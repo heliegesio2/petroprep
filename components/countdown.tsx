@@ -40,7 +40,7 @@ export function Countdown({ target }: { target: string }) {
       {cells.map(([label, value]) => (
         <div
           key={label}
-          className="min-w-[3.75rem] rounded-xl border bg-surface px-2 py-2 text-center sm:min-w-[4.5rem] sm:px-3"
+          className="min-w-[3.75rem] rounded-xl border border-current/15 bg-current/10 px-2 py-2 text-center sm:min-w-[4.5rem] sm:px-3"
         >
           <div
             className="font-mono text-xl font-bold tabular-nums sm:text-2xl"
@@ -48,7 +48,7 @@ export function Countdown({ target }: { target: string }) {
           >
             {String(value).padStart(2, "0")}
           </div>
-          <div className="text-[0.65rem] uppercase tracking-wide text-muted">{label}</div>
+          <div className="text-[0.65rem] uppercase tracking-wide opacity-60">{label}</div>
         </div>
       ))}
     </div>

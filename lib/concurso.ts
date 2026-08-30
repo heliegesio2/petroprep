@@ -51,7 +51,7 @@ export const concurso = {
   dataProvaEstimada: KEY_DATE,
 
   numeros: {
-    vagasImediatasEstimadas: 900,
+    vagasImediatasEstimadas: 920,
     cadastroReservaEstimado: 6000,
     salarioInicialMaximo: 15034.81,
     oficial: false,
@@ -255,3 +255,213 @@ export const escolaridadeLabel: Record<Escolaridade, string> = {
   tecnico: "Nível Técnico",
   superior: "Nível Superior",
 };
+
+// ===========================================================================
+// VAGAS E RESERVA DE VAGAS (COTAS)
+//
+// Números por cargo/UF são ESTIMATIVAS (não há edital). O cálculo das reservas
+// segue as regras federais: Lei 12.990/2014 (negros, 20%) e Decreto 9.508/2018
+// (PcD, 5%). Concursos da Petrobras/Transpetro historicamente aplicam essas
+// duas. Ao sair o edital, ajustar `vagas` e, se necessário, `gruposReserva`.
+// ===========================================================================
+
+export const ufLabel: Record<string, string> = {
+  RJ: "Rio de Janeiro",
+  SP: "São Paulo",
+  BA: "Bahia",
+  PE: "Pernambuco",
+  RN: "Rio Grande do Norte",
+  PR: "Paraná",
+  ES: "Espírito Santo",
+  AM: "Amazonas",
+};
+
+export interface Vaga {
+  cargoSlug: string;
+  uf: string;
+  unidade: string;
+  /** Vagas de nomeação imediata (ampla + reservas, que são subconjunto). */
+  imediatas: number;
+}
+
+export const vagas: Vaga[] = [
+  { cargoSlug: "tec-operacao", uf: "RJ", unidade: "REDUC — Duque de Caxias", imediatas: 80 },
+  { cargoSlug: "tec-operacao", uf: "BA", unidade: "RLAM — São Francisco do Conde", imediatas: 70 },
+  { cargoSlug: "tec-operacao", uf: "PE", unidade: "RNEST — Ipojuca", imediatas: 50 },
+  { cargoSlug: "tec-operacao", uf: "SP", unidade: "REVAP — São José dos Campos", imediatas: 40 },
+  { cargoSlug: "tec-operacao", uf: "PR", unidade: "REPAR — Araucária", imediatas: 30 },
+  { cargoSlug: "tec-operacao", uf: "RN", unidade: "Polo Potiguar — Guamaré", imediatas: 30 },
+
+  { cargoSlug: "tec-manutencao", uf: "RJ", unidade: "REDUC — Duque de Caxias", imediatas: 70 },
+  { cargoSlug: "tec-manutencao", uf: "BA", unidade: "RLAM — São Francisco do Conde", imediatas: 60 },
+  { cargoSlug: "tec-manutencao", uf: "SP", unidade: "RPBC — Cubatão", imediatas: 40 },
+  { cargoSlug: "tec-manutencao", uf: "PE", unidade: "RNEST — Ipojuca", imediatas: 40 },
+  { cargoSlug: "tec-manutencao", uf: "AM", unidade: "REMAN — Manaus", imediatas: 30 },
+
+  { cargoSlug: "tec-administracao", uf: "RJ", unidade: "Sede — Rio de Janeiro", imediatas: 50 },
+  { cargoSlug: "tec-administracao", uf: "BA", unidade: "RLAM — São Francisco do Conde", imediatas: 25 },
+  { cargoSlug: "tec-administracao", uf: "SP", unidade: "REVAP — São José dos Campos", imediatas: 25 },
+  { cargoSlug: "tec-administracao", uf: "RN", unidade: "Natal", imediatas: 20 },
+
+  { cargoSlug: "eng-petroleo", uf: "RJ", unidade: "CENPES / Sede — Rio de Janeiro", imediatas: 45 },
+  { cargoSlug: "eng-petroleo", uf: "ES", unidade: "UO-ES — Vitória", imediatas: 15 },
+  { cargoSlug: "eng-petroleo", uf: "RN", unidade: "UO-RNCE — Natal", imediatas: 10 },
+
+  { cargoSlug: "eng-equipamentos", uf: "RJ", unidade: "Sede — Rio de Janeiro", imediatas: 45 },
+  { cargoSlug: "eng-equipamentos", uf: "BA", unidade: "RLAM — São Francisco do Conde", imediatas: 20 },
+  { cargoSlug: "eng-equipamentos", uf: "SP", unidade: "REVAP — São José dos Campos", imediatas: 15 },
+
+  { cargoSlug: "analista-sistemas", uf: "RJ", unidade: "Sede / TIC — Rio de Janeiro", imediatas: 45 },
+  { cargoSlug: "analista-sistemas", uf: "SP", unidade: "São Paulo", imediatas: 15 },
+
+  { cargoSlug: "advogado", uf: "RJ", unidade: "Jurídico — Rio de Janeiro", imediatas: 12 },
+  { cargoSlug: "advogado", uf: "BA", unidade: "Salvador", imediatas: 3 },
+
+  { cargoSlug: "profissional-junior-contabilidade", uf: "RJ", unidade: "Sede — Rio de Janeiro", imediatas: 25 },
+  { cargoSlug: "profissional-junior-contabilidade", uf: "BA", unidade: "Salvador", imediatas: 10 },
+];
+
+export type GrupoReservaId = "negros" | "pcd" | "indigena" | "lgbtqia";
+
+export interface GrupoReserva {
+  id: GrupoReservaId;
+  label: string;
+  /** % das vagas do cargo reservado ao grupo. 0 = sem reserva prevista. */
+  percentual: number;
+  /** Nº mínimo de vagas no cargo para a reserva incidir. */
+  minVagasCargo: number;
+  /** Arredondamento do nº de vagas reservadas. */
+  arredonda: "cima" | "matematico";
+  /** true = cota prevista em lei federal para este tipo de concurso. */
+  federal: boolean;
+  nota: string;
+}
+
+export const gruposReserva: GrupoReserva[] = [
+  {
+    id: "negros",
+    label: "Pessoa preta ou parda",
+    percentual: 0.2,
+    minVagasCargo: 3,
+    arredonda: "matematico",
+    federal: true,
+    nota: "Lei 12.990/2014: 20% das vagas quando o cargo oferece 3 ou mais. Exige autodeclaração e, em geral, procedimento de heteroidentificação.",
+  },
+  {
+    id: "pcd",
+    label: "Pessoa com deficiência (PcD)",
+    percentual: 0.05,
+    minVagasCargo: 5,
+    arredonda: "cima",
+    federal: true,
+    nota: "Decreto 9.508/2018: no mínimo 5% das vagas, com laudo médico e avaliação por equipe multiprofissional.",
+  },
+  {
+    id: "indigena",
+    label: "Pessoa indígena",
+    percentual: 0,
+    minVagasCargo: 0,
+    arredonda: "cima",
+    federal: false,
+    nota: "Não há cota federal para indígenas em concursos da Petrobras/Transpetro. Você concorre na ampla concorrência. Alguns editais criam reserva própria — confirmamos quando o edital sair.",
+  },
+  {
+    id: "lgbtqia",
+    label: "Pessoa LGBTQIA+",
+    percentual: 0,
+    minVagasCargo: 0,
+    arredonda: "cima",
+    federal: false,
+    nota: "Concursos federais não reservam vagas por orientação sexual ou identidade de gênero. Você concorre na ampla concorrência. Alguns concursos estaduais e municipais reservam vagas para pessoas trans.",
+  },
+];
+
+function arredondaReserva(qtd: number, modo: "cima" | "matematico"): number {
+  return modo === "cima" ? Math.ceil(qtd) : Math.round(qtd);
+}
+
+/** Vagas reservadas a um grupo, para um cargo com `imediatas` vagas. */
+export function vagasReservadas(imediatas: number, grupo: GrupoReserva): number {
+  if (grupo.percentual <= 0 || imediatas < grupo.minVagasCargo) return 0;
+  const bruto = arredondaReserva(imediatas * grupo.percentual, grupo.arredonda);
+  // Teto de 20% para PcD (regra do art. 37, VIII).
+  const teto = Math.floor(imediatas * 0.2);
+  return Math.max(0, Math.min(bruto, teto || bruto));
+}
+
+export interface FiltroVagas {
+  escolaridade: Escolaridade | "todas";
+  area: string; // "todas" ou nome da área
+  uf: string; // "todas" ou sigla
+  grupos: GrupoReservaId[]; // grupos de reserva que a pessoa marcou
+}
+
+export interface LinhaResultado {
+  cargo: Cargo;
+  uf: string;
+  unidade: string;
+  imediatas: number;
+  reservadasParaVoce: number;
+}
+
+export interface ResultadoVagas {
+  totalImediatas: number;
+  totalCargos: number;
+  reservadasParaVoce: number;
+  porGrupo: { grupo: GrupoReserva; vagas: number }[];
+  linhas: LinhaResultado[];
+}
+
+export function filtrarVagas(filtro: FiltroVagas): ResultadoVagas {
+  const cargoPorSlug = new Map(cargos.map((c) => [c.slug, c]));
+  const gruposSelecionados = gruposReserva.filter((g) =>
+    filtro.grupos.includes(g.id),
+  );
+
+  const linhas: LinhaResultado[] = [];
+  const porGrupoMap = new Map<GrupoReservaId, number>();
+
+  for (const vaga of vagas) {
+    const cargo = cargoPorSlug.get(vaga.cargoSlug);
+    if (!cargo) continue;
+    if (filtro.escolaridade !== "todas" && cargo.escolaridade !== filtro.escolaridade) continue;
+    if (filtro.area !== "todas" && cargo.area !== filtro.area) continue;
+    if (filtro.uf !== "todas" && vaga.uf !== filtro.uf) continue;
+
+    let reservadasParaVoce = 0;
+    for (const grupo of gruposSelecionados) {
+      const r = vagasReservadas(vaga.imediatas, grupo);
+      reservadasParaVoce += r;
+      porGrupoMap.set(grupo.id, (porGrupoMap.get(grupo.id) ?? 0) + r);
+    }
+
+    linhas.push({
+      cargo,
+      uf: vaga.uf,
+      unidade: vaga.unidade,
+      imediatas: vaga.imediatas,
+      reservadasParaVoce,
+    });
+  }
+
+  linhas.sort((a, b) => b.imediatas - a.imediatas);
+
+  return {
+    totalImediatas: linhas.reduce((s, l) => s + l.imediatas, 0),
+    totalCargos: new Set(linhas.map((l) => l.cargo.slug)).size,
+    reservadasParaVoce: linhas.reduce((s, l) => s + l.reservadasParaVoce, 0),
+    porGrupo: gruposSelecionados.map((grupo) => ({
+      grupo,
+      vagas: porGrupoMap.get(grupo.id) ?? 0,
+    })),
+    linhas,
+  };
+}
+
+export const areasDisponiveis = Array.from(
+  new Set(cargos.map((c) => c.area)),
+).sort();
+
+export const ufsDisponiveis = Array.from(
+  new Set(vagas.map((v) => v.uf)),
+).sort();

@@ -3,8 +3,9 @@
 Plataforma de preparação para o próximo concurso da Petrobras: simulados no
 estilo da banca, conteúdo programático por cargo e buscador de vagas com filtros.
 
-**Status:** Fase 1 — landing page de captação (lista de espera). As demais
-funcionalidades estão apenas modeladas em `prisma/schema.prisma`.
+**Status:** Fase 1 — landing page de captação (lista de espera) com filtro
+interativo de vagas e cotas. Simulados e conteúdos completos ainda são só
+modelagem em `prisma/schema.prisma`.
 
 > Até agosto/2026 a Petrobras não publicou edital para 2027. Referência atual:
 > concurso **Transpetro 2026** (Cesgranrio), provas em 29/11/2026. Os números
@@ -73,9 +74,10 @@ app/
   layout.tsx            # metadados pt-BR, fonte
   globals.css           # tokens de tema (claro/escuro)
   api/waitlist/route.ts # POST da lista de espera → Prisma (degrada sem banco)
-components/             # uma seção por arquivo (hero, cargos, edital, ...)
+components/             # uma seção por arquivo (hero banner, vagas-section, edital, ...)
 lib/
-  concurso.ts           # FONTE ÚNICA: cargos, conteúdo, datas, FAQ, números
+  concurso.ts           # FONTE ÚNICA: cargos, vagas, cotas, conteúdo, datas, FAQ
+                        #   filtrarVagas() calcula vagas por perfil + reserva (cotas)
   prisma.ts             # Prisma Client singleton
 prisma/schema.prisma    # Lead (usado) + modelos das próximas fases
 public/edital/          # PDFs do edital (ver LEIA-ME.md)

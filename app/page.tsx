@@ -1,7 +1,7 @@
 import { SiteNav } from "@/components/site-nav";
 import { Hero } from "@/components/hero";
 import { FeatureGrid } from "@/components/feature-grid";
-import { CargosSection } from "@/components/cargos-section";
+import { VagasSection } from "@/components/vagas-section";
 import { ConteudoSection } from "@/components/conteudo-section";
 import { EditalSection } from "@/components/edital-section";
 import { WaitlistSection } from "@/components/waitlist-section";
@@ -15,7 +15,7 @@ export default function Home() {
       <main className="flex-1">
         <Hero />
         <FeatureGrid />
-        <CargosSection />
+        <VagasSection />
         <ConteudoSection />
         <EditalSection />
         <WaitlistSection />

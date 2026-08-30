@@ -13,7 +13,7 @@ export function SiteFooter() {
           </Link>
           <nav className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
             <Link href="#plataforma" className="hover:text-foreground">Plataforma</Link>
-            <Link href="#cargos" className="hover:text-foreground">Cargos e vagas</Link>
+            <Link href="#vagas" className="hover:text-foreground">Vagas e cotas</Link>
             <Link href="#conteudo" className="hover:text-foreground">O que cai na prova</Link>
             <Link href="#edital" className="hover:text-foreground">Edital</Link>
             <Link href="#lista" className="hover:text-foreground">Lista de espera</Link>
