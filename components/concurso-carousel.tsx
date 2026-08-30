@@ -1,6 +1,8 @@
 "use client";
 
-import Link from "next/link";
+import Image from "next/image";
+import { CaretLeftIcon, CaretRightIcon, GraduationCapIcon, ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
   formatBRL,
   formatData,
@@ -18,6 +20,7 @@ interface Props {
 export function ConcursoCarousel({ concursos, atual, onAtualChange }: Props) {
   const concurso = concursos[atual];
   const total = concursos.length;
+  const reduce = useReducedMotion();
 
   function ir(delta: number) {
     onAtualChange((atual + delta + total) % total);
@@ -30,42 +33,51 @@ export function ConcursoCarousel({ concursos, atual, onAtualChange }: Props) {
       aria-roledescription="carrossel de concursos"
     >
       <div
-        className="absolute inset-0 -z-10 opacity-[0.10] mix-blend-screen"
+        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-64 opacity-60"
         style={{
-          backgroundImage:
-            "radial-gradient(circle at 1px 1px, #ffffff 1px, transparent 0)",
-          backgroundSize: "26px 26px",
+          background:
+            "radial-gradient(60% 100% at 50% 0%, rgba(43,182,115,0.22), transparent 70%)",
         }}
         aria-hidden
       />
 
-      <div className="mx-auto flex max-w-6xl items-stretch gap-2 px-2 pt-6 sm:gap-4 sm:px-4 sm:pt-8">
+      <div className="mx-auto flex max-w-6xl items-stretch gap-2 px-2 pt-6 sm:gap-4 sm:px-4 sm:pt-10">
         <Seta direcao="anterior" onClick={() => ir(-1)} />
 
         <div className="min-w-0 flex-1">
-          <Slide concurso={concurso} />
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={concurso.slug}
+              initial={reduce ? false : { opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduce ? undefined : { opacity: 0, y: -8 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <Slide concurso={concurso} />
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         <Seta direcao="proximo" onClick={() => ir(1)} />
       </div>
 
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4 py-4">
-        <span className="text-xs text-white/50">
-          {atual + 1} de {total}
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4 py-5">
+        <span className="font-mono text-xs text-white/50">
+          {atual + 1} / {total}
         </span>
         <label className="flex items-center gap-2 text-xs text-white/60">
-          <span className="hidden sm:inline">Ir para:</span>
+          <span className="hidden sm:inline">Ir para</span>
           <select
             value={atual}
             onChange={(e) => onAtualChange(Number(e.target.value))}
-            className="max-w-[16rem] rounded-lg border border-white/15 bg-[#0a3a27] px-2 py-1.5 text-sm text-white"
+            className="max-w-[16rem] rounded-lg border border-white/15 bg-[#0a3a27] px-2.5 py-1.5 text-sm text-white"
             aria-label="Escolher concurso"
           >
             <optgroup label="Inscrições abertas">
               {concursos.map((c, i) =>
                 c.status === "inscricoes_abertas" ? (
                   <option key={c.slug} value={i}>
-                    {c.nome} — {c.tituloCompleto}
+                    {c.tituloCompleto}
                   </option>
                 ) : null,
               )}
@@ -74,7 +86,7 @@ export function ConcursoCarousel({ concursos, atual, onAtualChange }: Props) {
               {concursos.map((c, i) =>
                 c.status === "previsto" ? (
                   <option key={c.slug} value={i}>
-                    {c.nome} — {c.tituloCompleto}
+                    {c.tituloCompleto}
                   </option>
                 ) : null,
               )}
@@ -93,33 +105,36 @@ function Seta({
   direcao: "anterior" | "proximo";
   onClick: () => void;
 }) {
+  const Icon = direcao === "anterior" ? CaretLeftIcon : CaretRightIcon;
   return (
     <button
       type="button"
       onClick={onClick}
       aria-label={direcao === "anterior" ? "Concurso anterior" : "Próximo concurso"}
-      className="grid w-9 shrink-0 place-items-center rounded-xl border border-white/15 bg-white/5 text-white/80 transition-colors hover:bg-white/15 hover:text-white sm:w-12"
+      className="grid w-9 shrink-0 place-items-center rounded-lg border border-white/15 bg-white/5 text-white/80 transition-colors hover:bg-white/15 hover:text-white active:scale-[0.97] sm:w-12"
     >
-      <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-        {direcao === "anterior" ? <path d="M15 6l-6 6 6 6" /> : <path d="M9 6l6 6-6 6" />}
-      </svg>
+      <Icon size={22} weight="bold" aria-hidden />
     </button>
   );
 }
 
 function Slide({ concurso }: { concurso: Concurso }) {
-  const destaque = concurso.destaque;
   const temPainel = Boolean(concurso.dataProva);
+  const salario = concurso.salarioAte
+    ? concurso.salarioDe
+      ? `${formatBRL(concurso.salarioDe)} a ${formatBRL(concurso.salarioAte)}`
+      : `até ${formatBRL(concurso.salarioAte)}`
+    : null;
 
   return (
     <div
-      className={`grid gap-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:p-6 ${
-        temPainel ? "lg:grid-cols-[1.3fr_1fr]" : ""
+      className={`grid gap-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:p-7 ${
+        temPainel ? "lg:grid-cols-[1.25fr_1fr]" : ""
       }`}
     >
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
-          {destaque && (
+          {concurso.destaque && (
             <span className="rounded-full bg-accent px-2.5 py-0.5 text-[#062a1c]">
               Destaque
             </span>
@@ -138,93 +153,104 @@ function Slide({ concurso }: { concurso: Concurso }) {
           )}
         </div>
 
-        <h1 className="mt-3 text-2xl font-black leading-tight tracking-tight sm:text-3xl lg:text-4xl">
+        <h1 className="mt-3 text-3xl font-black leading-[1.1] tracking-tight sm:text-4xl">
           {concurso.tituloCompleto}
         </h1>
         <p className="mt-1 text-sm text-white/60">{concurso.orgao}</p>
 
-        <p className="mt-2 flex items-start gap-1.5 text-sm text-white/75">
-          <svg viewBox="0 0 24 24" className="mt-0.5 h-4 w-4 flex-none text-accent" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-            <path d="M22 10L12 5 2 10l10 5 10-5z" />
-            <path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5" />
-          </svg>
-          {concurso.escolaridadeTexto}
-        </p>
-
-        <p className="mt-3 max-w-2xl text-sm text-white/80 sm:text-base">
+        <p className="mt-4 max-w-xl text-sm leading-relaxed text-white/80 sm:text-base">
           {concurso.resumo}
         </p>
 
         {!temPainel && (
-          <p className="mt-3 text-sm text-white/70">
+          <p className="mt-3 max-w-xl text-sm text-white/70">
             {concurso.status === "previsto"
-              ? "Edital ainda não publicado — quem assina o Plano Completo é avisado assim que sair."
+              ? "Edital ainda não publicado. Quem assina o Plano Completo é avisado assim que sair."
               : concurso.inscricoesAte
                 ? `Inscrições abertas até ${formatData(concurso.inscricoesAte)}. Datas da prova no edital oficial.`
-                : "Inscrições abertas — confira as datas no edital oficial."}
+                : "Inscrições abertas. Confira as datas no edital oficial."}
           </p>
         )}
 
-        <dl className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm">
+        <dl className="mt-5 grid max-w-lg grid-cols-2 gap-x-6 gap-y-3 text-sm sm:grid-cols-3">
           {concurso.vagasTotais && (
             <div>
               <dt className="text-white/50">Vagas</dt>
-              <dd className="text-lg font-bold">
+              <dd className="text-lg font-bold tabular-nums">
                 {concurso.vagasTotais.toLocaleString("pt-BR")}
               </dd>
             </div>
           )}
-          {concurso.salarioAte && (
+          {salario && (
             <div>
-              <dt className="text-white/50">
-                {concurso.salarioDe ? "Salário" : "Salário até"}
-              </dt>
-              <dd className="text-lg font-bold">
-                {concurso.salarioDe
-                  ? `${formatBRL(concurso.salarioDe)} a ${formatBRL(concurso.salarioAte)}`
-                  : formatBRL(concurso.salarioAte)}
-              </dd>
+              <dt className="text-white/50">Salário</dt>
+              <dd className="text-lg font-bold">{salario}</dd>
             </div>
           )}
           {concurso.inscricoesAte && (
             <div>
               <dt className="text-white/50">Inscrições até</dt>
-              <dd className="text-lg font-bold">
+              <dd className="text-lg font-bold tabular-nums">
                 {formatData(concurso.inscricoesAte)}
               </dd>
             </div>
           )}
+          <div className="col-span-2 flex items-start gap-1.5 sm:col-span-3">
+            <GraduationCapIcon
+              size={16}
+              weight="fill"
+              className="mt-0.5 flex-none text-accent"
+              aria-hidden
+            />
+            <span className="text-white/75">{concurso.escolaridadeTexto}</span>
+          </div>
         </dl>
 
-        <div className="mt-5 flex flex-wrap gap-2">
-          <Link
+        <div className="mt-6 flex flex-wrap gap-2">
+          <a
             href="#planos"
-            className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-[#062a1c] transition-transform hover:-translate-y-0.5"
+            className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-[#062a1c] transition-transform hover:-translate-y-0.5 active:translate-y-0"
           >
-            Assinar e estudar
-          </Link>
+            Assinar
+          </a>
           {concurso.linkOficial && (
             <a
               href={concurso.linkOficial}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-semibold transition-colors hover:bg-white/10"
+              className="inline-flex items-center gap-1 rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-semibold transition-colors hover:bg-white/10"
             >
-              Edital oficial ↗
+              Edital oficial
+              <ArrowUpRightIcon size={14} weight="bold" aria-hidden />
             </a>
           )}
         </div>
       </div>
 
       {temPainel && (
-        <div className="flex flex-col justify-center gap-3 rounded-xl border border-white/10 bg-white/[0.04] p-4">
-          <p className="text-xs font-semibold text-white/60">
-            Contagem regressiva para a prova
-          </p>
-          <Countdown target={concurso.dataProva!} />
-          <p className="text-xs text-white/60">
-            Prova em {formatData(concurso.dataProva!)}
-          </p>
+        <div className="flex flex-col gap-4">
+          <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-white/10">
+            {/* TODO: trocar por foto real do concurso / estudo (900x560). */}
+            <Image
+              src="https://picsum.photos/seed/petroprep-transpetro-2026/900/560"
+              alt=""
+              fill
+              priority
+              sizes="(min-width: 1024px) 380px, 100vw"
+              className="object-cover"
+            />
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+            <p className="text-xs font-semibold text-white/60">
+              Contagem regressiva para a prova
+            </p>
+            <div className="mt-2">
+              <Countdown target={concurso.dataProva!} />
+            </div>
+            <p className="mt-2 text-xs text-white/60">
+              Prova em {formatData(concurso.dataProva!)}
+            </p>
+          </div>
         </div>
       )}
     </div>

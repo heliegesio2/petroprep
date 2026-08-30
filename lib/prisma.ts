@@ -5,7 +5,7 @@ import { PrismaClient } from "@prisma/client";
  * (hot reload) nem em ambientes serverless.
  *
  * `hasDatabase` permite que a landing page funcione mesmo sem DATABASE_URL
- * configurada — a rota da lista de espera degrada com elegância.
+ * configurada - a rota da lista de espera degrada com elegância.
  */
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;

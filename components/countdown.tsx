@@ -48,7 +48,7 @@ export function Countdown({ target }: { target: string }) {
           >
             {String(value).padStart(2, "0")}
           </div>
-          <div className="text-[0.65rem] uppercase tracking-wide opacity-60">{label}</div>
+          <div className="text-[0.7rem] opacity-55">{label}</div>
         </div>
       ))}
     </div>

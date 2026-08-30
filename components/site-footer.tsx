@@ -6,7 +6,7 @@ export function SiteFooter() {
       <div className="mx-auto max-w-6xl px-4">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <Link href="#top" className="flex items-center gap-2 font-bold">
-            <span className="grid h-7 w-7 place-items-center rounded-md bg-brand text-xs font-black text-white">
+            <span className="grid h-7 w-7 place-items-center rounded-lg bg-brand text-xs font-black text-white">
               P
             </span>
             PetroPrep
@@ -31,7 +31,7 @@ export function SiteFooter() {
           . Nomes de órgãos e concursos citados pertencem aos seus respectivos titulares e
           aparecem aqui apenas para fins informativos. Vagas, salários, datas e conteúdos
           são estimativas montadas a partir da imprensa especializada e de editais
-          anteriores — confirme sempre na fonte oficial. As inscrições são feitas somente
+          anteriores. Confirme sempre na fonte oficial. As inscrições são feitas somente
           nos canais oficiais.
         </p>
         <p className="mt-4 text-xs text-muted">

@@ -69,6 +69,17 @@ Não há suíte de testes. Verificação = `npm run lint` + `npm run build` + co
 
 **Schema.** `prisma/schema.prisma`: `Lead` = intenção de assinatura (`email`, `nome`, `plano`, `concursoSlug`). Modelos `Cargo`/`Vaga`/`Topico`/`Questao`/`Simulado` ainda são só direção para fases futuras.
 
+## Design (skill `design-taste-frontend` aplicada)
+
+- **Fonte:** Geist / Geist Mono (`next/font/google`), variáveis `--font-geist-sans/mono`. Números com `font-mono tabular-nums`.
+- **Ícones:** só `@phosphor-icons/react/dist/ssr/<Nome>` (import por ícone). **Não** desenhar `<svg>` à mão. **Sem emoji** na UI.
+- **Sem em-dash (`—`) nem en-dash (`–`) em nada visível.** Só hífen `-`. (Regra dura da skill.)
+- **Cor:** verde é o accent em superfícies claras; amarelo (`--accent`) **só** no banner escuro `#062a1c`. Uma cor de accent por superfície.
+- **Raio:** cards `rounded-2xl` (16px), controles/botões `rounded-lg` (10px), pills `rounded-full`. Não misturar fora disso.
+- **Movimento (MOTION 4):** `components/reveal.tsx` (`motion/react`, `whileInView` once) + crossfade do slide no carrossel. Tudo honra `useReducedMotion()`.
+- **Listas longas:** a tabela de vagas mostra 6 linhas + botão "ver todas". Não repetir família de layout entre seções (carrossel / filtro / grid conteúdo / rows features / cards planos / accordion FAQ).
+- **Imagem:** `next/image` com placeholder `picsum.photos` no slide em destaque (`remotePatterns` em `next.config.ts`). **TODO: trocar por foto real.**
+
 ## Convenções
 
 - **Idioma:** toda a UI e os comentários de domínio em **português (pt-BR)**. Nomes de identificadores podem ser em português quando descrevem o domínio (`cargos`, `escolaridade`).

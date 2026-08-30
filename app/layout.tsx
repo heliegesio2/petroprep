@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
+const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
+const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3100";
-const title = "PetroPrep — Preparatório para concursos públicos";
+const title = "PetroPrep, preparatório para concursos públicos";
 const description =
   "Plataforma de estudos para os principais concursos do país. Transpetro 2026 em destaque: simulados no estilo Cesgranrio, conteúdo por cargo e buscador de vagas e cotas por perfil.";
 
@@ -16,7 +14,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
     default: title,
-    template: "%s · PetroPrep",
+    template: "%s | PetroPrep",
   },
   description,
   keywords: [
@@ -41,8 +39,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} h-full`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html
+      lang="pt-BR"
+      className={`${geistSans.variable} ${geistMono.variable} h-full`}
+    >
+      <body className="min-h-full flex flex-col antialiased">{children}</body>
     </html>
   );
 }

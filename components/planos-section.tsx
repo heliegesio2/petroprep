@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import { planos } from "@/lib/planos";
 import { AssinarForm } from "@/components/assinar-form";
 
@@ -15,8 +16,8 @@ export function PlanosSection() {
             Escolha seu plano
           </h2>
           <p className="mt-3 text-muted">
-            Pagamento único, sem mensalidade. Acesso a todo o material, simulados e ao
-            buscador de vagas.
+            Pagamento único, sem mensalidade. Material, simulados e o buscador de vagas,
+            liberados de uma vez.
           </p>
         </div>
 
@@ -37,8 +38,10 @@ export function PlanosSection() {
                 )}
               </div>
 
-              <p className="mt-3 flex items-baseline gap-1">
-                <span className="text-4xl font-black">R$ {plano.preco}</span>
+              <p className="mt-3 flex items-baseline gap-1.5">
+                <span className="font-mono text-4xl font-bold tabular-nums">
+                  R$ {plano.preco}
+                </span>
                 <span className="text-sm text-muted">único</span>
               </p>
               <p className="mt-1 text-sm text-muted">{plano.periodo}</p>
@@ -47,9 +50,12 @@ export function PlanosSection() {
               <ul className="mt-4 flex-1 space-y-2 text-sm">
                 {plano.beneficios.map((b) => (
                   <li key={b} className="flex gap-2">
-                    <svg viewBox="0 0 20 20" className="mt-0.5 h-4 w-4 flex-none text-brand" fill="currentColor" aria-hidden>
-                      <path fillRule="evenodd" d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0L3.3 9.7a1 1 0 1 1 1.4-1.4l3.3 3.29 6.8-6.79a1 1 0 0 1 1.4 0Z" clipRule="evenodd" />
-                    </svg>
+                    <CheckIcon
+                      size={16}
+                      weight="bold"
+                      className="mt-0.5 flex-none text-brand"
+                      aria-hidden
+                    />
                     {b}
                   </li>
                 ))}
@@ -58,13 +64,14 @@ export function PlanosSection() {
               <button
                 type="button"
                 onClick={() => setPlanoSelecionado(plano.id)}
+                aria-label={`Assinar ${plano.nome}`}
                 className={`mt-6 rounded-lg px-5 py-3 font-semibold transition-colors ${
                   plano.destaque
                     ? "bg-brand text-white hover:bg-brand-strong"
                     : "border hover:bg-background"
                 }`}
               >
-                Assinar {plano.nome}
+                Assinar
               </button>
             </div>
           ))}

@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     console.info("[assinar] reserva recebida (sem DATABASE_URL):", data.email, data.plano);
     return NextResponse.json({
       message:
-        "Recebemos sua reserva! Assim que o checkout abrir, você é o primeiro a saber — com o preço atual garantido.",
+        "Recebemos sua reserva! Assim que o checkout abrir, você é o primeiro a saber - com o preço atual garantido.",
     });
   }
 

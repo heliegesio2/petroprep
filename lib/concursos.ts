@@ -1,12 +1,12 @@
 /**
- * Fonte única de dados da plataforma — vários concursos.
+ * Fonte única de dados da plataforma - vários concursos.
  *
  * IMPORTANTE: os números vêm de um panorama de imprensa (ago/2026) e de concursos
- * anteriores. São ESTIMATIVAS / referência — confira sempre a fonte oficial antes
+ * anteriores. São ESTIMATIVAS / referência - confira sempre a fonte oficial antes
  * de se inscrever. Só a Transpetro tem dados profundos (cargos, vagas, cotas,
  * conteúdo); os demais são cards de resumo até o dono priorizar cada um.
  *
- * Ao sair um edital oficial, ajustar o objeto do concurso aqui — é o único lugar.
+ * Ao sair um edital oficial, ajustar o objeto do concurso aqui - é o único lugar.
  */
 
 export type Escolaridade = "medio" | "tecnico" | "superior";
@@ -78,7 +78,7 @@ export interface Concurso {
   salarioAte?: number;
   /** ISO. Fim das inscrições. */
   inscricoesAte?: string;
-  /** ISO. Data da prova — usada no countdown e na ordenação. */
+  /** ISO. Data da prova - usada no countdown e na ordenação. */
   dataProva?: string;
   /** Usado pelo filtro (só relevante onde há dados profundos). */
   escolaridades: Escolaridade[];
@@ -86,7 +86,7 @@ export interface Concurso {
   escolaridadeTexto: string;
   resumo: string;
   linkOficial?: string;
-  /** Dados profundos — presentes só onde já foram preenchidos. */
+  /** Dados profundos - presentes só onde já foram preenchidos. */
   cargos?: Cargo[];
   vagas?: Vaga[];
   conteudo?: TopicoProva[];
@@ -134,7 +134,7 @@ export const statusLabel: Record<ConcursoStatus, string> = {
 };
 
 // ---------------------------------------------------------------------------
-// Reserva de vagas (cotas) — regras federais
+// Reserva de vagas (cotas) - regras federais
 // ---------------------------------------------------------------------------
 
 export const gruposReservaPadrao: GrupoReserva[] = [
@@ -163,7 +163,7 @@ export const gruposReservaPadrao: GrupoReserva[] = [
     minVagasCargo: 0,
     arredonda: "cima",
     federal: false,
-    nota: "Não há cota federal para indígenas em concursos da Petrobras/Transpetro. Você concorre na ampla concorrência. Alguns editais criam reserva própria — confirmamos quando o edital sair.",
+    nota: "Não há cota federal para indígenas em concursos da Petrobras/Transpetro. Você concorre na ampla concorrência. Alguns editais criam reserva própria - confirmamos quando o edital sair.",
   },
   {
     id: "lgbtqia",
@@ -189,7 +189,7 @@ export function vagasReservadas(imediatas: number, grupo: GrupoReserva): number 
 }
 
 // ---------------------------------------------------------------------------
-// Dados profundos — Transpetro 2026 (banca Cesgranrio)
+// Dados profundos - Transpetro 2026 (banca Cesgranrio)
 // ---------------------------------------------------------------------------
 
 const cargosTranspetro: Cargo[] = [
@@ -230,7 +230,7 @@ const cargosTranspetro: Cargo[] = [
   },
   {
     slug: "eng-dutos",
-    titulo: "Engenheiro(a) Júnior — Dutos/Transporte",
+    titulo: "Engenheiro(a) Júnior - Dutos/Transporte",
     escolaridade: "superior",
     area: "Engenharia",
     salario: 13649,
@@ -255,7 +255,7 @@ const cargosTranspetro: Cargo[] = [
   },
   {
     slug: "profissional-contabilidade",
-    titulo: "Profissional Júnior — Ciências Contábeis",
+    titulo: "Profissional Júnior - Ciências Contábeis",
     escolaridade: "superior",
     area: "Administrativo",
     salario: 13649,
@@ -277,25 +277,25 @@ const vagasTranspetro: Vaga[] = [
   { cargoSlug: "tec-manutencao", uf: "PE", unidade: "Terminal de Suape", imediatas: 40 },
   { cargoSlug: "tec-manutencao", uf: "AM", unidade: "Terminal de Manaus", imediatas: 30 },
 
-  { cargoSlug: "tec-administracao", uf: "RJ", unidade: "Sede — Rio de Janeiro", imediatas: 50 },
+  { cargoSlug: "tec-administracao", uf: "RJ", unidade: "Sede, Rio de Janeiro", imediatas: 50 },
   { cargoSlug: "tec-administracao", uf: "BA", unidade: "Salvador", imediatas: 25 },
   { cargoSlug: "tec-administracao", uf: "SP", unidade: "São Paulo", imediatas: 25 },
   { cargoSlug: "tec-administracao", uf: "RN", unidade: "Natal", imediatas: 20 },
 
-  { cargoSlug: "eng-equipamentos", uf: "RJ", unidade: "Sede — Rio de Janeiro", imediatas: 45 },
+  { cargoSlug: "eng-equipamentos", uf: "RJ", unidade: "Sede, Rio de Janeiro", imediatas: 45 },
   { cargoSlug: "eng-equipamentos", uf: "BA", unidade: "Salvador", imediatas: 20 },
   { cargoSlug: "eng-equipamentos", uf: "SP", unidade: "São Paulo", imediatas: 15 },
 
-  { cargoSlug: "eng-dutos", uf: "RJ", unidade: "Sede — Rio de Janeiro", imediatas: 40 },
+  { cargoSlug: "eng-dutos", uf: "RJ", unidade: "Sede, Rio de Janeiro", imediatas: 40 },
   { cargoSlug: "eng-dutos", uf: "ES", unidade: "Vitória", imediatas: 15 },
 
-  { cargoSlug: "analista-sistemas", uf: "RJ", unidade: "Sede / TIC — Rio de Janeiro", imediatas: 45 },
+  { cargoSlug: "analista-sistemas", uf: "RJ", unidade: "Sede / TIC, Rio de Janeiro", imediatas: 45 },
   { cargoSlug: "analista-sistemas", uf: "SP", unidade: "São Paulo", imediatas: 15 },
 
-  { cargoSlug: "advogado", uf: "RJ", unidade: "Jurídico — Rio de Janeiro", imediatas: 12 },
+  { cargoSlug: "advogado", uf: "RJ", unidade: "Jurídico, Rio de Janeiro", imediatas: 12 },
   { cargoSlug: "advogado", uf: "BA", unidade: "Salvador", imediatas: 3 },
 
-  { cargoSlug: "profissional-contabilidade", uf: "RJ", unidade: "Sede — Rio de Janeiro", imediatas: 25 },
+  { cargoSlug: "profissional-contabilidade", uf: "RJ", unidade: "Sede, Rio de Janeiro", imediatas: 25 },
   { cargoSlug: "profissional-contabilidade", uf: "BA", unidade: "Salvador", imediatas: 10 },
 ];
 
@@ -506,7 +506,7 @@ const listaBruta: Concurso[] = [
   {
     slug: "iss-manaus-2026",
     nome: "ISS Manaus",
-    tituloCompleto: "ISS Manaus 2026 — Auditor Fiscal",
+    tituloCompleto: "ISS Manaus 2026: Auditor Fiscal",
     orgao: "Prefeitura de Manaus / SEMEF",
     destaque: false,
     status: "inscricoes_abertas",
@@ -668,7 +668,7 @@ const listaBruta: Concurso[] = [
   {
     slug: "iss-taubate-2026",
     nome: "ISS Taubaté",
-    tituloCompleto: "ISS Taubaté 2026 — Auditor Fiscal",
+    tituloCompleto: "ISS Taubaté 2026: Auditor Fiscal",
     orgao: "Prefeitura de Taubaté (SP)",
     destaque: false,
     status: "inscricoes_abertas",
@@ -680,7 +680,7 @@ const listaBruta: Concurso[] = [
   {
     slug: "iss-caruaru-2026",
     nome: "ISS Caruaru",
-    tituloCompleto: "ISS Caruaru 2026 — Auditor / Analista Fiscal",
+    tituloCompleto: "ISS Caruaru 2026: Auditor / Analista Fiscal",
     orgao: "Prefeitura de Caruaru (PE)",
     destaque: false,
     status: "inscricoes_abertas",
@@ -717,20 +717,20 @@ const listaBruta: Concurso[] = [
   {
     slug: "pmbm-ba-saude-2026",
     nome: "PM/CBM BA (Saúde)",
-    tituloCompleto: "PM e Bombeiros da Bahia 2026 — Saúde",
+    tituloCompleto: "PM e Bombeiros da Bahia 2026: Saúde",
     orgao: "Polícia Militar e Corpo de Bombeiros Militar da Bahia",
     destaque: false,
     status: "inscricoes_abertas",
     salarioAte: 9973.34,
     escolaridades: ["superior"],
-    escolaridadeTexto: "Superior (áreas de saúde — oficiais)",
+    escolaridadeTexto: "Superior (áreas de saúde - oficiais)",
     resumo: "Vagas para profissionais de saúde nas corporações militares baianas.",
   },
   {
     slug: "abgf-2026",
     nome: "ABGF",
     tituloCompleto: "Agência Brasileira Gestora de Fundos 2026",
-    orgao: "ABGF — Agência Brasileira Gestora de Fundos Garantidores e Garantias",
+    orgao: "ABGF - Agência Brasileira Gestora de Fundos Garantidores e Garantias",
     destaque: false,
     status: "inscricoes_abertas",
     salarioAte: 15200,
@@ -742,7 +742,7 @@ const listaBruta: Concurso[] = [
     slug: "agepar-2026",
     nome: "AGEPAR",
     tituloCompleto: "Agência Reguladora do Paraná 2026",
-    orgao: "AGEPAR — Agência Reguladora de Serviços Públicos Delegados do Paraná",
+    orgao: "AGEPAR - Agência Reguladora de Serviços Públicos Delegados do Paraná",
     destaque: false,
     status: "inscricoes_abertas",
     salarioAte: 10334.74,
@@ -777,14 +777,14 @@ const listaBruta: Concurso[] = [
   {
     slug: "faetec-rj-2026",
     nome: "Faetec RJ",
-    tituloCompleto: "Faetec RJ 2026 — Professores temporários",
+    tituloCompleto: "Faetec RJ 2026: Professores temporários",
     orgao: "Fundação de Apoio à Escola Técnica do Rio de Janeiro",
     destaque: false,
     status: "inscricoes_abertas",
     salarioDe: 2003.32,
     salarioAte: 4066.64,
     escolaridades: ["superior"],
-    escolaridadeTexto: "Superior (docência — contratos temporários)",
+    escolaridadeTexto: "Superior (docência - contratos temporários)",
     resumo: "Processo seletivo para professores da rede técnica estadual do RJ.",
   },
   {
@@ -844,14 +844,14 @@ const listaBruta: Concurso[] = [
     status: "inscricoes_abertas",
     salarioAte: 5226.6,
     escolaridades: ["medio", "superior"],
-    escolaridadeTexto: "Médio ou superior — conferir o cargo no edital",
+    escolaridadeTexto: "Médio ou superior - conferir o cargo no edital",
     resumo: "Cargos de gestão e apoio administrativo no governo mineiro.",
   },
   {
     slug: "docas-pa-2026",
     nome: "Docas PA",
     tituloCompleto: "Companhia Docas do Pará 2026",
-    orgao: "CDP — Companhia Docas do Pará",
+    orgao: "CDP - Companhia Docas do Pará",
     destaque: false,
     status: "inscricoes_abertas",
     salarioAte: 6985.76,
@@ -875,7 +875,7 @@ const listaBruta: Concurso[] = [
     slug: "cidennf-rj-2026",
     nome: "Cidennf RJ",
     tituloCompleto: "Consórcio do Noroeste Fluminense (Cidennf) 2026",
-    orgao: "Cidennf — Consórcio Intermunicipal de Desenvolvimento do Noroeste Fluminense",
+    orgao: "Cidennf - Consórcio Intermunicipal de Desenvolvimento do Noroeste Fluminense",
     destaque: false,
     status: "inscricoes_abertas",
     salarioDe: 2194,
@@ -913,7 +913,7 @@ const listaBruta: Concurso[] = [
     slug: "hob-mg-2026",
     nome: "HOB MG",
     tituloCompleto: "Hospital Odilon Behrens (Belo Horizonte) 2026",
-    orgao: "HOB — Hospital Municipal Odilon Behrens",
+    orgao: "HOB - Hospital Municipal Odilon Behrens",
     destaque: false,
     status: "inscricoes_abertas",
     salarioDe: 2003,
@@ -938,7 +938,7 @@ const listaBruta: Concurso[] = [
     slug: "caer-rr-2026",
     nome: "CAER RR",
     tituloCompleto: "Companhia de Águas e Esgotos de Roraima 2026",
-    orgao: "CAER — Companhia de Águas e Esgotos de Roraima",
+    orgao: "CAER - Companhia de Águas e Esgotos de Roraima",
     destaque: false,
     status: "inscricoes_abertas",
     salarioDe: 3036,
@@ -975,7 +975,7 @@ const listaBruta: Concurso[] = [
     slug: "emater-mg-2026",
     nome: "Emater MG",
     tituloCompleto: "Emater Minas Gerais 2026",
-    orgao: "Emater-MG — Empresa de Assistência Técnica e Extensão Rural",
+    orgao: "Emater-MG - Empresa de Assistência Técnica e Extensão Rural",
     destaque: false,
     status: "inscricoes_abertas",
     salarioAte: 7321.75,
@@ -1196,12 +1196,12 @@ export const faq: FaqItem[] = [
   {
     pergunta: "O pagamento já está disponível?",
     resposta:
-      "Estamos finalizando o checkout. Ao clicar em “Assinar” você reserva sua vaga com o preço atual — assim que o pagamento abrir, você é avisado em primeira mão e entra antes do reajuste.",
+      "Estamos finalizando o checkout. Ao clicar em “Assinar” você reserva sua vaga com o preço atual - assim que o pagamento abrir, você é avisado em primeira mão e entra antes do reajuste.",
   },
   {
     pergunta: "Os números de vagas e salários são oficiais?",
     resposta:
-      "São uma referência montada a partir da imprensa especializada e de editais anteriores. Editais e prazos mudam quase toda semana — confirme sempre na fonte oficial antes de se inscrever. Para a Transpetro, o edital já está publicado pela Cesgranrio.",
+      "São uma referência montada a partir da imprensa especializada e de editais anteriores. Editais e prazos mudam quase toda semana - confirme sempre na fonte oficial antes de se inscrever. Para a Transpetro, o edital já está publicado pela Cesgranrio.",
   },
   {
     pergunta: "Os simulados são no estilo da banca?",

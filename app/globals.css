@@ -7,13 +7,20 @@
   --muted: #4a5d55;
   --border: #dfe6e2;
 
+  /* Accent lock: green is the primary on light surfaces; amber is used
+     ONLY on the dark banner where green-on-green would not carry. */
   --brand: #007a3d;
   --brand-strong: #005c2e;
   --brand-soft: #e2f2e8;
   --accent: #f2b705;
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Shape scale: cards 16px, controls 10px, pills full. */
+  --radius-card: 1rem;
+  --radius-control: 0.625rem;
 }
 
 @theme inline {
@@ -27,6 +34,7 @@
   --color-brand-soft: var(--brand-soft);
   --color-accent: var(--accent);
   --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -52,13 +60,18 @@ html {
   scroll-behavior: smooth;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
 }
 
 section {
-  scroll-margin-top: 5rem;
+  scroll-margin-top: 6rem;
 }

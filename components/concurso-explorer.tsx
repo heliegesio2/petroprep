@@ -9,7 +9,7 @@ import type { Concurso } from "@/lib/concursos";
 
 interface Props {
   concursos: Concurso[];
-  /** slug do concurso → arquivos de edital que existem em disco. */
+  /** slug do concurso -> arquivos de edital que existem em disco. */
   docsPorConcurso: Record<string, string[]>;
 }
 

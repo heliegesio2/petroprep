@@ -13,13 +13,14 @@ export function SiteNav() {
   return (
     <>
       <div className="bg-[#062a1c] px-4 py-2 text-center text-xs text-white/90">
-        <span className="font-semibold text-accent">{concursoDestaque.tituloCompleto}:</span>{" "}
+        <span className="font-semibold text-accent">
+          {concursoDestaque.tituloCompleto}
+        </span>{" "}
         {concursoDestaque.inscricoesAte
-          ? `inscrições até ${formatData(concursoDestaque.inscricoesAte)}`
-          : "edital em breve"}{" "}
-        —{" "}
+          ? `inscrições até ${formatData(concursoDestaque.inscricoesAte)}.`
+          : "edital em breve."}{" "}
         <Link href="#planos" className="font-semibold underline underline-offset-2">
-          assine e comece a estudar
+          Ver os planos
         </Link>
       </div>
 
