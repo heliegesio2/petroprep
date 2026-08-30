@@ -39,7 +39,7 @@ export function ConcursoCarousel({ concursos, atual, onAtualChange }: Props) {
         aria-hidden
       />
 
-      <div className="mx-auto flex max-w-6xl items-stretch gap-2 px-2 py-6 sm:gap-4 sm:px-4 sm:py-8">
+      <div className="mx-auto flex max-w-6xl items-stretch gap-2 px-2 pt-6 sm:gap-4 sm:px-4 sm:pt-8">
         <Seta direcao="anterior" onClick={() => ir(-1)} />
 
         <div className="min-w-0 flex-1">
@@ -49,19 +49,38 @@ export function ConcursoCarousel({ concursos, atual, onAtualChange }: Props) {
         <Seta direcao="proximo" onClick={() => ir(1)} />
       </div>
 
-      <div className="flex flex-wrap justify-center gap-1.5 px-4 pb-5">
-        {concursos.map((c, i) => (
-          <button
-            key={c.slug}
-            type="button"
-            onClick={() => onAtualChange(i)}
-            aria-label={`Ver ${c.nome}`}
-            aria-current={i === atual}
-            className={`h-1.5 rounded-full transition-all ${
-              i === atual ? "w-6 bg-accent" : "w-1.5 bg-white/30 hover:bg-white/50"
-            }`}
-          />
-        ))}
+      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4 py-4">
+        <span className="text-xs text-white/50">
+          {atual + 1} de {total}
+        </span>
+        <label className="flex items-center gap-2 text-xs text-white/60">
+          <span className="hidden sm:inline">Ir para:</span>
+          <select
+            value={atual}
+            onChange={(e) => onAtualChange(Number(e.target.value))}
+            className="max-w-[16rem] rounded-lg border border-white/15 bg-[#0a3a27] px-2 py-1.5 text-sm text-white"
+            aria-label="Escolher concurso"
+          >
+            <optgroup label="Inscrições abertas">
+              {concursos.map((c, i) =>
+                c.status === "inscricoes_abertas" ? (
+                  <option key={c.slug} value={i}>
+                    {c.nome} — {c.tituloCompleto}
+                  </option>
+                ) : null,
+              )}
+            </optgroup>
+            <optgroup label="Previstos (sem edital)">
+              {concursos.map((c, i) =>
+                c.status === "previsto" ? (
+                  <option key={c.slug} value={i}>
+                    {c.nome} — {c.tituloCompleto}
+                  </option>
+                ) : null,
+              )}
+            </optgroup>
+          </select>
+        </label>
       </div>
     </section>
   );
