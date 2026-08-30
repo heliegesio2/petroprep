@@ -86,6 +86,8 @@ export interface Concurso {
   escolaridadeTexto: string;
   resumo: string;
   linkOficial?: string;
+  /** Caminho da foto do slide (ex.: "/banner/<slug>.jpg"). Ver public/banner/LEIA-ME.md. */
+  imagem?: string;
   /** Dados profundos - presentes só onde já foram preenchidos. */
   cargos?: Cargo[];
   vagas?: Vaga[];
@@ -394,6 +396,7 @@ const listaBruta: Concurso[] = [
     resumo:
       "Quadros Terra e Mar. Vagas em terminais e dutos pelo país, com prova no estilo Cesgranrio.",
     linkOficial: "https://www.cesgranrio.org.br/concurso/transpetro-2026/",
+    imagem: "/banner/transpetro-2026.jpg",
     cargos: cargosTranspetro,
     vagas: vagasTranspetro,
     conteudo: conteudoTranspetro,

@@ -226,17 +226,18 @@ function Slide({ concurso }: { concurso: Concurso }) {
 
       {temPainel && (
         <div className="flex flex-col gap-4">
-          <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-white/10">
-            {/* TODO: trocar por foto real do concurso / estudo (900x560). */}
-            <Image
-              src="https://picsum.photos/seed/petroprep-transpetro-2026/900/560"
-              alt=""
-              fill
-              priority
-              sizes="(min-width: 1024px) 380px, 100vw"
-              className="object-cover"
-            />
-          </div>
+          {concurso.imagem && (
+            <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-white/10">
+              <Image
+                src={concurso.imagem}
+                alt={`Imagem ilustrativa: ${concurso.orgao}`}
+                fill
+                priority
+                sizes="(min-width: 1024px) 380px, 100vw"
+                className="object-cover"
+              />
+            </div>
+          )}
           <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
             <p className="text-xs font-semibold text-white/60">
               Contagem regressiva para a prova
