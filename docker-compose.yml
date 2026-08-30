@@ -38,7 +38,7 @@ services:
     # --webpack + WATCHPACK_POLLING: Turbopack não detecta mudanças no bind mount
     # do Windows; o watcher do Webpack com polling detecta (HMR fica ~1-2s mais
     # lento, aceitável). Para edição intensa, prefira `npm run dev` no host.
-    command: sh -c "npx prisma db push --skip-generate && npm run dev -- -H 0.0.0.0 --webpack"
+    command: sh -c "npx prisma db push --skip-generate --accept-data-loss && npm run dev -- -H 0.0.0.0 --webpack"
     environment:
       DATABASE_URL: postgresql://petroprep:petroprep@db:5432/petroprep?schema=public
       NEXT_PUBLIC_SITE_URL: http://localhost:3100

@@ -1,11 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { escolaridadeLabel } from "@/lib/concurso";
+import { planos } from "@/lib/planos";
 
 type Status = "idle" | "loading" | "ok" | "error";
 
-export function WaitlistForm() {
+interface Props {
+  planoId: string;
+  onTrocarPlano: (id: string) => void;
+}
+
+export function AssinarForm({ planoId, onTrocarPlano }: Props) {
   const [status, setStatus] = useState<Status>("idle");
   const [mensagem, setMensagem] = useState("");
 
@@ -16,23 +21,21 @@ export function WaitlistForm() {
 
     const form = new FormData(event.currentTarget);
     const payload = {
-      email: String(form.get("email") ?? "").trim(),
       nome: String(form.get("nome") ?? "").trim() || undefined,
-      escolaridade: String(form.get("escolaridade") ?? "") || undefined,
-      areaInteresse: String(form.get("areaInteresse") ?? "").trim() || undefined,
+      email: String(form.get("email") ?? "").trim(),
+      plano: planoId,
     };
 
     try {
-      const res = await fetch("/api/waitlist", {
+      const res = await fetch("/api/assinar", {
         method: "POST",
         headers: { "content-type": "application/json" },
         body: JSON.stringify(payload),
       });
       const data = (await res.json()) as { message?: string };
-
       if (res.ok) {
         setStatus("ok");
-        setMensagem(data.message ?? "Pronto! Você está na lista.");
+        setMensagem(data.message ?? "Recebemos sua reserva!");
       } else {
         setStatus("error");
         setMensagem(data.message ?? "Não foi possível concluir. Tente de novo.");
@@ -46,7 +49,7 @@ export function WaitlistForm() {
   if (status === "ok") {
     return (
       <div className="rounded-2xl border border-brand/40 bg-brand-soft p-6 text-brand-strong">
-        <p className="font-semibold">Inscrição confirmada 🎉</p>
+        <p className="font-semibold">Reserva registrada 🎉</p>
         <p className="mt-1 text-sm">{mensagem}</p>
       </div>
     );
@@ -54,6 +57,25 @@ export function WaitlistForm() {
 
   return (
     <form onSubmit={onSubmit} className="grid gap-3 rounded-2xl border bg-surface p-6">
+      <p className="text-sm font-semibold">
+        Reservar o {planos.find((p) => p.id === planoId)?.nome}
+      </p>
+
+      <div className="flex flex-wrap gap-1 rounded-lg border p-1 text-sm">
+        {planos.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            onClick={() => onTrocarPlano(p.id)}
+            className={`flex-1 rounded-md px-3 py-1.5 font-medium transition-colors ${
+              p.id === planoId ? "bg-brand text-white" : "text-muted hover:text-foreground"
+            }`}
+          >
+            {p.nome} · R$ {p.preco}
+          </button>
+        ))}
+      </div>
+
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="grid gap-1 text-sm">
           <span className="font-medium">Nome</span>
@@ -62,7 +84,7 @@ export function WaitlistForm() {
             type="text"
             autoComplete="name"
             className="rounded-lg border bg-background px-3 py-2"
-            placeholder="Como te chamamos"
+            placeholder="Seu nome"
           />
         </label>
         <label className="grid gap-1 text-sm">
@@ -80,39 +102,12 @@ export function WaitlistForm() {
         </label>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        <label className="grid gap-1 text-sm">
-          <span className="font-medium">Escolaridade</span>
-          <select
-            name="escolaridade"
-            defaultValue=""
-            className="rounded-lg border bg-background px-3 py-2"
-          >
-            <option value="">Prefiro não informar</option>
-            {Object.entries(escolaridadeLabel).map(([v, label]) => (
-              <option key={v} value={v}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="grid gap-1 text-sm">
-          <span className="font-medium">Área de interesse</span>
-          <input
-            name="areaInteresse"
-            type="text"
-            className="rounded-lg border bg-background px-3 py-2"
-            placeholder="Ex.: Operação, Engenharia, TI"
-          />
-        </label>
-      </div>
-
       <button
         type="submit"
         disabled={status === "loading"}
         className="mt-1 rounded-lg bg-brand px-5 py-3 font-semibold text-white transition-colors hover:bg-brand-strong disabled:opacity-60"
       >
-        {status === "loading" ? "Enviando…" : "Quero entrar na lista"}
+        {status === "loading" ? "Enviando…" : "Reservar com o preço atual"}
       </button>
 
       {status === "error" && (
@@ -120,8 +115,8 @@ export function WaitlistForm() {
       )}
 
       <p className="text-xs text-muted">
-        Sem spam. Você recebe o material inicial, o resumo do edital quando sair e
-        o acesso antecipado aos simulados. Pode sair da lista quando quiser.
+        Ainda não é cobrança. O checkout está sendo finalizado — quem reserva agora trava o
+        preço atual e entra antes do reajuste.
       </p>
     </form>
   );

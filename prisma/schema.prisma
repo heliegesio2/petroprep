@@ -1,8 +1,9 @@
-// PetroPrep 2027 — schema do banco.
+// PetroPrep — schema do banco.
 //
-// Fase 1 (landing page): apenas `Lead` é usado, para a lista de espera.
-// Os demais modelos ficam aqui como direção da plataforma completa
-// (simulados, conteúdos, vagas) e ainda NÃO têm rotas/telas.
+// Fase atual (landing multi-concurso): apenas `Lead` é usado — agora representa
+// uma INTENÇÃO DE ASSINATURA (nome, e-mail, plano escolhido) captada antes do
+// checkout real existir. Os demais modelos ficam aqui como direção da
+// plataforma completa (simulados, conteúdos, vagas) e ainda NÃO têm rotas.
 
 generator client {
   provider = "prisma-client-js"
@@ -13,17 +14,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/// Inscrição na lista de espera feita pela landing page.
+/// Intenção de assinatura captada pela landing (pré-checkout).
 model Lead {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  nome          String?
-  escolaridade  String? // "medio" | "tecnico" | "superior"
-  areaInteresse String?
-  origem        String? // utm_source ou canal informado
-  confirmado    Boolean  @default(false)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id           String   @id @default(cuid())
+  email        String   @unique
+  nome         String?
+  plano        String? // "transpetro" | "completo"
+  concursoSlug String? // slug do concurso ou "todos"
+  origem       String? // utm_source ou canal informado
+  confirmado   Boolean  @default(false)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   @@index([createdAt])
 }

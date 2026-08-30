@@ -1,95 +1,88 @@
-import fs from "node:fs";
-import path from "node:path";
-import { concurso } from "@/lib/concurso";
+import { concursoDestaque, type Concurso } from "@/lib/concursos";
 
-const PDF_DIR = path.join(process.cwd(), "public", "edital");
-
-interface Documento {
-  arquivo: string;
-  titulo: string;
-}
-
-/** Catálogo dos documentos esperados na pasta public/edital. */
-const documentos: Documento[] = [
-  { arquivo: "edital-petrobras-2027.pdf", titulo: "Edital de abertura" },
+/** Nome de arquivo esperado → rótulo exibido. */
+const DOCS_CATALOGO: { arquivo: string; titulo: string }[] = [
+  { arquivo: "edital.pdf", titulo: "Edital de abertura" },
   { arquivo: "conteudo-programatico.pdf", titulo: "Conteúdo programático completo" },
   { arquivo: "cronograma.pdf", titulo: "Cronograma e datas" },
 ];
 
-function existe(arquivo: string): number | null {
-  try {
-    const stat = fs.statSync(path.join(PDF_DIR, arquivo));
-    return stat.size;
-  } catch {
-    return null;
-  }
+interface Props {
+  concurso: Concurso;
+  /** Arquivos que realmente existem em public/edital/<slug>/ (vem de app/page.tsx). */
+  docs: string[];
 }
 
-function formatSize(bytes: number): string {
-  if (bytes < 1024 * 1024) return `${Math.max(1, Math.round(bytes / 1024))} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
-
-export function EditalSection() {
-  const itens = documentos.map((d) => ({ ...d, tamanho: existe(d.arquivo) }));
-  const algumDisponivel = itens.some((i) => i.tamanho !== null);
+export function EditalSection({ concurso, docs }: Props) {
+  const itens = DOCS_CATALOGO.filter((d) => docs.includes(d.arquivo));
+  const algumDisponivel = itens.length > 0;
 
   return (
-    <section id="edital" className="border-b py-16 lg:py-24">
+    <section id="edital" className="border-b py-12 lg:py-16">
       <div className="mx-auto max-w-6xl px-4">
-        <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
-          Edital e documentos oficiais
+        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+          Edital e documentos — {concurso.nome}
         </h2>
-        <p className="mt-3 max-w-2xl text-muted">
+        <p className="mt-2 max-w-2xl text-sm text-muted">
           {algumDisponivel
-            ? "Baixe os documentos abaixo. Nossa equipe já preparou o resumo com o que muda em relação ao concurso anterior."
-            : "O edital do concurso Petrobras 2027 ainda não foi publicado. Assim que sair, os PDFs aparecem aqui e vão por e-mail para quem está na lista."}
+            ? "Baixe os documentos abaixo. O resumo com o que muda em relação ao concurso anterior está no material dos assinantes."
+            : concurso.status === "previsto"
+              ? "O edital deste concurso ainda não foi publicado. Assine o Plano Completo para ser avisado assim que sair."
+              : "Estamos organizando os PDFs deste concurso. Enquanto isso, use o link oficial abaixo."}
         </p>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {itens.map((i) => (
-            <div key={i.arquivo} className="flex flex-col rounded-2xl border bg-surface p-5">
-              <FileIcon />
-              <h3 className="mt-3 font-semibold">{i.titulo}</h3>
-              {i.tamanho !== null ? (
+        {algumDisponivel && (
+          <div className="mt-6 grid gap-4 md:grid-cols-3">
+            {itens.map((i) => (
+              <div key={i.arquivo} className="flex flex-col rounded-2xl border bg-surface p-5">
+                <FileIcon />
+                <h3 className="mt-3 font-semibold">{i.titulo}</h3>
                 <a
-                  href={`/edital/${i.arquivo}`}
-                  className="mt-4 inline-flex items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-strong"
+                  href={`/edital/${concurso.slug}/${i.arquivo}`}
+                  className="mt-4 inline-flex w-fit items-center gap-2 rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-brand-strong"
                   download
                 >
                   Baixar PDF
-                  <span className="text-xs font-normal opacity-80">
-                    ({formatSize(i.tamanho)})
-                  </span>
                 </a>
-              ) : (
-                <span className="mt-4 inline-flex w-fit items-center gap-2 rounded-lg border border-dashed px-4 py-2 text-sm text-muted">
-                  Em breve
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
+              </div>
+            ))}
+          </div>
+        )}
 
-        <div className="mt-8 rounded-2xl border bg-surface p-6">
+        <div className="mt-6 rounded-2xl border bg-surface p-6">
           <h3 className="font-semibold">Canais oficiais</h3>
           <p className="mt-1 text-sm text-muted">
-            As inscrições e o edital verdadeiro só saem nestes endereços. A
-            PetroPrep não faz inscrição no seu lugar.
+            Inscrições e editais verdadeiros só saem nos sites oficiais. Esta plataforma
+            não faz inscrição no seu lugar.
           </p>
           <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm">
-            {concurso.linksOficiais.map((l) => (
-              <li key={l.url}>
+            {concurso.linkOficial && (
+              <li>
                 <a
-                  href={l.url}
+                  href={concurso.linkOficial}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="font-medium text-brand hover:underline"
                 >
-                  {l.label} ↗
+                  Edital / inscrição — {concurso.orgao} ↗
                 </a>
               </li>
-            ))}
+            )}
+            <li>
+              <a
+                href="https://www.cesgranrio.org.br"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium text-brand hover:underline"
+              >
+                Fundação Cesgranrio ↗
+              </a>
+            </li>
+            {concurso.slug !== concursoDestaque.slug && (
+              <li className="text-muted">
+                Não achou? Busque pelo nome do órgão + &quot;concurso {new Date().getFullYear()}&quot;.
+              </li>
+            )}
           </ul>
         </div>
       </div>

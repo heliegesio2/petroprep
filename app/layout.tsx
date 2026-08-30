@@ -1,37 +1,37 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { concurso } from "@/lib/concurso";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const title = "PetroPrep 2027 — Preparatório para o Concurso da Petrobras";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3100";
+const title = "PetroPrep — Preparatório para concursos públicos";
 const description =
-  "Plataforma de estudos para o próximo concurso da Petrobras: simulados no estilo Cesgranrio, conteúdo programático organizado e um buscador de vagas por escolaridade e área.";
+  "Plataforma de estudos para os principais concursos do país. Transpetro 2026 em destaque: simulados no estilo Cesgranrio, conteúdo por cargo e buscador de vagas e cotas por perfil.";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(concurso.siteUrl),
+  metadataBase: new URL(siteUrl),
   title: {
     default: title,
-    template: "%s · PetroPrep 2027",
+    template: "%s · PetroPrep",
   },
   description,
   keywords: [
-    "concurso Petrobras",
-    "concurso Petrobras 2027",
-    "simulado Petrobras",
+    "concurso Transpetro",
+    "concurso Transpetro 2026",
+    "simulado Transpetro",
     "Cesgranrio",
-    "Transpetro",
-    "edital Petrobras",
+    "concursos 2026",
+    "preparatório concurso",
   ],
   openGraph: {
     type: "website",
     locale: "pt_BR",
-    url: concurso.siteUrl,
-    siteName: "PetroPrep 2027",
+    url: siteUrl,
+    siteName: "PetroPrep",
     title,
     description,
   },

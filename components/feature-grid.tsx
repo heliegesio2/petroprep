@@ -12,16 +12,16 @@ const features = [
     icon: "M5 4h14v16l-7-3-7 3z",
   },
   {
-    titulo: "Buscador de vagas por filtro",
+    titulo: "Buscador de vagas e cotas",
     descricao:
-      "Filtre por escolaridade, área, estado e requisito e veja só as vagas em que você pode concorrer — e onde a concorrência é menor.",
+      "Filtre por escolaridade, área, estado e reserva de vagas e veja quantas oportunidades são para o seu perfil — e onde a concorrência é menor.",
     icon: "M10 4a6 6 0 1 0 3.5 10.9L19 20l1-1-5.1-5.5A6 6 0 0 0 10 4z",
   },
   {
-    titulo: "Diagnóstico de desempenho",
+    titulo: "Vários concursos num lugar só",
     descricao:
-      "Depois de cada simulado, veja sua nota projetada, os pontos fracos por disciplina e o que estudar na próxima semana.",
-    icon: "M4 19V5m5 14V9m5 10V7m5 12V11",
+      "Transpetro em destaque e os próximos grandes concursos no mesmo painel. O Plano Completo libera todos, com material novo a cada edital.",
+    icon: "M4 6h16M4 12h16M4 18h16",
   },
 ];
 

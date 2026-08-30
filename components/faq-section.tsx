@@ -1,4 +1,4 @@
-import { faq } from "@/lib/concurso";
+import { faq } from "@/lib/concursos";
 
 export function FaqSection() {
   return (

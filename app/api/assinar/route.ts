@@ -1,16 +1,15 @@
 import { NextResponse } from "next/server";
 import { hasDatabase, prisma } from "@/lib/prisma";
+import { getPlano } from "@/lib/planos";
 
 export const runtime = "nodejs";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const ESCOLARIDADES = new Set(["medio", "tecnico", "superior"]);
 
 interface Payload {
   email?: unknown;
   nome?: unknown;
-  escolaridade?: unknown;
-  areaInteresse?: unknown;
+  plano?: unknown;
   origem?: unknown;
 }
 
@@ -30,30 +29,29 @@ export async function POST(request: Request) {
 
   const email = str(body.email)?.toLowerCase();
   if (!email || !EMAIL_RE.test(email)) {
-    return NextResponse.json(
-      { message: "Informe um e-mail válido." },
-      { status: 422 },
-    );
+    return NextResponse.json({ message: "Informe um e-mail válido." }, { status: 422 });
   }
 
-  const escolaridadeRaw = str(body.escolaridade, 20);
+  const planoId = str(body.plano, 20);
+  const plano = planoId ? getPlano(planoId) : undefined;
+  if (!plano) {
+    return NextResponse.json({ message: "Plano inválido." }, { status: 422 });
+  }
+
   const data = {
     email,
     nome: str(body.nome, 80) ?? null,
-    escolaridade:
-      escolaridadeRaw && ESCOLARIDADES.has(escolaridadeRaw)
-        ? escolaridadeRaw
-        : null,
-    areaInteresse: str(body.areaInteresse, 80) ?? null,
+    plano: plano.id,
+    concursoSlug:
+      plano.concursos === "todos" ? "todos" : plano.concursos[0] ?? null,
     origem: str(body.origem, 80) ?? null,
   };
 
-  // Sem banco configurado: a landing continua funcionando.
   if (!hasDatabase) {
-    console.info("[waitlist] lead recebido (sem DATABASE_URL):", data.email);
+    console.info("[assinar] reserva recebida (sem DATABASE_URL):", data.email, data.plano);
     return NextResponse.json({
       message:
-        "Recebemos seu contato! Estamos finalizando a configuração e você já está reservado na lista.",
+        "Recebemos sua reserva! Assim que o checkout abrir, você é o primeiro a saber — com o preço atual garantido.",
     });
   }
 
@@ -63,12 +61,12 @@ export async function POST(request: Request) {
       create: data,
       update: {
         nome: data.nome ?? undefined,
-        escolaridade: data.escolaridade ?? undefined,
-        areaInteresse: data.areaInteresse ?? undefined,
+        plano: data.plano,
+        concursoSlug: data.concursoSlug ?? undefined,
       },
     });
   } catch (error) {
-    console.error("[waitlist] falha ao gravar lead:", error);
+    console.error("[assinar] falha ao gravar reserva:", error);
     return NextResponse.json(
       { message: "Tivemos um problema ao salvar. Tente novamente em instantes." },
       { status: 500 },
@@ -76,6 +74,7 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json({
-    message: "Você está na lista. Fique de olho no seu e-mail nas próximas semanas.",
+    message:
+      "Reserva registrada! Assim que o pagamento abrir, avisamos por e-mail e você entra com o preço atual.",
   });
 }
