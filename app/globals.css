@@ -1,0 +1,64 @@
+@import "tailwindcss";
+
+:root {
+  --background: #f6f8f7;
+  --surface: #ffffff;
+  --foreground: #0b1f17;
+  --muted: #4a5d55;
+  --border: #dfe6e2;
+
+  --brand: #007a3d;
+  --brand-strong: #005c2e;
+  --brand-soft: #e2f2e8;
+  --accent: #f2b705;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-accent: var(--accent);
+  --font-sans: var(--font-sans);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #071410;
+    --surface: #0e2119;
+    --foreground: #e9f2ec;
+    --muted: #9db4a9;
+    --border: #1e3a2e;
+
+    --brand: #2bb673;
+    --brand-strong: #1f9c60;
+    --brand-soft: #12291f;
+    --accent: #f7c948;
+  }
+}
+
+* {
+  border-color: var(--color-border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+section {
+  scroll-margin-top: 5rem;
+}

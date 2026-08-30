@@ -1,0 +1,117 @@
+// PetroPrep 2027 — schema do banco.
+//
+// Fase 1 (landing page): apenas `Lead` é usado, para a lista de espera.
+// Os demais modelos ficam aqui como direção da plataforma completa
+// (simulados, conteúdos, vagas) e ainda NÃO têm rotas/telas.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Inscrição na lista de espera feita pela landing page.
+model Lead {
+  id            String   @id @default(cuid())
+  email         String   @unique
+  nome          String?
+  escolaridade  String? // "medio" | "tecnico" | "superior"
+  areaInteresse String?
+  origem        String? // utm_source ou canal informado
+  confirmado    Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([createdAt])
+}
+
+// ----------------------------------------------------------------------------
+// A partir daqui: modelagem da plataforma completa (fases seguintes).
+// ----------------------------------------------------------------------------
+
+enum Escolaridade {
+  MEDIO
+  TECNICO
+  SUPERIOR
+}
+
+model Cargo {
+  id           String       @id @default(cuid())
+  slug         String       @unique
+  titulo       String
+  escolaridade Escolaridade
+  area         String
+  salario      Decimal      @db.Decimal(10, 2)
+  requisito    String
+  vagas        Vaga[]
+  questoes     Questao[]
+  createdAt    DateTime     @default(now())
+}
+
+model Vaga {
+  id           String       @id @default(cuid())
+  cargo        Cargo        @relation(fields: [cargoId], references: [id])
+  cargoId      String
+  uf           String
+  cidade       String
+  unidade      String?
+  imediatas    Int          @default(0)
+  cadastroRes  Int          @default(0)
+  escolaridade Escolaridade
+  createdAt    DateTime     @default(now())
+
+  @@index([uf, escolaridade])
+}
+
+/// Item do conteúdo programático, ligado a disciplinas e questões.
+model Topico {
+  id         String    @id @default(cuid())
+  disciplina String
+  titulo     String
+  descricao  String?
+  natureza   String // "basico" | "especifico"
+  questoes   Questao[]
+
+  @@unique([disciplina, titulo])
+}
+
+model Questao {
+  id          String              @id @default(cuid())
+  enunciado   String
+  alternativas Json
+  correta     Int
+  comentario  String?
+  dificuldade Int                 @default(3)
+  topico      Topico?             @relation(fields: [topicoId], references: [id])
+  topicoId    String?
+  cargo       Cargo?              @relation(fields: [cargoId], references: [id])
+  cargoId     String?
+  respostas   RespostaSimulado[]
+  createdAt   DateTime            @default(now())
+}
+
+model Simulado {
+  id        String             @id @default(cuid())
+  titulo    String
+  descricao String?
+  duracaoMin Int               @default(240)
+  respostas RespostaSimulado[]
+  createdAt DateTime           @default(now())
+}
+
+model RespostaSimulado {
+  id          String   @id @default(cuid())
+  simulado    Simulado @relation(fields: [simuladoId], references: [id])
+  simuladoId  String
+  questao     Questao  @relation(fields: [questaoId], references: [id])
+  questaoId   String
+  leadEmail   String?
+  marcada     Int
+  correta     Boolean
+  respondidoEm DateTime @default(now())
+
+  @@index([simuladoId])
+}

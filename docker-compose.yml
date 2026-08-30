@@ -1,0 +1,25 @@
+# Postgres local para desenvolvimento.
+#   docker compose up -d
+# Depois: copie .env.example para .env e rode `npm run db:push`.
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: petroprep-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: petroprep
+      POSTGRES_PASSWORD: petroprep
+      POSTGRES_DB: petroprep
+    ports:
+      - "5432:5432"
+    volumes:
+      - petroprep-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U petroprep"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  petroprep-pgdata:
