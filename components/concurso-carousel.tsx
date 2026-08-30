@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { CaretLeftIcon, CaretRightIcon, GraduationCapIcon, ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
+import { CaretLeftIcon, CaretRightIcon, GraduationCapIcon, ArrowUpRightIcon, IdentificationCardIcon } from "@phosphor-icons/react/dist/ssr";
 import { motion, useReducedMotion } from "motion/react";
 import {
   formatBRL,
   formatData,
   imagemDoConcurso,
+  linkInscricaoDoConcurso,
   statusLabel,
   type Concurso,
 } from "@/lib/concursos";
@@ -118,6 +119,7 @@ function Seta({
 
 function Slide({ concurso }: { concurso: Concurso }) {
   const temPainel = Boolean(concurso.dataProva);
+  const linkInscricao = linkInscricaoDoConcurso(concurso);
   const salario = concurso.salarioAte
     ? concurso.salarioDe
       ? `${formatBRL(concurso.salarioDe)} a ${formatBRL(concurso.salarioAte)}`
@@ -207,18 +209,24 @@ function Slide({ concurso }: { concurso: Concurso }) {
           >
             Assinar
           </a>
-          {concurso.linkOficial && (
+          {linkInscricao && (
             <a
-              href={concurso.linkOficial}
+              href={linkInscricao}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 rounded-lg border border-white/20 bg-white/5 px-4 py-2 text-sm font-semibold transition-colors hover:bg-white/10"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold transition-colors hover:bg-white/15"
             >
-              Edital oficial
-              <ArrowUpRightIcon size={14} weight="bold" aria-hidden />
+              <IdentificationCardIcon size={16} weight="bold" aria-hidden />
+              Inscrição e taxa
+              <ArrowUpRightIcon size={13} weight="bold" aria-hidden />
             </a>
           )}
         </div>
+        <p className="mt-2 text-xs text-white/50">
+          {linkInscricao
+            ? "O cadastro e o pagamento da taxa são feitos no site oficial do concurso."
+            : "O cadastro e o pagamento da taxa são feitos no site do órgão organizador."}
+        </p>
       </div>
 
       <div className="flex flex-col gap-4">

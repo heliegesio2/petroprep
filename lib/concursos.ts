@@ -108,7 +108,10 @@ export interface Concurso {
   /** Frase de escolaridade exibida no banner (aceita "Fundamental" etc.). */
   escolaridadeTexto: string;
   resumo: string;
+  /** Página do edital / do concurso no site do órgão ou da banca. */
   linkOficial?: string;
+  /** Página onde o candidato cria a conta, escolhe o cargo e paga a taxa. */
+  linkInscricao?: string;
   /** Caminho da foto do slide (ex.: "/banner/<slug>.jpg"). Ver public/banner/LEIA-ME.md. */
   imagem?: string;
   /** Dados profundos - presentes só onde já foram preenchidos. */
@@ -420,6 +423,7 @@ const listaBruta: Concurso[] = [
     resumo:
       "Quadros Terra e Mar. Vagas em terminais e dutos pelo país, com prova no estilo Cesgranrio.",
     linkOficial: "https://www.cesgranrio.org.br/concurso/transpetro-2026/",
+    linkInscricao: "https://concursos.cesgranrio.org.br/portal/avaliacoes/22",
     imagem: "/banner/transpetro-2026.jpg",
     cargos: cargosTranspetro,
     vagas: vagasTranspetro,
@@ -1176,6 +1180,14 @@ export function getConcurso(slug: string): Concurso | undefined {
 /** Foto do slide: a específica do concurso, senão a da categoria. */
 export function imagemDoConcurso(concurso: Concurso): string {
   return concurso.imagem ?? IMAGEM_POR_CATEGORIA[concurso.categoria];
+}
+
+/**
+ * Link "onde me inscrevo e pago a taxa": a página de inscrição quando conhecida,
+ * senão a página oficial do concurso. `undefined` = ainda não temos URL.
+ */
+export function linkInscricaoDoConcurso(concurso: Concurso): string | undefined {
+  return concurso.linkInscricao ?? concurso.linkOficial;
 }
 
 // ---------------------------------------------------------------------------

@@ -1,4 +1,8 @@
-import { concursoDestaque, type Concurso } from "@/lib/concursos";
+import {
+  concursoDestaque,
+  linkInscricaoDoConcurso,
+  type Concurso,
+} from "@/lib/concursos";
 import { FileArrowDownIcon, FilePdfIcon, ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
 
 const DOCS_CATALOGO: { arquivo: string; titulo: string }[] = [
@@ -57,30 +61,33 @@ export function EditalSection({ concurso, docs }: Props) {
             não faz inscrição no seu lugar.
           </p>
           <ul className="mt-4 grid gap-2 text-sm">
-            {concurso.linkOficial && (
+            {linkInscricaoDoConcurso(concurso) && (
               <li>
                 <a
-                  href={concurso.linkOficial}
+                  href={linkInscricaoDoConcurso(concurso)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 font-medium text-brand hover:underline"
                 >
-                  Edital e inscrição no site do órgão
+                  Fazer a inscrição e pagar a taxa (site oficial)
                   <ArrowUpRightIcon size={14} weight="bold" aria-hidden />
                 </a>
               </li>
             )}
-            <li>
-              <a
-                href="https://www.cesgranrio.org.br"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 font-medium text-brand hover:underline"
-              >
-                Fundação Cesgranrio
-                <ArrowUpRightIcon size={14} weight="bold" aria-hidden />
-              </a>
-            </li>
+            {concurso.linkOficial &&
+              concurso.linkOficial !== linkInscricaoDoConcurso(concurso) && (
+                <li>
+                  <a
+                    href={concurso.linkOficial}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 font-medium text-brand hover:underline"
+                  >
+                    Página do concurso e edital
+                    <ArrowUpRightIcon size={14} weight="bold" aria-hidden />
+                  </a>
+                </li>
+              )}
             {concurso.slug !== concursoDestaque.slug && (
               <li className="text-muted">
                 Não achou? Busque pelo nome do órgão mais &quot;concurso{" "}
