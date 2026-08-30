@@ -1,6 +1,14 @@
-# Postgres local para desenvolvimento.
-#   docker compose up -d
-# Depois: copie .env.example para .env e rode `npm run db:push`.
+# Ambiente de desenvolvimento completo: app (hot reload) + Postgres.
+#
+#   docker compose up          # sobe tudo; abra http://localhost:3100
+#   docker compose up -d       # em segundo plano
+#   docker compose down        # para tudo (mantém os dados do banco)
+#   docker compose down -v     # para tudo e APAGA o banco
+#
+# Porta 3100 no host (3000 costuma estar ocupada por outro projeto).
+#
+# Primeira vez / depois de mudar package.json ou prisma/schema.prisma:
+#   docker compose up --build
 
 services:
   db:
@@ -12,14 +20,36 @@ services:
       POSTGRES_PASSWORD: petroprep
       POSTGRES_DB: petroprep
     ports:
-      - "5432:5432"
+      - "5433:5432" # host 5433 → evita conflito com Postgres local em 5432
     volumes:
       - petroprep-pgdata:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U petroprep"]
-      interval: 10s
+      interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: petroprep-app
+    restart: unless-stopped
+    command: sh -c "npx prisma db push --skip-generate && npm run dev -- -H 0.0.0.0"
+    environment:
+      DATABASE_URL: postgresql://petroprep:petroprep@db:5432/petroprep?schema=public
+      NEXT_PUBLIC_SITE_URL: http://localhost:3100
+      WATCHPACK_POLLING: "true"
+    ports:
+      - "3100:3100"
+    volumes:
+      - .:/app
+      # volumes anônimos: usam o que está DENTRO da imagem, não o do host
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      db:
+        condition: service_healthy
 
 volumes:
   petroprep-pgdata:

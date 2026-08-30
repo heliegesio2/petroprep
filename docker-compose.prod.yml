@@ -1,0 +1,52 @@
+# Build de produção local (sem hot reload). Testa a imagem que vai pro deploy.
+#
+#   docker compose -f docker-compose.prod.yml up --build
+#
+# Abra http://localhost:3100
+
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: petroprep-db-prod
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: petroprep
+      POSTGRES_PASSWORD: petroprep
+      POSTGRES_DB: petroprep
+    volumes:
+      - petroprep-pgdata-prod:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U petroprep"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: npx prisma db push --skip-generate
+    environment:
+      DATABASE_URL: postgresql://petroprep:petroprep@db:5432/petroprep?schema=public
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: "no"
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: petroprep-app-prod
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql://petroprep:petroprep@db:5432/petroprep?schema=public
+      NEXT_PUBLIC_SITE_URL: http://localhost:3100
+    ports:
+      - "3100:3000"
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+volumes:
+  petroprep-pgdata-prod:

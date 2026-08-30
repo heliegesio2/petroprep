@@ -14,28 +14,50 @@ funcionalidades estão apenas modeladas em `prisma/schema.prisma`.
 
 Next.js 16 (App Router, Turbopack) · React 19 · Tailwind CSS v4 · Prisma 6 · PostgreSQL
 
-## Rodando localmente
+## Rodando com Docker (recomendado)
+
+Precisa só do **Docker Desktop** aberto. Um comando sobe o site + o banco:
+
+```bash
+docker compose up --build      # primeira vez (ou após mudar deps/schema)
+docker compose up              # nas próximas vezes
+```
+
+Abra **http://localhost:3100** (porta 3100 porque a 3000 costuma estar ocupada
+por outro projeto). O código é montado por volume, então editar arquivos
+recarrega a página automaticamente (hot reload). O Postgres já vem junto (host
+`localhost:5433`) e a tabela `Lead` é criada no start (`prisma db push`).
+
+```bash
+docker compose down            # para tudo (mantém os dados)
+docker compose down -v         # para tudo e apaga o banco
+docker compose logs -f app     # ver os logs do site
+```
+
+Build de produção local (a mesma imagem do deploy, sem hot reload):
+
+```bash
+docker compose -f docker-compose.prod.yml up --build
+```
+
+## Rodando sem Docker (Node direto)
 
 ```bash
 npm install
 cp .env.example .env        # no Windows: copy .env.example .env
-
-# opcional — só se quiser persistir os leads:
-docker compose up -d        # sobe Postgres em localhost:5432
-npm run db:push             # cria a tabela Lead
-
-npm run dev                 # http://localhost:3000
+npm run dev                 # http://localhost:3100
 ```
 
 Sem `DATABASE_URL` a landing funciona normalmente: o formulário da lista de
 espera responde com mensagem amigável e apenas registra o lead no log do
-servidor (ver `app/api/waitlist/route.ts`).
+servidor (ver `app/api/waitlist/route.ts`). Para persistir os leads, suba um
+Postgres e rode `npm run db:push`.
 
 ## Scripts
 
 | Comando | O que faz |
 | --- | --- |
-| `npm run dev` | Desenvolvimento (Turbopack) |
+| `npm run dev` | Desenvolvimento (Turbopack) na porta 3100 |
 | `npm run build` | `prisma generate` + build de produção |
 | `npm run start` | Servir o build |
 | `npm run lint` | ESLint |

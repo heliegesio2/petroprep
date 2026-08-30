@@ -14,20 +14,34 @@ Contexto factual importante: até 2026-08 **não há edital oficial** da Petrobr
 
 ## Comandos
 
+**Docker é o caminho recomendado** (evita as quirks de file-watching do Next no Windows quando o projeto está direto na raiz `C:\`):
+
 ```bash
-npm run dev            # servidor de desenvolvimento (Turbopack) em :3000
-npm run build          # prisma generate + next build
-npm run lint           # ESLint (eslint-config-next). Deve passar limpo.
-
-npm run db:push        # aplica prisma/schema.prisma no banco (dev, sem migration)
-npm run db:migrate     # cria/aplica migration nomeada (produção)
-npm run db:studio      # Prisma Studio
-npm run db:generate    # regenera o Prisma Client (rode após editar o schema)
-
-docker compose up -d   # sobe Postgres local (user/senha/db = petroprep)
+docker compose up --build   # app (hot reload) + Postgres → http://localhost:3100
+docker compose down [-v]     # para (-v apaga o banco)
+docker compose -f docker-compose.prod.yml up --build   # testa a imagem de deploy
 ```
 
-Não há suíte de testes ainda. Verificação = `npm run lint` + `npm run build` + conferir a página no browser.
+O serviço `app` (compose dev) roda `prisma db push` e depois `next dev -H 0.0.0.0`. `WATCHPACK_POLLING=true` é obrigatório para hot reload no bind mount.
+
+Node direto:
+
+```bash
+npm run dev            # Turbopack em :3100 (emite "Watchpack Error ... C:\pagefile.sys" — ruído inofensivo)
+npm run build          # prisma generate + next build (output: standalone)
+npm run lint           # ESLint (eslint-config-next). Deve passar limpo.
+npm run db:push        # aplica prisma/schema.prisma (dev, sem migration)
+npm run db:studio      # Prisma Studio
+```
+
+Não há suíte de testes. Verificação = `npm run lint` + `npm run build` + conferir a página no browser.
+
+## Docker
+
+- `Dockerfile` — build de produção multi-stage, usa `output: "standalone"` do `next.config.ts`. Copia `.prisma` e `@prisma` para o runner (a rota `/api/waitlist` precisa do engine em runtime). `openssl` instalado nas 3 stages (Prisma exige).
+- `Dockerfile.dev` — imagem de dev, `npm ci` + código por volume.
+- `docker-compose.yml` — dev: `app` + `db`, source bind-mounted, `node_modules` e `.next` em volumes anônimos.
+- `docker-compose.prod.yml` — build de produção + serviço `migrate` one-shot antes do `app`.
 
 ## Arquitetura
 
