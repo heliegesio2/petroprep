@@ -21,8 +21,27 @@ Use **apenas** imagens que você pode usar comercialmente:
 **Não** use fotos de portais de notícia (G1, GZH, UOL, agências) sem licença: são
 protegidas por direito autoral e o site cobra assinatura.
 
+## Imagem por categoria
+
+Cada concurso tem uma `categoria` em `lib/concursos.ts`. Se o concurso não tem
+`imagem` própria, o slide usa a foto da categoria (`IMAGEM_POR_CATEGORIA`):
+
+| Categoria      | Arquivo                    |
+| -------------- | -------------------------- |
+| petroleo       | `transpetro-2026.jpg`      |
+| policia        | `cat-policia.jpg`          |
+| bombeiros      | `cat-bombeiros.jpg`        |
+| saude          | `cat-saude.jpg`            |
+| juridico       | `cat-juridico.jpg`         |
+| fiscal         | `cat-fiscal.jpg`           |
+| educacao       | `cat-educacao.jpg`         |
+| administracao  | `cat-administracao.jpg`    |
+
+Para dar foto exclusiva a um concurso, salve `<slug>.jpg` aqui e ponha
+`imagem: "/banner/<slug>.jpg"` no objeto dele.
+
 ## O que já está aqui
 
-- `transpetro-2026.jpg` - refinaria ao entardecer. Foto de Red Shuheart no
-  Unsplash (Unsplash License: uso comercial livre, sem atribuição obrigatória).
-  Troque pela foto oficial quando tiver uma licenciada.
+Todas as fotos são do Unsplash (Unsplash License: uso comercial livre, sem
+atribuição obrigatória). Troque por fotos oficiais/licenciadas quando tiver.
+`transpetro-2026.jpg` é uma refinaria ao entardecer (Red Shuheart).

@@ -63,8 +63,31 @@ export interface FaqItem {
 
 export type ConcursoStatus = "inscricoes_abertas" | "previsto";
 
+/** Agrupa concursos para escolher a foto do slide. Ver IMAGEM_POR_CATEGORIA. */
+export type CategoriaConcurso =
+  | "petroleo"
+  | "policia"
+  | "bombeiros"
+  | "saude"
+  | "juridico"
+  | "fiscal"
+  | "educacao"
+  | "administracao";
+
+export const IMAGEM_POR_CATEGORIA: Record<CategoriaConcurso, string> = {
+  petroleo: "/banner/transpetro-2026.jpg",
+  policia: "/banner/cat-policia.jpg",
+  bombeiros: "/banner/cat-bombeiros.jpg",
+  saude: "/banner/cat-saude.jpg",
+  juridico: "/banner/cat-juridico.jpg",
+  fiscal: "/banner/cat-fiscal.jpg",
+  educacao: "/banner/cat-educacao.jpg",
+  administracao: "/banner/cat-administracao.jpg",
+};
+
 export interface Concurso {
   slug: string;
+  categoria: CategoriaConcurso;
   nome: string;
   tituloCompleto: string;
   orgao: string;
@@ -381,6 +404,7 @@ const conteudoTranspetro: TopicoProva[] = [
 const listaBruta: Concurso[] = [
   {
     slug: "transpetro-2026",
+    categoria: "petroleo",
     nome: "Transpetro",
     tituloCompleto: "Concurso Transpetro 2026",
     orgao: "Petrobras Transporte S.A. (Transpetro)",
@@ -404,6 +428,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "ses-to-2026",
+    categoria: "saude",
     nome: "SES TO",
     tituloCompleto: "Secretaria de Saúde do Tocantins 2026",
     orgao: "Governo do Tocantins",
@@ -420,6 +445,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "pc-ba-2026",
+    categoria: "policia",
     nome: "PC BA",
     tituloCompleto: "Polícia Civil da Bahia 2026",
     orgao: "Polícia Civil do Estado da Bahia",
@@ -436,6 +462,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "pc-ma-2026",
+    categoria: "policia",
     nome: "PC MA",
     tituloCompleto: "Polícia Civil do Maranhão 2026",
     orgao: "Polícia Civil do Estado do Maranhão",
@@ -451,6 +478,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "pc-pr-2026",
+    categoria: "policia",
     nome: "PC PR",
     tituloCompleto: "Polícia Civil do Paraná 2026",
     orgao: "Polícia Civil do Estado do Paraná",
@@ -465,6 +493,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "tce-sp-2026",
+    categoria: "juridico",
     nome: "TCE SP",
     tituloCompleto: "Tribunal de Contas do Estado de São Paulo 2026",
     orgao: "Tribunal de Contas do Estado de São Paulo",
@@ -479,6 +508,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "tj-pr-2026",
+    categoria: "juridico",
     nome: "TJ PR",
     tituloCompleto: "Tribunal de Justiça do Paraná 2026",
     orgao: "Tribunal de Justiça do Estado do Paraná",
@@ -493,6 +523,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "mp-sp-2026",
+    categoria: "juridico",
     nome: "MP SP",
     tituloCompleto: "Ministério Público de São Paulo 2026",
     orgao: "Ministério Público do Estado de São Paulo",
@@ -508,6 +539,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "iss-manaus-2026",
+    categoria: "fiscal",
     nome: "ISS Manaus",
     tituloCompleto: "ISS Manaus 2026: Auditor Fiscal",
     orgao: "Prefeitura de Manaus / SEMEF",
@@ -523,6 +555,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "bombeiros-rr-2026",
+    categoria: "bombeiros",
     nome: "CBM RR",
     tituloCompleto: "Corpo de Bombeiros Militar de Roraima 2026",
     orgao: "Corpo de Bombeiros Militar do Estado de Roraima",
@@ -538,6 +571,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "prefeitura-santos-2026",
+    categoria: "administracao",
     nome: "Pref. Santos",
     tituloCompleto: "Prefeitura de Santos 2026",
     orgao: "Prefeitura Municipal de Santos (SP)",
@@ -551,6 +585,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "receita-federal-2026",
+    categoria: "fiscal",
     nome: "Receita Federal",
     tituloCompleto: "Concurso Receita Federal 2026 (previsto)",
     orgao: "Ministério da Fazenda / Receita Federal do Brasil",
@@ -564,6 +599,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "tcu-2026",
+    categoria: "juridico",
     nome: "TCU",
     tituloCompleto: "Concurso TCU 2026 (previsto)",
     orgao: "Tribunal de Contas da União",
@@ -577,6 +613,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "pm-sp-2026",
+    categoria: "policia",
     nome: "PM SP",
     tituloCompleto: "Polícia Militar de São Paulo 2026 (previsto)",
     orgao: "Polícia Militar do Estado de São Paulo",
@@ -590,6 +627,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "sefaz-ba-2026",
+    categoria: "fiscal",
     nome: "Sefaz BA",
     tituloCompleto: "Secretaria da Fazenda da Bahia 2026 (previsto)",
     orgao: "Secretaria da Fazenda do Estado da Bahia",
@@ -605,6 +643,7 @@ const listaBruta: Concurso[] = [
   // ---- Demais concursos com inscrições abertas (panorama ago/2026) ----
   {
     slug: "sesau-al-2026",
+    categoria: "saude",
     nome: "Sesau AL",
     tituloCompleto: "Secretaria de Saúde de Alagoas 2026",
     orgao: "Governo de Alagoas / Sesau",
@@ -619,6 +658,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "prefeitura-cristalina-2026",
+    categoria: "administracao",
     nome: "Pref. Cristalina",
     tituloCompleto: "Prefeitura de Cristalina (GO) 2026",
     orgao: "Prefeitura Municipal de Cristalina (GO)",
@@ -633,6 +673,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "pc-al-2026",
+    categoria: "policia",
     nome: "PC AL",
     tituloCompleto: "Polícia Civil de Alagoas 2026",
     orgao: "Polícia Civil do Estado de Alagoas",
@@ -646,6 +687,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "tce-ma-2026",
+    categoria: "juridico",
     nome: "TCE MA",
     tituloCompleto: "Tribunal de Contas do Estado do Maranhão 2026",
     orgao: "Tribunal de Contas do Estado do Maranhão",
@@ -658,6 +700,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "tcdf-2026",
+    categoria: "juridico",
     nome: "TCDF",
     tituloCompleto: "Tribunal de Contas do Distrito Federal 2026",
     orgao: "Tribunal de Contas do Distrito Federal",
@@ -670,6 +713,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "iss-taubate-2026",
+    categoria: "fiscal",
     nome: "ISS Taubaté",
     tituloCompleto: "ISS Taubaté 2026: Auditor Fiscal",
     orgao: "Prefeitura de Taubaté (SP)",
@@ -682,6 +726,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "iss-caruaru-2026",
+    categoria: "fiscal",
     nome: "ISS Caruaru",
     tituloCompleto: "ISS Caruaru 2026: Auditor / Analista Fiscal",
     orgao: "Prefeitura de Caruaru (PE)",
@@ -694,6 +739,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "pericia-ma-2026",
+    categoria: "policia",
     nome: "Perícia MA",
     tituloCompleto: "Perícia Oficial do Maranhão 2026",
     orgao: "Instituto de Perícia Oficial do Estado do Maranhão",
@@ -706,6 +752,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "policia-penal-ma-2026",
+    categoria: "policia",
     nome: "Pol. Penal MA",
     tituloCompleto: "Polícia Penal do Maranhão 2026",
     orgao: "Secretaria de Administração Penitenciária do Maranhão",
@@ -719,6 +766,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "pmbm-ba-saude-2026",
+    categoria: "saude",
     nome: "PM/CBM BA (Saúde)",
     tituloCompleto: "PM e Bombeiros da Bahia 2026: Saúde",
     orgao: "Polícia Militar e Corpo de Bombeiros Militar da Bahia",
@@ -731,6 +779,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "abgf-2026",
+    categoria: "administracao",
     nome: "ABGF",
     tituloCompleto: "Agência Brasileira Gestora de Fundos 2026",
     orgao: "ABGF - Agência Brasileira Gestora de Fundos Garantidores e Garantias",
@@ -743,6 +792,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "agepar-2026",
+    categoria: "administracao",
     nome: "AGEPAR",
     tituloCompleto: "Agência Reguladora do Paraná 2026",
     orgao: "AGEPAR - Agência Reguladora de Serviços Públicos Delegados do Paraná",
@@ -755,6 +805,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "sape-sc-2026",
+    categoria: "policia",
     nome: "SAP SC",
     tituloCompleto: "Administração Prisional de Santa Catarina 2026",
     orgao: "Secretaria de Estado da Administração Prisional e Socioeducativa de SC",
@@ -767,6 +818,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "unificado-pi-2026",
+    categoria: "administracao",
     nome: "Unificado PI",
     tituloCompleto: "Concurso Público Unificado do Piauí 2026",
     orgao: "Governo do Estado do Piauí",
@@ -779,6 +831,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "faetec-rj-2026",
+    categoria: "educacao",
     nome: "Faetec RJ",
     tituloCompleto: "Faetec RJ 2026: Professores temporários",
     orgao: "Fundação de Apoio à Escola Técnica do Rio de Janeiro",
@@ -792,6 +845,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "ufrrj-2026",
+    categoria: "educacao",
     nome: "UFRRJ",
     tituloCompleto: "Universidade Federal Rural do Rio de Janeiro 2026",
     orgao: "UFRRJ",
@@ -804,6 +858,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "ufpe-2026",
+    categoria: "educacao",
     nome: "UFPE",
     tituloCompleto: "Universidade Federal de Pernambuco 2026",
     orgao: "UFPE",
@@ -816,6 +871,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "ifpi-2026",
+    categoria: "educacao",
     nome: "IFPI",
     tituloCompleto: "Instituto Federal do Piauí 2026",
     orgao: "IFPI",
@@ -828,6 +884,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "guarda-vida-saquarema-2026",
+    categoria: "bombeiros",
     nome: "Guarda-Vida Saquarema",
     tituloCompleto: "Guarda-Vidas de Saquarema (RJ) 2026",
     orgao: "Prefeitura de Saquarema (RJ)",
@@ -840,6 +897,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "seplag-mg-2026",
+    categoria: "administracao",
     nome: "Seplag MG",
     tituloCompleto: "Seplag Minas Gerais 2026",
     orgao: "Secretaria de Planejamento e Gestão de Minas Gerais",
@@ -852,6 +910,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "docas-pa-2026",
+    categoria: "administracao",
     nome: "Docas PA",
     tituloCompleto: "Companhia Docas do Pará 2026",
     orgao: "CDP - Companhia Docas do Pará",
@@ -864,6 +923,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "saude-rj-iaserj-2026",
+    categoria: "saude",
     nome: "Iaserj RJ",
     tituloCompleto: "Saúde RJ / Iaserj 2026",
     orgao: "Instituto de Assistência dos Servidores do Estado do RJ",
@@ -876,6 +936,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "cidennf-rj-2026",
+    categoria: "saude",
     nome: "Cidennf RJ",
     tituloCompleto: "Consórcio do Noroeste Fluminense (Cidennf) 2026",
     orgao: "Cidennf - Consórcio Intermunicipal de Desenvolvimento do Noroeste Fluminense",
@@ -889,6 +950,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "cra-rj-2026",
+    categoria: "administracao",
     nome: "CRA RJ",
     tituloCompleto: "Conselho Regional de Administração do RJ 2026",
     orgao: "CRA-RJ",
@@ -902,6 +964,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "demhab-poa-2026",
+    categoria: "administracao",
     nome: "DEMHAB POA",
     tituloCompleto: "DEMHAB Porto Alegre 2026",
     orgao: "Departamento Municipal de Habitação de Porto Alegre",
@@ -914,6 +977,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "hob-mg-2026",
+    categoria: "saude",
     nome: "HOB MG",
     tituloCompleto: "Hospital Odilon Behrens (Belo Horizonte) 2026",
     orgao: "HOB - Hospital Municipal Odilon Behrens",
@@ -927,6 +991,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "procon-al-2026",
+    categoria: "fiscal",
     nome: "Procon AL",
     tituloCompleto: "Procon Alagoas 2026",
     orgao: "Procon do Estado de Alagoas",
@@ -939,6 +1004,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "caer-rr-2026",
+    categoria: "administracao",
     nome: "CAER RR",
     tituloCompleto: "Companhia de Águas e Esgotos de Roraima 2026",
     orgao: "CAER - Companhia de Águas e Esgotos de Roraima",
@@ -952,6 +1018,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "cremers-2026",
+    categoria: "saude",
     nome: "CREMERS",
     tituloCompleto: "Conselho Regional de Medicina do RS 2026",
     orgao: "CREMERS",
@@ -964,6 +1031,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "creci-sp-2026",
+    categoria: "administracao",
     nome: "CRECI SP",
     tituloCompleto: "Conselho Regional de Corretores de Imóveis de SP 2026",
     orgao: "CRECI-SP",
@@ -976,6 +1044,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "emater-mg-2026",
+    categoria: "administracao",
     nome: "Emater MG",
     tituloCompleto: "Emater Minas Gerais 2026",
     orgao: "Emater-MG - Empresa de Assistência Técnica e Extensão Rural",
@@ -990,6 +1059,7 @@ const listaBruta: Concurso[] = [
   // ---- Demais concursos previstos (sem edital) ----
   {
     slug: "cgu-2026",
+    categoria: "juridico",
     nome: "CGU",
     tituloCompleto: "Concurso CGU 2026 (previsto)",
     orgao: "Controladoria-Geral da União",
@@ -1002,6 +1072,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "camara-deputados-2026",
+    categoria: "juridico",
     nome: "Câmara dos Deputados",
     tituloCompleto: "Concurso Câmara dos Deputados 2026 (previsto)",
     orgao: "Câmara dos Deputados",
@@ -1013,6 +1084,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "pmdf-2026",
+    categoria: "policia",
     nome: "PMDF",
     tituloCompleto: "Polícia Militar do Distrito Federal 2026 (previsto)",
     orgao: "Polícia Militar do Distrito Federal",
@@ -1025,6 +1097,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "pm-pe-2026",
+    categoria: "policia",
     nome: "PM PE",
     tituloCompleto: "Polícia Militar de Pernambuco 2026 (previsto)",
     orgao: "Polícia Militar de Pernambuco",
@@ -1037,6 +1110,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "sefaz-df-2026",
+    categoria: "fiscal",
     nome: "Sefaz DF",
     tituloCompleto: "Secretaria de Fazenda do DF 2026 (previsto)",
     orgao: "Secretaria de Economia do Distrito Federal",
@@ -1049,6 +1123,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "sefaz-to-2026",
+    categoria: "fiscal",
     nome: "Sefaz TO",
     tituloCompleto: "Secretaria de Fazenda do Tocantins 2026 (previsto)",
     orgao: "Secretaria da Fazenda do Estado do Tocantins",
@@ -1061,6 +1136,7 @@ const listaBruta: Concurso[] = [
   },
   {
     slug: "ministerio-saude-2026",
+    categoria: "saude",
     nome: "Ministério da Saúde",
     tituloCompleto: "Concurso Ministério da Saúde 2026 (previsto)",
     orgao: "Ministério da Saúde",
@@ -1095,6 +1171,11 @@ export const concursoDestaque =
 
 export function getConcurso(slug: string): Concurso | undefined {
   return concursos.find((c) => c.slug === slug);
+}
+
+/** Foto do slide: a específica do concurso, senão a da categoria. */
+export function imagemDoConcurso(concurso: Concurso): string {
+  return concurso.imagem ?? IMAGEM_POR_CATEGORIA[concurso.categoria];
 }
 
 // ---------------------------------------------------------------------------

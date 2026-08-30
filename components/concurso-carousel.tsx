@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from "motion/react";
 import {
   formatBRL,
   formatData,
+  imagemDoConcurso,
   statusLabel,
   type Concurso,
 } from "@/lib/concursos";
@@ -124,11 +125,7 @@ function Slide({ concurso }: { concurso: Concurso }) {
     : null;
 
   return (
-    <div
-      className={`grid gap-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:p-7 ${
-        temPainel ? "lg:grid-cols-[1.25fr_1fr]" : ""
-      }`}
-    >
+    <div className="grid gap-6 rounded-2xl border border-white/10 bg-white/[0.04] p-5 sm:p-7 lg:grid-cols-[1.25fr_1fr]">
       <div className="min-w-0">
         <div className="flex flex-wrap items-center gap-2 text-xs font-semibold">
           {concurso.destaque && (
@@ -224,20 +221,18 @@ function Slide({ concurso }: { concurso: Concurso }) {
         </div>
       </div>
 
-      {temPainel && (
-        <div className="flex flex-col gap-4">
-          {concurso.imagem && (
-            <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-white/10">
-              <Image
-                src={concurso.imagem}
-                alt={`Imagem ilustrativa: ${concurso.orgao}`}
-                fill
-                priority
-                sizes="(min-width: 1024px) 380px, 100vw"
-                className="object-cover"
-              />
-            </div>
-          )}
+      <div className="flex flex-col gap-4">
+        <div className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-white/10">
+          <Image
+            src={imagemDoConcurso(concurso)}
+            alt={`Imagem ilustrativa: ${concurso.orgao}`}
+            fill
+            priority
+            sizes="(min-width: 1024px) 380px, 100vw"
+            className="object-cover"
+          />
+        </div>
+        {temPainel && (
           <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
             <p className="text-xs font-semibold text-white/60">
               Contagem regressiva para a prova
@@ -249,8 +244,8 @@ function Slide({ concurso }: { concurso: Concurso }) {
               Prova em {formatData(concurso.dataProva!)}
             </p>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
