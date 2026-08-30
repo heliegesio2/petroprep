@@ -53,7 +53,7 @@ Não há suíte de testes. Verificação = `npm run lint` + `npm run build` + co
 
 **Composição da página.** `app/page.tsx` (Server Component) lê `public/edital/<slug>/*.pdf` com `fs` → `docsPorConcurso`, e monta: `SiteNav` → `ConcursoExplorer` → `FeatureGrid` → `PlanosSection` → `FaqSection` → `SiteFooter`.
 
-**`ConcursoExplorer` (client) é o núcleo.** Guarda o índice do concurso selecionado e renderiza `ConcursoCarousel` (banner) + `VagasFiltro` + `ConteudoSection` + `EditalSection` — todos recebem o `concurso` atual como prop. Trocar de slide no carrossel troca as 3 seções.
+**`ConcursoExplorer` (client) é o núcleo.** Guarda `filtro` (`FiltroConcursos`) + `atual`. Renderiza `ConcursoFiltro` (faixa clara entre a nav e o banner: escolaridade/situação/salário mínimo + linha "N concursos para o seu perfil, salários de X a Y") → `ConcursoCarousel` (só com os concursos que passam no filtro, via `concursoAtendeFiltro`) → `VagasFiltro` + `ConteudoSection` + `EditalSection` do concurso atual. Trocar filtro reseta `atual` para 0; `atual` é clampado ao tamanho da lista filtrada. Helpers em `lib/concursos.ts`: `filtroConcursosVazio`, `concursoAtendeFiltro`, `resumoConcursos`, `opcoesSalarioMinimo`.
 
 **`ConcursoCarousel`** (client): banner verde escuro `#062a1c`, compacto (~cabe acima da dobra junto com o topo do filtro), setas ‹ ›, dots, teclado ←/→. Slide `destaque` mostra `Countdown` + vagas/salário; slides `previsto` mostram situação.
 

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { CaretLeftIcon, CaretRightIcon, GraduationCapIcon, ArrowUpRightIcon } from "@phosphor-icons/react/dist/ssr";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import {
   formatBRL,
   formatData,
@@ -45,17 +45,14 @@ export function ConcursoCarousel({ concursos, atual, onAtualChange }: Props) {
         <Seta direcao="anterior" onClick={() => ir(-1)} />
 
         <div className="min-w-0 flex-1">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={concurso.slug}
-              initial={reduce ? false : { opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reduce ? undefined : { opacity: 0, y: -8 }}
-              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <Slide concurso={concurso} />
-            </motion.div>
-          </AnimatePresence>
+          <motion.div
+            key={concurso.slug}
+            initial={reduce ? false : { opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <Slide concurso={concurso} />
+          </motion.div>
         </div>
 
         <Seta direcao="proximo" onClick={() => ir(1)} />

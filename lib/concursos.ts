@@ -1095,6 +1095,79 @@ export function getConcurso(slug: string): Concurso | undefined {
 }
 
 // ---------------------------------------------------------------------------
+// Filtro do carrossel (nível de concurso): estreita a lista pelo perfil
+// ---------------------------------------------------------------------------
+
+export type FiltroSituacao = "todas" | "inscricoes_abertas" | "previsto";
+
+export interface FiltroConcursos {
+  escolaridade: Escolaridade | "todas";
+  situacao: FiltroSituacao;
+  /** Salário mínimo (teto do cargo) que o concurso precisa alcançar. */
+  salarioMinimo: number;
+}
+
+export const filtroConcursosVazio: FiltroConcursos = {
+  escolaridade: "todas",
+  situacao: "todas",
+  salarioMinimo: 0,
+};
+
+export const opcoesSalarioMinimo: { valor: number; label: string }[] = [
+  { valor: 0, label: "Qualquer salário" },
+  { valor: 3000, label: "A partir de R$ 3.000" },
+  { valor: 5000, label: "A partir de R$ 5.000" },
+  { valor: 8000, label: "A partir de R$ 8.000" },
+  { valor: 12000, label: "A partir de R$ 12.000" },
+  { valor: 18000, label: "A partir de R$ 18.000" },
+];
+
+export function concursoAtendeFiltro(
+  concurso: Concurso,
+  filtro: FiltroConcursos,
+): boolean {
+  if (
+    filtro.escolaridade !== "todas" &&
+    !concurso.escolaridades.includes(filtro.escolaridade)
+  ) {
+    return false;
+  }
+  if (filtro.situacao !== "todas" && concurso.status !== filtro.situacao) {
+    return false;
+  }
+  if (filtro.salarioMinimo > 0) {
+    if (!concurso.salarioAte || concurso.salarioAte < filtro.salarioMinimo) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export function filtrarConcursos(filtro: FiltroConcursos): Concurso[] {
+  return concursos.filter((c) => concursoAtendeFiltro(c, filtro));
+}
+
+export interface ResumoConcursos {
+  total: number;
+  salarioMin: number | null;
+  salarioMax: number | null;
+}
+
+export function resumoConcursos(lista: Concurso[]): ResumoConcursos {
+  const pisos = lista
+    .map((c) => c.salarioDe ?? c.salarioAte)
+    .filter((v): v is number => typeof v === "number");
+  const tetos = lista
+    .map((c) => c.salarioAte)
+    .filter((v): v is number => typeof v === "number");
+  return {
+    total: lista.length,
+    salarioMin: pisos.length ? Math.min(...pisos) : null,
+    salarioMax: tetos.length ? Math.max(...tetos) : null,
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Filtro de vagas / cotas (para concursos com dados profundos)
 // ---------------------------------------------------------------------------
 

@@ -32,11 +32,11 @@ export function VagasFiltro({ concurso }: { concurso: Concurso }) {
     <section id="vagas" className="border-b py-14 lg:py-20">
       <div className="mx-auto max-w-6xl px-4">
         <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-          Quantas vagas são para você?
+          Vagas por cargo, localidade e cota
         </h2>
         <p className="mt-2 max-w-2xl text-sm text-muted">
-          {concurso.nome}: diga escolaridade, área, estado e situação, e veja o total e
-          as vagas de cota do seu perfil.
+          {concurso.nome}: filtre por cargo, estado e reserva de vagas para ver o total
+          e quantas são do seu perfil.
         </p>
 
         {temDados ? (
