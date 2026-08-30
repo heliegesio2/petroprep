@@ -17,22 +17,40 @@ export const escolaridadeLabel: Record<Escolaridade, string> = {
   superior: "Nível Superior",
 };
 
+/** Transpetro 2026: são 4 editais independentes. */
+export type EditalTranspetro =
+  | "mar-guarnicao"
+  | "mar-oficiais"
+  | "terra-medio"
+  | "terra-superior";
+
+export const editalLabel: Record<EditalTranspetro, string> = {
+  "mar-guarnicao": "Quadro de Mar - Guarnição",
+  "mar-oficiais": "Quadro de Mar - Oficiais",
+  "terra-medio": "Quadro de Terra - Médio/Técnico",
+  "terra-superior": "Quadro de Terra - Superior",
+};
+
 export interface Cargo {
   slug: string;
   titulo: string;
   escolaridade: Escolaridade;
   area: string;
-  /** Faixa salarial inicial de referência, em R$. */
+  /** Salário inicial, em R$. */
   salario: number;
+  /** Taxa de inscrição, em R$. */
+  taxa?: number;
   requisito: string;
+  /** Só na Transpetro: a qual dos 4 editais o cargo pertence. */
+  edital?: EditalTranspetro;
 }
 
 export interface Vaga {
   cargoSlug: string;
-  uf: string;
-  unidade: string;
-  /** Vagas de nomeação imediata (ampla + reservas, que são subconjunto). */
+  /** "Nacional", "Norte/Nordeste", "Rio de Janeiro", "São Paulo", "Sul", "Todos os polos de terra". */
+  polo: string;
   imediatas: number;
+  cadastroReserva: number;
 }
 
 export interface TopicoProva {
@@ -40,6 +58,12 @@ export interface TopicoProva {
   escolaridades: Escolaridade[];
   itens: string[];
   natureza: "basico" | "especifico";
+  /** Parágrafo de conteúdo real. */
+  resumo?: string;
+  /** Quanto cai na prova. */
+  prioridade?: "alta" | "media" | "baixa";
+  /** Editais que cobram (rótulos livres). */
+  editais?: string[];
 }
 
 export type GrupoReservaId = "negros" | "pcd" | "indigena" | "lgbtqia";
@@ -125,17 +149,6 @@ export interface Concurso {
 // Rótulos e utilitários compartilhados
 // ---------------------------------------------------------------------------
 
-export const ufLabel: Record<string, string> = {
-  RJ: "Rio de Janeiro",
-  SP: "São Paulo",
-  BA: "Bahia",
-  PE: "Pernambuco",
-  RN: "Rio Grande do Norte",
-  PR: "Paraná",
-  ES: "Espírito Santo",
-  AM: "Amazonas",
-};
-
 export function formatBRL(valor: number, semCentavos = true): string {
   return valor.toLocaleString("pt-BR", {
     style: "currency",
@@ -220,182 +233,192 @@ export function vagasReservadas(imediatas: number, grupo: GrupoReserva): number 
 // Dados profundos - Transpetro 2026 (banca Cesgranrio)
 // ---------------------------------------------------------------------------
 
+// Dados dos 4 editais Transpetro 2026 (Cesgranrio). Vagas imediatas e cadastro
+// de reserva conforme cobertura da imprensa especializada; lista de cargos
+// parcial (os principais). Confira o edital para o quadro completo por polo.
 const cargosTranspetro: Cargo[] = [
-  {
-    slug: "tec-operacao",
-    titulo: "Técnico(a) de Operação Júnior",
-    escolaridade: "tecnico",
-    area: "Operação",
-    salario: 5876,
-    requisito:
-      "Curso técnico em áreas industriais (Química, Petroquímica, Mecânica, Eletrotécnica ou afins).",
-  },
-  {
-    slug: "tec-manutencao",
-    titulo: "Técnico(a) de Manutenção Júnior",
-    escolaridade: "tecnico",
-    area: "Manutenção",
-    salario: 5876,
-    requisito:
-      "Curso técnico em Mecânica, Eletrônica, Eletrotécnica, Instrumentação ou Caldeiraria.",
-  },
-  {
-    slug: "tec-administracao",
-    titulo: "Técnico(a) de Administração e Controle Júnior",
-    escolaridade: "medio",
-    area: "Administrativo",
-    salario: 5876,
-    requisito: "Ensino médio completo.",
-  },
-  {
-    slug: "eng-equipamentos",
-    titulo: "Engenheiro(a) de Equipamentos Júnior",
-    escolaridade: "superior",
-    area: "Engenharia",
-    salario: 13649,
-    requisito:
-      "Superior em Engenharia (Mecânica, Elétrica, Civil, Química ou afins) e registro no CREA.",
-  },
-  {
-    slug: "eng-dutos",
-    titulo: "Engenheiro(a) Júnior - Dutos/Transporte",
-    escolaridade: "superior",
-    area: "Engenharia",
-    salario: 13649,
-    requisito: "Superior em Engenharia e registro no CREA.",
-  },
-  {
-    slug: "analista-sistemas",
-    titulo: "Analista de Sistemas Júnior",
-    escolaridade: "superior",
-    area: "Tecnologia",
-    salario: 13649,
-    requisito:
-      "Superior em Computação, Sistemas de Informação, Engenharia de Software ou afins.",
-  },
-  {
-    slug: "advogado",
-    titulo: "Advogado(a) Júnior",
-    escolaridade: "superior",
-    area: "Jurídico",
-    salario: 13649,
-    requisito: "Bacharel em Direito e inscrição na OAB. Prova discursiva.",
-  },
-  {
-    slug: "profissional-contabilidade",
-    titulo: "Profissional Júnior - Ciências Contábeis",
-    escolaridade: "superior",
-    area: "Administrativo",
-    salario: 13649,
-    requisito: "Superior em Ciências Contábeis e registro no CRC.",
-  },
+  // Edital 01 - Quadro de Mar, Guarnição (nível médio, taxa R$ 81,50, nacional)
+  { slug: "mar-auxiliar-saude", titulo: "Auxiliar de Saúde", escolaridade: "medio", area: "Saúde", salario: 5464, taxa: 81.5, edital: "mar-guarnicao", requisito: "Ensino médio + técnico em Enfermagem, CIR e curso de formação da Marinha." },
+  { slug: "mar-condutor-bombeador", titulo: "Condutor Bombeador", escolaridade: "medio", area: "Máquinas", salario: 5464, taxa: 81.5, edital: "mar-guarnicao", requisito: "Ensino médio + certificação da Marinha para a função (CIR/STCW)." },
+  { slug: "mar-condutor-mecanico", titulo: "Condutor Mecânico", escolaridade: "medio", area: "Máquinas", salario: 5464, taxa: 81.5, edital: "mar-guarnicao", requisito: "Ensino médio + certificação da Marinha para a função (CIR/STCW)." },
+  { slug: "mar-cozinheiro", titulo: "Cozinheiro", escolaridade: "medio", area: "Camarotagem", salario: 5464, taxa: 81.5, edital: "mar-guarnicao", requisito: "Ensino médio + curso de formação de aquaviário da Marinha." },
+  { slug: "mar-eletricista", titulo: "Eletricista", escolaridade: "medio", area: "Máquinas", salario: 5464, taxa: 81.5, edital: "mar-guarnicao", requisito: "Ensino médio + técnico em Eletrotécnica/Eletrônica e certificação da Marinha." },
+  { slug: "mar-moco-conves", titulo: "Moço de Convés", escolaridade: "medio", area: "Convés", salario: 5464, taxa: 81.5, edital: "mar-guarnicao", requisito: "Ensino médio + curso de formação de aquaviário da Marinha (CFAQ)." },
+  { slug: "mar-moco-maquinas", titulo: "Moço de Máquinas", escolaridade: "medio", area: "Máquinas", salario: 5464, taxa: 81.5, edital: "mar-guarnicao", requisito: "Ensino médio + curso de formação de aquaviário da Marinha (CFAQ)." },
+  { slug: "mar-taifeiro", titulo: "Taifeiro", escolaridade: "medio", area: "Camarotagem", salario: 5464, taxa: 81.5, edital: "mar-guarnicao", requisito: "Ensino médio + curso de formação de aquaviário da Marinha." },
+  // Edital 02 - Quadro de Mar, Oficiais (nível superior, taxa R$ 117, nacional)
+  { slug: "mar-2o-oficial-maquinas", titulo: "2º Oficial de Máquinas", escolaridade: "superior", area: "Máquinas", salario: 15034.81, taxa: 117, edital: "mar-oficiais", requisito: "Formação de Oficial de Máquinas da Marinha Mercante e certificação (CIR/STCW)." },
+  { slug: "mar-2o-oficial-nautica", titulo: "2º Oficial de Náutica", escolaridade: "superior", area: "Náutica", salario: 15034.81, taxa: 117, edital: "mar-oficiais", requisito: "Formação de Oficial de Náutica da Marinha Mercante e certificação (CIR/STCW)." },
+  // Edital 03 - Quadro de Terra, Médio/Técnico (taxa R$ 81,50, polos Norte/Nordeste, RJ, SP, Sul)
+  { slug: "terra-adm-controle", titulo: "Técnico(a) de Administração e Controle Júnior", escolaridade: "tecnico", area: "Administrativo", salario: 5876, taxa: 81.5, edital: "terra-medio", requisito: "Ensino médio completo." },
+  { slug: "terra-dutos-terminais", titulo: "Técnico(a) de Dutos e Terminais Júnior", escolaridade: "tecnico", area: "Operação", salario: 5876, taxa: 81.5, edital: "terra-medio", requisito: "Curso técnico em Química, Petroquímica, Mecânica, Eletrotécnica ou afins." },
+  { slug: "terra-manutencao-mecanica", titulo: "Técnico(a) de Manutenção Júnior - Mecânica", escolaridade: "tecnico", area: "Manutenção", salario: 5876, taxa: 81.5, edital: "terra-medio", requisito: "Curso técnico em Mecânica." },
+  { slug: "terra-manutencao-eletrica", titulo: "Técnico(a) de Manutenção Júnior - Elétrica/Instrumentação", escolaridade: "tecnico", area: "Manutenção", salario: 5876, taxa: 81.5, edital: "terra-medio", requisito: "Curso técnico em Eletrotécnica, Eletrônica ou Instrumentação." },
+  { slug: "terra-seguranca", titulo: "Técnico(a) de Segurança Júnior", escolaridade: "tecnico", area: "SMS", salario: 5876, taxa: 81.5, edital: "terra-medio", requisito: "Curso técnico em Segurança do Trabalho e registro no MTE." },
+  // Edital 04 - Quadro de Terra, Superior (taxa R$ 117, polos Norte/Nordeste, RJ, SP, Sul)
+  { slug: "terra-administracao", titulo: "Profissional Júnior - Administração", escolaridade: "superior", area: "Administrativo", salario: 12916, taxa: 117, edital: "terra-superior", requisito: "Superior em Administração e registro no CRA." },
+  { slug: "terra-contabeis", titulo: "Profissional Júnior - Ciências Contábeis", escolaridade: "superior", area: "Administrativo", salario: 12916, taxa: 117, edital: "terra-superior", requisito: "Superior em Ciências Contábeis e registro no CRC." },
+  { slug: "terra-eng-mecanica", titulo: "Engenheiro(a) Júnior - Mecânica", escolaridade: "superior", area: "Engenharia", salario: 12916, taxa: 117, edital: "terra-superior", requisito: "Superior em Engenharia Mecânica e registro no CREA." },
+  { slug: "terra-eng-civil", titulo: "Engenheiro(a) Júnior - Civil", escolaridade: "superior", area: "Engenharia", salario: 12916, taxa: 117, edital: "terra-superior", requisito: "Superior em Engenharia Civil e registro no CREA." },
+  { slug: "terra-eng-eletrica", titulo: "Engenheiro(a) Júnior - Elétrica", escolaridade: "superior", area: "Engenharia", salario: 12916, taxa: 117, edital: "terra-superior", requisito: "Superior em Engenharia Elétrica e registro no CREA." },
+  { slug: "terra-analise-sistemas", titulo: "Analista de Sistemas Júnior", escolaridade: "superior", area: "Tecnologia", salario: 12916, taxa: 117, edital: "terra-superior", requisito: "Superior em Computação, Sistemas de Informação ou afins." },
+  { slug: "terra-advocacia", titulo: "Advogado(a) Júnior", escolaridade: "superior", area: "Jurídico", salario: 12916, taxa: 117, edital: "terra-superior", requisito: "Bacharel em Direito e inscrição na OAB. Prova objetiva + discursiva." },
 ];
 
 const vagasTranspetro: Vaga[] = [
-  { cargoSlug: "tec-operacao", uf: "RJ", unidade: "Terminal do Rio de Janeiro", imediatas: 80 },
-  { cargoSlug: "tec-operacao", uf: "BA", unidade: "Terminal de São Francisco do Conde", imediatas: 70 },
-  { cargoSlug: "tec-operacao", uf: "PE", unidade: "Terminal de Suape", imediatas: 50 },
-  { cargoSlug: "tec-operacao", uf: "SP", unidade: "Terminal de São Sebastião", imediatas: 40 },
-  { cargoSlug: "tec-operacao", uf: "PR", unidade: "Terminal de Paranaguá", imediatas: 30 },
-  { cargoSlug: "tec-operacao", uf: "RN", unidade: "Terminal de Guamaré", imediatas: 30 },
-
-  { cargoSlug: "tec-manutencao", uf: "RJ", unidade: "Terminal do Rio de Janeiro", imediatas: 70 },
-  { cargoSlug: "tec-manutencao", uf: "BA", unidade: "Terminal de São Francisco do Conde", imediatas: 60 },
-  { cargoSlug: "tec-manutencao", uf: "SP", unidade: "Terminal de Cubatão", imediatas: 40 },
-  { cargoSlug: "tec-manutencao", uf: "PE", unidade: "Terminal de Suape", imediatas: 40 },
-  { cargoSlug: "tec-manutencao", uf: "AM", unidade: "Terminal de Manaus", imediatas: 30 },
-
-  { cargoSlug: "tec-administracao", uf: "RJ", unidade: "Sede, Rio de Janeiro", imediatas: 50 },
-  { cargoSlug: "tec-administracao", uf: "BA", unidade: "Salvador", imediatas: 25 },
-  { cargoSlug: "tec-administracao", uf: "SP", unidade: "São Paulo", imediatas: 25 },
-  { cargoSlug: "tec-administracao", uf: "RN", unidade: "Natal", imediatas: 20 },
-
-  { cargoSlug: "eng-equipamentos", uf: "RJ", unidade: "Sede, Rio de Janeiro", imediatas: 45 },
-  { cargoSlug: "eng-equipamentos", uf: "BA", unidade: "Salvador", imediatas: 20 },
-  { cargoSlug: "eng-equipamentos", uf: "SP", unidade: "São Paulo", imediatas: 15 },
-
-  { cargoSlug: "eng-dutos", uf: "RJ", unidade: "Sede, Rio de Janeiro", imediatas: 40 },
-  { cargoSlug: "eng-dutos", uf: "ES", unidade: "Vitória", imediatas: 15 },
-
-  { cargoSlug: "analista-sistemas", uf: "RJ", unidade: "Sede / TIC, Rio de Janeiro", imediatas: 45 },
-  { cargoSlug: "analista-sistemas", uf: "SP", unidade: "São Paulo", imediatas: 15 },
-
-  { cargoSlug: "advogado", uf: "RJ", unidade: "Jurídico, Rio de Janeiro", imediatas: 12 },
-  { cargoSlug: "advogado", uf: "BA", unidade: "Salvador", imediatas: 3 },
-
-  { cargoSlug: "profissional-contabilidade", uf: "RJ", unidade: "Sede, Rio de Janeiro", imediatas: 25 },
-  { cargoSlug: "profissional-contabilidade", uf: "BA", unidade: "Salvador", imediatas: 10 },
+  // Quadro de Mar: abrangência nacional
+  { cargoSlug: "mar-auxiliar-saude", polo: "Nacional", imediatas: 3, cadastroReserva: 63 },
+  { cargoSlug: "mar-condutor-bombeador", polo: "Nacional", imediatas: 3, cadastroReserva: 63 },
+  { cargoSlug: "mar-condutor-mecanico", polo: "Nacional", imediatas: 3, cadastroReserva: 63 },
+  { cargoSlug: "mar-cozinheiro", polo: "Nacional", imediatas: 12, cadastroReserva: 252 },
+  { cargoSlug: "mar-eletricista", polo: "Nacional", imediatas: 4, cadastroReserva: 84 },
+  { cargoSlug: "mar-moco-conves", polo: "Nacional", imediatas: 15, cadastroReserva: 315 },
+  { cargoSlug: "mar-moco-maquinas", polo: "Nacional", imediatas: 45, cadastroReserva: 945 },
+  { cargoSlug: "mar-taifeiro", polo: "Nacional", imediatas: 4, cadastroReserva: 84 },
+  { cargoSlug: "mar-2o-oficial-maquinas", polo: "Nacional", imediatas: 51, cadastroReserva: 561 },
+  { cargoSlug: "mar-2o-oficial-nautica", polo: "Nacional", imediatas: 40, cadastroReserva: 440 },
+  // Quadro de Terra: distribuídas entre os polos (detalhe no Anexo de Vagas do edital)
+  { cargoSlug: "terra-adm-controle", polo: "Todos os polos de terra", imediatas: 5, cadastroReserva: 65 },
+  { cargoSlug: "terra-dutos-terminais", polo: "Todos os polos de terra", imediatas: 8, cadastroReserva: 104 },
+  { cargoSlug: "terra-manutencao-mecanica", polo: "Todos os polos de terra", imediatas: 5, cadastroReserva: 65 },
+  { cargoSlug: "terra-manutencao-eletrica", polo: "Todos os polos de terra", imediatas: 4, cadastroReserva: 52 },
+  { cargoSlug: "terra-seguranca", polo: "Todos os polos de terra", imediatas: 4, cadastroReserva: 52 },
+  { cargoSlug: "terra-administracao", polo: "Todos os polos de terra", imediatas: 5, cadastroReserva: 55 },
+  { cargoSlug: "terra-contabeis", polo: "Todos os polos de terra", imediatas: 5, cadastroReserva: 55 },
+  { cargoSlug: "terra-eng-mecanica", polo: "Todos os polos de terra", imediatas: 6, cadastroReserva: 66 },
+  { cargoSlug: "terra-eng-civil", polo: "Todos os polos de terra", imediatas: 3, cadastroReserva: 33 },
+  { cargoSlug: "terra-eng-eletrica", polo: "Todos os polos de terra", imediatas: 5, cadastroReserva: 55 },
+  { cargoSlug: "terra-analise-sistemas", polo: "Todos os polos de terra", imediatas: 5, cadastroReserva: 55 },
+  { cargoSlug: "terra-advocacia", polo: "Todos os polos de terra", imediatas: 1, cadastroReserva: 11 },
 ];
 
+// Conteúdo montado a partir do edital Transpetro 2026 (Cesgranrio) e das provas
+// anteriores da mesma banca. Os "Conhecimentos Básicos" caem em todos os editais;
+// os "Conhecimentos Específicos" mudam por cargo. Confira o conteúdo programático
+// completo no anexo do seu edital.
 const conteudoTranspetro: TopicoProva[] = [
   {
     disciplina: "Língua Portuguesa",
     escolaridades: ["medio", "tecnico", "superior"],
     natureza: "basico",
+    prioridade: "alta",
+    editais: ["Todos os 4 editais"],
+    resumo:
+      "É a disciplina que mais pesa entre os conhecimentos básicos e a que mais elimina candidato na Cesgranrio. A banca cobra interpretação de textos longos (jornalísticos e de divulgação técnica), com pegadinhas de inferência, tese e ponto de vista do autor. Gramática sempre contextualizada ao texto: reescritura de frases sem mudar o sentido, substituição de conectivos, colocação e referência dos pronomes, regência e crase, concordância e pontuação. Vale treinar com provas anteriores da própria Cesgranrio.",
     itens: [
-      "Compreensão e interpretação de textos",
-      "Coesão e coerência textual",
-      "Ortografia, acentuação e pontuação",
-      "Classes de palavras e regência",
+      "Compreensão e interpretação de textos: tese, argumento, inferência e ironia",
+      "Coesão e coerência: conectivos, referência, elipse e progressão temática",
+      "Reescritura de períodos preservando o sentido",
+      "Ortografia, acentuação, emprego da crase e pontuação",
+      "Classes de palavras, regência verbal e nominal",
       "Concordância verbal e nominal",
-      "Semântica e figuras de linguagem",
+      "Significação das palavras: sinonímia, antonímia, denotação e conotação",
+    ],
+  },
+  {
+    disciplina: "Matemática",
+    escolaridades: ["medio", "tecnico"],
+    natureza: "basico",
+    prioridade: "media",
+    editais: ["Quadro de Mar - Guarnição", "Quadro de Terra - Médio/Técnico (parte dos cargos)"],
+    resumo:
+      "Cobrança de raciocínio quantitativo aplicado, sem exigir demonstração. O forte da banca é porcentagem, proporção e regra de três em problemas com contexto (consumo, vazão, rendimento, escala). Aparecem também funções de 1º e 2º grau, progressões, sistemas lineares e noções de estatística e probabilidade. Leitura de gráficos e tabelas costuma valer questões fáceis, então não deixe passar.",
+    itens: [
+      "Razão, proporção, divisão proporcional e porcentagem",
+      "Regra de três simples e composta",
+      "Funções e equações do 1º e 2º grau",
+      "Progressões aritmética e geométrica",
+      "Sistemas de equações lineares",
+      "Estatística descritiva e probabilidade básica",
+      "Leitura e interpretação de gráficos e tabelas",
     ],
   },
   {
     disciplina: "Língua Inglesa",
-    escolaridades: ["tecnico", "superior"],
+    escolaridades: ["superior"],
     natureza: "basico",
+    prioridade: "media",
+    editais: ["Quadro de Terra - Superior", "Quadro de Mar - Oficiais"],
+    resumo:
+      "Prova de leitura instrumental: dois ou três textos técnicos/acadêmicos da área de energia e logística, com questões de ideia principal, detalhe, inferência e vocabulário em contexto. Não cobra produção escrita. Foco em reconhecer referência (this, that, it), sufixos e prefixos, false friends, e o sentido de conectivos (however, therefore, whereas). Para os Oficiais, some vocabulário marítimo padrão (SMCP).",
     itens: [
-      "Interpretação de textos técnicos",
-      "Vocabulário da indústria de óleo e gás",
-      "Tempos verbais e voz passiva",
-      "Conectivos e referência textual",
+      "Ideia principal, propósito e público do texto",
+      "Inferência e informação explícita x implícita",
+      "Vocabulário em contexto, formação de palavras e false friends",
+      "Referência pronominal e conectivos",
+      "Tempos verbais, voz passiva e modais",
+      "Terminologia de óleo, gás, dutos e navegação",
     ],
   },
   {
-    disciplina: "Matemática / Raciocínio Lógico",
-    escolaridades: ["medio", "tecnico"],
-    natureza: "basico",
-    itens: [
-      "Razão, proporção e porcentagem",
-      "Regra de três simples e composta",
-      "Funções e equações do 1º e 2º grau",
-      "Estatística descritiva básica",
-      "Lógica proposicional e sequências",
-    ],
-  },
-  {
-    disciplina: "Atualidades e Setor de Energia",
-    escolaridades: ["medio", "tecnico", "superior"],
-    natureza: "basico",
-    itens: [
-      "Panorama da indústria de petróleo e gás natural",
-      "Logística e transporte dutoviário e marítimo",
-      "Transição energética e biocombustíveis",
-      "Governança e compliance no Sistema Petrobras",
-    ],
-  },
-  {
-    disciplina: "Segurança, Meio Ambiente e Saúde (SMS)",
-    escolaridades: ["tecnico", "superior"],
+    disciplina: "Conhecimentos Específicos - Quadro de Mar (Guarnição)",
+    escolaridades: ["medio"],
     natureza: "especifico",
+    prioridade: "alta",
+    editais: ["Quadro de Mar - Guarnição"],
+    resumo:
+      "Varia por função (Moço de Convés, Moço de Máquinas, Condutor, Eletricista, Cozinheiro, Taifeiro, Auxiliar de Saúde), mas o tronco comum é segurança da vida no mar, marinharia e legislação aquaviária. Estude a partir da bibliografia da Marinha (Ensino Profissional Marítimo) indicada no edital. Convés cobra faina de amarração, cabos e sinalização; Máquinas cobra sistemas de bombeamento, motores e lubrificação; funções de saúde e camaroteiro têm conteúdo próprio.",
     itens: [
-      "Normas Regulamentadoras (NR-10, NR-13, NR-20, NR-33, NR-35)",
-      "Análise preliminar de risco e permissão de trabalho",
-      "Resposta a emergências e combate a incêndio",
-      "Gestão ambiental e licenciamento",
+      "Segurança da vida no mar, SOLAS e uso de EPI/EPC a bordo",
+      "Marinharia: cabos, nós, amarração, sinalização náutica",
+      "Prevenção e combate a incêndio e abandono de navio",
+      "Máquinas: bombas, motores de combustão, sistemas de óleo e lastro",
+      "Convés: manobra, movimentação de carga e conservação do navio",
+      "Legislação aquaviária (NORMAM) e STCW aplicável à função",
+      "Primeiros socorros e higiene a bordo",
     ],
   },
   {
-    disciplina: "Conhecimentos Específicos por Cargo",
-    escolaridades: ["medio", "tecnico", "superior"],
+    disciplina: "Conhecimentos Específicos - Quadro de Mar (Oficiais)",
+    escolaridades: ["superior"],
     natureza: "especifico",
+    prioridade: "alta",
+    editais: ["Quadro de Mar - Oficiais"],
+    resumo:
+      "Nível de Oficial de Náutica ou de Máquinas da Marinha Mercante, seguindo a Convenção STCW. Náutica cobra navegação (estimada, costeira e eletrônica), estabilidade, RIPEAM e manobra; Máquinas cobra termodinâmica aplicada, motores diesel marítimos, sistemas auxiliares, geração e distribuição elétrica de bordo. Os dois compartilham segurança, MARPOL e gestão de recursos de passadiço/praça de máquinas.",
     itens: [
-      "Operação: transferência e estocagem, bombas, medição e automação",
-      "Manutenção: mecânica, elétrica, instrumentação e ensaios",
-      "Engenharia: disciplina do cargo + integridade de dutos e regulação ANP",
-      "TI: engenharia de software, dados, redes e segurança",
-      "Administrativo: administração pública, contabilidade e licitações (Lei 14.133)",
+      "Náutica: navegação estimada, costeira e eletrônica (GPS, radar, ECDIS)",
+      "RIPEAM, manobra e governo do navio",
+      "Estabilidade, trim e plano de carga",
+      "Máquinas: motores diesel marítimos, turbinas e sistemas auxiliares",
+      "Geração, distribuição e proteção elétrica de bordo",
+      "MARPOL, prevenção da poluição e gestão de resíduos",
+      "Gerenciamento de recursos e procedimentos de emergência",
+    ],
+  },
+  {
+    disciplina: "Conhecimentos Específicos - Quadro de Terra (Técnico)",
+    escolaridades: ["tecnico"],
+    natureza: "especifico",
+    prioridade: "alta",
+    editais: ["Quadro de Terra - Médio/Técnico"],
+    resumo:
+      "Depende do cargo. Dutos e Terminais: transferência e estocagem de derivados, bombas e compressores, medição, boletim de medição e automação de terminais. Manutenção (Mecânica ou Elétrica/Instrumentação): planejamento de manutenção, elementos de máquinas, ensaios, malhas de controle e instrumentação. Segurança: Normas Regulamentadoras, PPRA/PGR, APR e investigação de acidentes. Administração e Controle: rotinas administrativas, noções de contabilidade e de licitações.",
+    itens: [
+      "Dutos e Terminais: transferência, estocagem, bombas, medição e automação",
+      "Manutenção mecânica: elementos de máquinas, lubrificação, alinhamento e ensaios",
+      "Manutenção elétrica/instrumentação: malhas de controle, sensores e NR-10",
+      "Segurança do trabalho: NRs (NR-13, NR-20, NR-33, NR-35), APR e PT",
+      "Administração e Controle: rotinas administrativas e noções de contabilidade",
+      "SMS: resposta a emergências, gestão ambiental e legislação",
+    ],
+  },
+  {
+    disciplina: "Conhecimentos Específicos - Quadro de Terra (Superior)",
+    escolaridades: ["superior"],
+    natureza: "especifico",
+    prioridade: "alta",
+    editais: ["Quadro de Terra - Superior"],
+    resumo:
+      "Conteúdo da formação do cargo mais o recorte do setor. Engenharias (Mecânica, Civil, Elétrica): disciplina de base + integridade de dutos, tancagem, projeto e regulação da ANP. Análise de Sistemas: engenharia de software, banco de dados, redes, cloud e segurança da informação. Administração e Contábeis: administração pública, orçamento, contabilidade societária e pública, Lei 14.133 (licitações). Advocacia tem prova discursiva além da objetiva.",
+    itens: [
+      "Engenharia Mecânica: mecânica dos fluidos, máquinas de fluxo, materiais e soldagem",
+      "Engenharia Civil: estruturas, geotecnia, fundações e obras industriais",
+      "Engenharia Elétrica: sistemas de potência, acionamentos e proteção",
+      "Integridade de dutos e terminais, corrosão e inspeção",
+      "Análise de Sistemas: engenharia de software, dados, redes e segurança",
+      "Administração/Contábeis: administração pública, orçamento e Lei 14.133",
+      "Advocacia: Direito Constitucional, Administrativo, Civil, Trabalho e discursiva",
     ],
   },
 ];
@@ -415,13 +438,14 @@ const listaBruta: Concurso[] = [
     destaque: true,
     status: "inscricoes_abertas",
     vagasTotais: 4171,
+    salarioDe: 5464,
     salarioAte: 15034.81,
     inscricoesAte: "2026-09-14",
     dataProva: "2026-11-29",
     escolaridades: ["medio", "tecnico", "superior"],
-    escolaridadeTexto: "Médio, técnico e superior (conforme o cargo)",
+    escolaridadeTexto: "Médio, técnico e superior (conforme o edital)",
     resumo:
-      "Quadros Terra e Mar. Vagas em terminais e dutos pelo país, com prova no estilo Cesgranrio.",
+      "Quatro editais: Quadro de Mar (Guarnição e Oficiais) e Quadro de Terra (médio/técnico e superior). Cerca de 281 vagas imediatas e 3.890 de cadastro de reserva, prova Cesgranrio em 29/11.",
     linkOficial: "https://www.cesgranrio.org.br/concurso/transpetro-2026/",
     linkInscricao: "https://concursos.cesgranrio.org.br/portal/avaliacoes/22",
     imagem: "/banner/transpetro-2026.jpg",
@@ -1270,20 +1294,23 @@ export function resumoConcursos(lista: Concurso[]): ResumoConcursos {
 export interface FiltroVagas {
   escolaridade: Escolaridade | "todas";
   area: string;
-  uf: string;
+  polo: string;
+  edital: string;
   grupos: GrupoReservaId[];
 }
 
 export interface LinhaResultado {
   cargo: Cargo;
-  uf: string;
-  unidade: string;
+  polo: string;
+  editalLabel: string;
   imediatas: number;
+  cadastroReserva: number;
   reservadasParaVoce: number;
 }
 
 export interface ResultadoVagas {
   totalImediatas: number;
+  totalReserva: number;
   totalCargos: number;
   reservadasParaVoce: number;
   porGrupo: { grupo: GrupoReserva; vagas: number }[];
@@ -1293,7 +1320,8 @@ export interface ResultadoVagas {
 export const filtroVazio: FiltroVagas = {
   escolaridade: "todas",
   area: "todas",
-  uf: "todas",
+  polo: "todos",
+  edital: "todos",
   grupos: [],
 };
 
@@ -1318,7 +1346,8 @@ export function filtrarVagas(
     if (!cargo) continue;
     if (filtro.escolaridade !== "todas" && cargo.escolaridade !== filtro.escolaridade) continue;
     if (filtro.area !== "todas" && cargo.area !== filtro.area) continue;
-    if (filtro.uf !== "todas" && vaga.uf !== filtro.uf) continue;
+    if (filtro.polo !== "todos" && vaga.polo !== filtro.polo) continue;
+    if (filtro.edital !== "todos" && cargo.edital !== filtro.edital) continue;
 
     let reservadasParaVoce = 0;
     for (const grupo of gruposSelecionados) {
@@ -1327,13 +1356,21 @@ export function filtrarVagas(
       porGrupoMap.set(grupo.id, (porGrupoMap.get(grupo.id) ?? 0) + r);
     }
 
-    linhas.push({ cargo, uf: vaga.uf, unidade: vaga.unidade, imediatas: vaga.imediatas, reservadasParaVoce });
+    linhas.push({
+      cargo,
+      polo: vaga.polo,
+      editalLabel: cargo.edital ? editalLabel[cargo.edital] : "",
+      imediatas: vaga.imediatas,
+      cadastroReserva: vaga.cadastroReserva,
+      reservadasParaVoce,
+    });
   }
 
   linhas.sort((a, b) => b.imediatas - a.imediatas);
 
   return {
     totalImediatas: linhas.reduce((s, l) => s + l.imediatas, 0),
+    totalReserva: linhas.reduce((s, l) => s + l.cadastroReserva, 0),
     totalCargos: new Set(linhas.map((l) => l.cargo.slug)).size,
     reservadasParaVoce: linhas.reduce((s, l) => s + l.reservadasParaVoce, 0),
     porGrupo: gruposSelecionados.map((grupo) => ({
@@ -1348,8 +1385,21 @@ export function areasDoConcurso(concurso: Concurso): string[] {
   return Array.from(new Set((concurso.cargos ?? []).map((c) => c.area))).sort();
 }
 
-export function ufsDoConcurso(concurso: Concurso): string[] {
-  return Array.from(new Set((concurso.vagas ?? []).map((v) => v.uf))).sort();
+export function polosDoConcurso(concurso: Concurso): string[] {
+  return Array.from(new Set((concurso.vagas ?? []).map((v) => v.polo))).sort();
+}
+
+export function editaisDoConcurso(
+  concurso: Concurso,
+): { id: EditalTranspetro; label: string }[] {
+  const ids = Array.from(
+    new Set(
+      (concurso.cargos ?? [])
+        .map((c) => c.edital)
+        .filter((e): e is EditalTranspetro => Boolean(e)),
+    ),
+  );
+  return ids.map((id) => ({ id, label: editalLabel[id] }));
 }
 
 // ---------------------------------------------------------------------------

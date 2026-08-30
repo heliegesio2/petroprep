@@ -1,3 +1,5 @@
+import { concursos } from "@/lib/concursos";
+
 export interface Plano {
   id: "transpetro" | "completo";
   nome: string;
@@ -47,4 +49,31 @@ export const planos: Plano[] = [
 
 export function getPlano(id: string): Plano | undefined {
   return planos.find((p) => p.id === id);
+}
+
+/**
+ * Até quando o acesso do plano vale: a data da prova do concurso incluído
+ * (Plano Transpetro) ou a prova mais distante entre os concursos do plano
+ * (Plano Completo). Sem data conhecida, cai para 12 meses a partir de agora.
+ */
+export function planoValidoAte(id: string): Date {
+  const doze = new Date();
+  doze.setFullYear(doze.getFullYear() + 1);
+
+  const plano = getPlano(id);
+  if (!plano) return doze;
+
+  const datas = concursos
+    .filter((c) =>
+      plano.concursos === "todos" ? true : plano.concursos.includes(c.slug),
+    )
+    .map((c) => c.dataProva)
+    .filter((d): d is string => Boolean(d))
+    .sort();
+
+  const alvo = datas[datas.length - 1];
+  if (!alvo) return doze;
+
+  const [y, m, d] = alvo.slice(0, 10).split("-").map(Number);
+  return new Date(y, (m ?? 1) - 1, (d ?? 1), 23, 59, 59);
 }

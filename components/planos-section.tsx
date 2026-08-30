@@ -5,7 +5,7 @@ import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import { planos } from "@/lib/planos";
 import { AssinarForm } from "@/components/assinar-form";
 
-export function PlanosSection() {
+export function PlanosSection({ logado = false }: { logado?: boolean }) {
   const [planoSelecionado, setPlanoSelecionado] = useState<string | null>(null);
 
   return (
@@ -81,6 +81,7 @@ export function PlanosSection() {
           <div className="mt-6 max-w-xl">
             <AssinarForm
               planoId={planoSelecionado}
+              logado={logado}
               onTrocarPlano={setPlanoSelecionado}
             />
           </div>

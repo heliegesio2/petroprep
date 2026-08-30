@@ -1,12 +1,11 @@
 import fs from "node:fs";
 import path from "node:path";
-import { SiteNav } from "@/components/site-nav";
 import { ConcursoExplorer } from "@/components/concurso-explorer";
 import { FeatureGrid } from "@/components/feature-grid";
 import { PlanosSection } from "@/components/planos-section";
 import { FaqSection } from "@/components/faq-section";
-import { SiteFooter } from "@/components/site-footer";
 import { concursos } from "@/lib/concursos";
+import { lerSessao } from "@/lib/auth";
 
 /** Lê quais PDFs existem em public/edital/<slug>/ para cada concurso. */
 function lerDocsPorConcurso(): Record<string, string[]> {
@@ -24,19 +23,16 @@ function lerDocsPorConcurso(): Record<string, string[]> {
   return mapa;
 }
 
-export default function Home() {
+export default async function Home() {
   const docsPorConcurso = lerDocsPorConcurso();
+  const logado = Boolean(await lerSessao());
 
   return (
     <>
-      <SiteNav />
-      <main className="flex-1">
-        <ConcursoExplorer concursos={concursos} docsPorConcurso={docsPorConcurso} />
-        <FeatureGrid />
-        <PlanosSection />
-        <FaqSection />
-      </main>
-      <SiteFooter />
+      <ConcursoExplorer concursos={concursos} docsPorConcurso={docsPorConcurso} />
+      <FeatureGrid />
+      <PlanosSection logado={logado} />
+      <FaqSection />
     </>
   );
 }

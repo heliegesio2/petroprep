@@ -8,9 +8,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **Plataforma multi-concurso** de preparação (simulados, conteúdo, buscador de vagas/cotas). O **Transpetro 2026** (banca Cesgranrio, inscrições até 14/09/2026, prova 29/11/2026) é o concurso em **destaque**; os demais entram como cards de resumo. Nome "PetroPrep" é provisório — deve mudar (ver plano `~/.claude/plans/abre-o-naveg-*.md`).
 
-**Fase atual: landing page** com carrossel de concursos + filtro de vagas + **captação de assinatura** (2 planos). Simulados/conteúdo completo ainda não têm telas.
+**Fase atual:** landing (carrossel + filtro de vagas) **+ cadastro/login real + simulados no Postgres + checkout Mercado Pago**. O conteúdo programático da Transpetro tem resumo real por disciplina e progresso do candidato (localStorage).
 
-**Monetização:** 2 planos pagamento único — R$ 50 (só Transpetro, até a prova) e R$ 80 (todos os concursos). Sem tier gratuito. O botão "Assinar" **capta intenção** (nome+e-mail+plano → `Lead`); checkout real (Mercado Pago/Stripe) é fase futura.
+**Monetização:** 2 planos pagamento único - R$ 50 (só Transpetro, até a prova) e R$ 80 (todos os concursos). Sem tier gratuito. O botão "Assinar": deslogado leva a `/cadastro`; logado chama `POST /api/checkout` → preferência Mercado Pago → `init_point`. Sem `MP_ACCESS_TOKEN`, degrada ("checkout em configuração", marca `planoStatus=pendente`). `Lead` (`/api/assinar`) continua para captação pré-cadastro.
 
 Contexto factual: vagas/salários/datas são **estimativas** de imprensa + editais anteriores. Só a Transpetro tem edital publicado. Sempre com selo "confira a fonte oficial".
 
@@ -24,7 +24,7 @@ docker compose down [-v]     # para (-v apaga o banco)
 docker compose -f docker-compose.prod.yml up --build   # testa a imagem de deploy
 ```
 
-O serviço `app` (compose dev) roda `prisma db push` e depois `next dev -H 0.0.0.0 --webpack`. **`--webpack` + `WATCHPACK_POLLING=true` são obrigatórios**: o Turbopack não detecta mudanças no bind mount do Windows (o watcher do Webpack com polling detecta). Para edição intensa, `npm run dev` no host é mais rápido. Depois de mudar arquivo, se o container não recompilar: `docker compose restart app`.
+O serviço `app` (compose dev) roda `prisma db push` → `prisma db seed` (popula questões/simulados, idempotente) → `next dev -H 0.0.0.0 --webpack`. **`--webpack` + `WATCHPACK_POLLING=true` são obrigatórios**: o Turbopack não detecta mudanças no bind mount do Windows (o watcher do Webpack com polling detecta). Para edição intensa, `npm run dev` no host é mais rápido. Depois de mudar arquivo, se o container não recompilar: `docker compose restart app`.
 
 Node direto:
 
@@ -33,6 +33,7 @@ npm run dev            # Turbopack em :3100 (emite "Watchpack Error ... C:\pagef
 npm run build          # prisma generate + next build (output: standalone)
 npm run lint           # ESLint (eslint-config-next). Deve passar limpo.
 npm run db:push        # aplica prisma/schema.prisma (dev, sem migration)
+npm run db:seed        # popula banco de questões + simulados (prisma/seed.ts, idempotente)
 npm run db:studio      # Prisma Studio
 ```
 
@@ -49,9 +50,17 @@ Não há suíte de testes. Verificação = `npm run lint` + `npm run build` + co
 
 **Stack:** Next.js 16 (App Router, React 19, Turbopack), Tailwind CSS v4, Prisma 6 + PostgreSQL. TypeScript estrito. Deploy alvo: Vercel + Postgres gerenciado (não configurado ainda); `docker-compose.yml` cobre o Postgres local.
 
-**Fonte única de dados — `lib/concursos.ts`.** Array `concursos: Concurso[]` (Transpetro com `cargos`/`vagas`/`conteudo`/`gruposReserva`; os outros só resumo). `concursoDestaque` = 1º. Ordenação: `destaque` primeiro, depois por `dataProva ?? inscricoesAte`. FAQ, rótulos (`ufLabel`, `escolaridadeLabel`, `statusLabel`), `formatBRL`/`formatData` e a lógica de cotas (`vagasReservadas`, `filtrarVagas`) também vivem aqui. **Planos** ficam em `lib/planos.ts`. Ao sair um edital, editar só o objeto do concurso.
+**Fonte única de dados - `lib/concursos.ts`.** Array `concursos: Concurso[]` (Transpetro com `cargos`/`vagas`/`conteudo`/`gruposReserva`; os outros só resumo). `concursoDestaque` = 1º. Ordenação: `destaque` primeiro, depois por `dataProva ?? inscricoesAte`. FAQ, rótulos (`escolaridadeLabel`, `editalLabel`), `formatBRL`/`formatData` e a lógica de cotas (`vagasReservadas`, `filtrarVagas`) também vivem aqui. **Planos** ficam em `lib/planos.ts` (`planoValidoAte` calcula até quando o acesso vale a partir da `dataProva` dos concursos do plano). Ao sair um edital, editar só o objeto do concurso.
 
-**Composição da página.** `app/page.tsx` (Server Component) lê `public/edital/<slug>/*.pdf` com `fs` → `docsPorConcurso`, e monta: `SiteNav` → `ConcursoExplorer` → `FeatureGrid` → `PlanosSection` → `FaqSection` → `SiteFooter`.
+**Transpetro = 4 editais.** `Cargo.edital: EditalTranspetro` (`mar-guarnicao|mar-oficiais|terra-medio|terra-superior`). `Vaga` tem `polo` (não `uf`) + `imediatas` + `cadastroReserva`. `filtrarVagas` filtra por escolaridade/área/polo/edital; `editaisDoConcurso` e `polosDoConcurso` alimentam os selects. Cargos são lista parcial ("principais"), sempre com disclaimer.
+
+**Rotas.** Route groups: `app/(auth)/` (`/cadastro`, `/entrar` - layout centrado) e `app/(site)/` (`SiteNav` + `main` + `SiteFooter`). `app/(site)/page.tsx` (server) lê `public/edital/<slug>/*.pdf` e `lerSessao()`, monta `ConcursoExplorer` → `FeatureGrid` → `PlanosSection` (recebe `logado`) → `FaqSection`. Fora do grupo: `/minha-conta`, `/simulado`, `/simulado/[slug]`, `/obrigado`.
+
+**Auth (`lib/auth.ts`).** Custom leve: `bcryptjs` (hash) + `jose` (JWT HS256 em cookie httpOnly `petroprep_sessao`, 30 dias). `AUTH_SECRET` obrigatório em produção (fallback inseguro loga aviso). `lerSessao()` (só cookie), `usuarioAtual()` (busca no banco), `exigirLogin(next)` (redirect p/ `/entrar`), `planoAtivo(u)`. `Usuario.email` e `Usuario.senhaHash` são **opcionais** (contas sociais).
+
+**Login social (`lib/oauth.ts`).** OAuth2 authorization-code + PKCE (S256) na mão p/ Google, Facebook, TikTok, reaproveitando o cookie de sessão. `GET /api/auth/[provedor]` gera state+verifier em cookies curtos (`oauth_state/verifier/next`, path `/api/auth`) e redireciona ao provedor; `GET /api/auth/[provedor]/callback` troca o código, então: acha `ContaOAuth` por `(provedor, provedorUserId)` → senão vincula a `Usuario` com e-mail verificado igual → senão cria conta nova (`senhaHash: null`). **TikTok não dá e-mail**: conta criada sem e-mail, `/minha-conta` mostra `ContaEmailForm` → `POST /api/conta/email`. `provedorConfigurado(p)` = há as 2 env vars; sem elas o botão some (`provedoresConfigurados()` no server component). `GOOGLE_CLIENT_ID/SECRET`, `FACEBOOK_CLIENT_ID/SECRET`, `TIKTOK_CLIENT_KEY/SECRET` no `.env`.
+
+**Simulados (`lib/simulado.ts` + `prisma/seed.ts`).** `carregarSimulado(slug)` traz questões ordenadas sem gabarito; `podeAcessar` = `gratuito || planoAtivo`. `Simulado` "diagnostico" é `gratuito` (abre sem login, tentativa com `usuarioId: null`). `/simulado/[slug]` cria/retoma `Tentativa`, renderiza `SimuladoPlayer` (client: cronômetro anexado a `deadlineRef` via effect, radiogroup, grade de navegação, auto-envio no zero). `POST /api/simulado/[slug]/submeter` corrige no servidor → `RespostaSimulado` + `Tentativa.nota/finalizadoEm`, e a página relê com `?r=<tentativaId>` → `SimuladoResultado` (nota, desempenho por disciplina, correção comentada). Histórico em `/minha-conta`.
 
 **`ConcursoExplorer` (client) é o núcleo.** Guarda `filtro` (`FiltroConcursos`) + `atual`. Renderiza `ConcursoFiltro` (faixa clara entre a nav e o banner: escolaridade/situação/salário mínimo + linha "N concursos para o seu perfil, salários de X a Y") → `ConcursoCarousel` (só com os concursos que passam no filtro, via `concursoAtendeFiltro`) → `VagasFiltro` + `ConteudoSection` + `EditalSection` do concurso atual. Trocar filtro reseta `atual` para 0; `atual` é clampado ao tamanho da lista filtrada. Helpers em `lib/concursos.ts`: `filtroConcursosVazio`, `concursoAtendeFiltro`, `resumoConcursos`, `opcoesSalarioMinimo`.
 
@@ -61,18 +70,18 @@ Não há suíte de testes. Verificação = `npm run lint` + `npm run build` + co
 
 **`countdown.tsx`** usa `border-current/15 bg-current/10` para funcionar sobre fundo claro ou escuro.
 
-**Fluxo de assinatura.** `assinar-form.tsx` (dentro de `planos-section.tsx`) → `POST /api/assinar` → `prisma.lead.upsert` com `plano` + `concursoSlug`. A rota **degrada sem banco** (`hasDatabase` em `lib/prisma.ts` → loga + 200). Mantenha esse comportamento.
+**Checkout (`lib/mercadopago.ts`).** `mpConfigurado` = há `MP_ACCESS_TOKEN`. `criarPreferencia` (item + `back_urls` p/ `/obrigado` + `external_reference` = `usuario.id` + `notification_url`). `POST /api/checkout` exige login, grava `planoStatus=pendente` + `mpPreferenceId`, devolve `{ initPoint }` (ou `{ configurando: true }` sem token). `POST /api/webhook/mercadopago` valida `x-signature` (`validarAssinaturaWebhook`, manifest `id:...;request-id:...;ts:...;`), consulta o pagamento, `approved` → `planoStatus=ativo` + `planoAte` + `mpPaymentId`. Tudo **degrada sem banco/token** - mantenha.
 
 **`EditalSection`** é client (dentro do explorer) e recebe `docs: string[]` (calculado no server em `app/page.tsx`). PDFs vivem em `public/edital/<slug>/` — nomes esperados em `DOCS_CATALOGO`. Ver `public/edital/transpetro-2026/LEIA-ME.md`.
 
 **Prisma client** é singleton em `lib/prisma.ts`.
 
-**Schema.** `prisma/schema.prisma`: `Lead` = intenção de assinatura (`email`, `nome`, `plano`, `concursoSlug`). Modelos `Cargo`/`Vaga`/`Topico`/`Questao`/`Simulado` ainda são só direção para fases futuras.
+**Schema.** `prisma/schema.prisma`: `Usuario` (`email?`/`senhaHash?` opcionais + plano: `plano`, `planoStatus` nenhum|pendente|ativo, `planoAte`, `mpPreferenceId`, `mpPaymentId`), `ContaOAuth` (`provedor`, `provedorUserId`, `@@unique([provedor, provedorUserId])`), `Lead` (captação pré-cadastro), `Questao` (`alternativas Json`, `correta Int`, `comentario`), `Simulado` + `SimuladoQuestao` (m2m ordenada), `Tentativa` (`usuarioId?`, `nota`, `finalizadoEm`) + `RespostaSimulado`. `Cargo`/`Vaga`/`Topico` seguem só como direção para migrar os dados estáticos depois.
 
 ## Design (skill `design-taste-frontend` aplicada)
 
 - **Fonte:** Geist / Geist Mono (`next/font/google`), variáveis `--font-geist-sans/mono`. Números com `font-mono tabular-nums`.
-- **Ícones:** só `@phosphor-icons/react/dist/ssr/<Nome>` (import por ícone). **Não** desenhar `<svg>` à mão. **Sem emoji** na UI.
+- **Ícones:** só do barrel `@phosphor-icons/react/dist/ssr` (import por subpath `/dist/ssr/<Nome>` **quebra no webpack do Docker**). Sufixo `Icon`. **Não** desenhar `<svg>` à mão. **Sem emoji** na UI.
 - **Sem em-dash (`—`) nem en-dash (`–`) em nada visível.** Só hífen `-`. (Regra dura da skill.)
 - **Cor:** verde é o accent em superfícies claras; amarelo (`--accent`) **só** no banner escuro `#062a1c`. Uma cor de accent por superfície.
 - **Raio:** cards `rounded-2xl` (16px), controles/botões `rounded-lg` (10px), pills `rounded-full`. Não misturar fora disso.
@@ -85,7 +94,7 @@ Não há suíte de testes. Verificação = `npm run lint` + `npm run build` + co
 - **Idioma:** toda a UI e os comentários de domínio em **português (pt-BR)**. Nomes de identificadores podem ser em português quando descrevem o domínio (`cargos`, `escolaridade`).
 - **Cores:** use os tokens Tailwind do tema (`bg-brand`, `text-muted`, `border`, `bg-surface`, `bg-accent`) definidos em `app/globals.css` — não hardcode hex. Tema claro/escuro via `prefers-color-scheme`.
 - **Disclaimer legal:** o rodapé deixa claro que a PetroPrep não tem vínculo com Petrobras/Transpetro/Cesgranrio. Não remova isso e não crie páginas que se passem por canais oficiais.
-- **Regra de lint React:** não chamar `setState` de forma síncrona dentro de `useEffect` (a `eslint-config-next` barra). Ver o padrão em `countdown.tsx` (init lazy no `useState` + `suppressHydrationWarning`).
+- **Regra de lint React (`eslint-config-next`, dura):** nada de `setState` síncrono em `useEffect`, `Date.now()`/impuras no corpo do render, nem escrever `ref.current` no render. Padrões: `countdown.tsx` (init lazy + `suppressHydrationWarning`), `conteudo-progresso.tsx` (`useSyncExternalStore` p/ ler localStorage), `simulado-player.tsx` (`deadlineRef` setado dentro do effect do `setInterval`).
 - **Aviso de hidratação `inmaintabuse="1"` no log do dev:** é injeção da extensão Claude-in-Chrome no `<body>`, não bug do código. Não aparece para usuário sem a extensão.
-- **Portas:** app 3100, Postgres host 5433 (a 3000 está ocupada por outro projeto Docker na máquina).
+- **Portas:** app 3100, Postgres host **5434** (3000 ocupada por outro projeto Docker; 5432 e 5433 ocupadas por um PostgreSQL 14 nativo do Windows - conexão a `localhost` cairia nele e falharia auth).
 - O bloco `BEGIN:nextjs-agent-rules` em `AGENTS.md` é regravado pelo `next dev` — commite junto, não tente removê-lo.

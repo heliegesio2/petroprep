@@ -1,12 +1,6 @@
-import { escolaridadeLabel, type Concurso } from "@/lib/concursos";
+import { type Concurso } from "@/lib/concursos";
 import { WarningCircleIcon } from "@phosphor-icons/react/dist/ssr";
-import { Reveal, RevealItem } from "@/components/reveal";
-
-function cobradaEm(escolaridades: Concurso["escolaridades"]): string {
-  const nomes = escolaridades.map((e) => escolaridadeLabel[e].replace("Ensino ", "").replace("Nível ", ""));
-  if (nomes.length <= 1) return nomes.join("");
-  return `${nomes.slice(0, -1).join(", ")} e ${nomes[nomes.length - 1]}`;
-}
+import { ConteudoProgresso } from "@/components/conteudo-progresso";
 
 export function ConteudoSection({ concurso }: { concurso: Concurso }) {
   const topicos = concurso.conteudo;
@@ -21,44 +15,15 @@ export function ConteudoSection({ concurso }: { concurso: Concurso }) {
         {topicos?.length ? (
           <>
             <p className="mt-2 max-w-2xl text-sm text-muted">
-              Programa consolidado a partir do edital e de provas anteriores. Cada
-              disciplina terá material de estudo e questões na plataforma.
+              Programa consolidado a partir do edital e de provas anteriores da banca.
+              Abra cada disciplina para o resumo do que a Cesgranrio cobra e marque o
+              que já estudou.
             </p>
 
-            <Reveal className="mt-8 grid gap-x-10 gap-y-8 md:grid-cols-2">
-              {topicos.map((t) => (
-                <RevealItem key={t.disciplina} className="border-t pt-6">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h3 className="text-lg font-semibold">{t.disciplina}</h3>
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-xs font-semibold ${
-                        t.natureza === "basico"
-                          ? "bg-brand-soft text-brand-strong"
-                          : "bg-accent/20 text-foreground"
-                      }`}
-                    >
-                      {t.natureza === "basico"
-                        ? "Conhecimentos básicos"
-                        : "Específico por cargo"}
-                    </span>
-                  </div>
-                  <p className="mt-1 text-xs text-muted">
-                    Cobrada em {cobradaEm(t.escolaridades)}
-                  </p>
-                  <ul className="mt-4 space-y-1.5 text-sm text-muted">
-                    {t.itens.map((item) => (
-                      <li key={item} className="flex gap-2">
-                        <span
-                          className="mt-2 h-1 w-1 flex-none rounded-full bg-brand"
-                          aria-hidden
-                        />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                </RevealItem>
-              ))}
-            </Reveal>
+            <ConteudoProgresso
+              topicos={topicos}
+              storageKey={`petroprep_estudo_${concurso.slug}`}
+            />
 
             <p className="mt-8 flex max-w-2xl gap-2 rounded-2xl border border-accent/40 bg-accent/10 p-4 text-sm leading-relaxed">
               <WarningCircleIcon

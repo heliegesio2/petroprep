@@ -20,7 +20,7 @@ services:
       POSTGRES_PASSWORD: petroprep
       POSTGRES_DB: petroprep
     ports:
-      - "5433:5432" # host 5433 → evita conflito com Postgres local em 5432
+      - "5434:5432" # host 5434 → evita conflito com Postgres local (5432 e 5433)
     volumes:
       - petroprep-pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -38,10 +38,20 @@ services:
     # --webpack + WATCHPACK_POLLING: Turbopack não detecta mudanças no bind mount
     # do Windows; o watcher do Webpack com polling detecta (HMR fica ~1-2s mais
     # lento, aceitável). Para edição intensa, prefira `npm run dev` no host.
-    command: sh -c "npx prisma db push --skip-generate --accept-data-loss && npm run dev -- -H 0.0.0.0 --webpack"
+    command: sh -c "npx prisma db push --skip-generate --accept-data-loss && npx prisma db seed && npm run dev -- -H 0.0.0.0 --webpack"
     environment:
       DATABASE_URL: postgresql://petroprep:petroprep@db:5432/petroprep?schema=public
       NEXT_PUBLIC_SITE_URL: http://localhost:3100
+      # segredo de dev; em produção defina AUTH_SECRET de verdade
+      AUTH_SECRET: ${AUTH_SECRET:-dev-secret-local-nao-use-em-producao}
+      MP_ACCESS_TOKEN: ${MP_ACCESS_TOKEN:-}
+      MP_WEBHOOK_SECRET: ${MP_WEBHOOK_SECRET:-}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      FACEBOOK_CLIENT_ID: ${FACEBOOK_CLIENT_ID:-}
+      FACEBOOK_CLIENT_SECRET: ${FACEBOOK_CLIENT_SECRET:-}
+      TIKTOK_CLIENT_KEY: ${TIKTOK_CLIENT_KEY:-}
+      TIKTOK_CLIENT_SECRET: ${TIKTOK_CLIENT_SECRET:-}
       WATCHPACK_POLLING: "true"
     ports:
       - "3100:3100"

@@ -1,9 +1,8 @@
 // PetroPrep — schema do banco.
 //
-// Fase atual (landing multi-concurso): apenas `Lead` é usado — agora representa
-// uma INTENÇÃO DE ASSINATURA (nome, e-mail, plano escolhido) captada antes do
-// checkout real existir. Os demais modelos ficam aqui como direção da
-// plataforma completa (simulados, conteúdos, vagas) e ainda NÃO têm rotas.
+// Em uso: Usuario (cadastro/login/plano), Lead (captura pré-cadastro),
+// Simulado/Questao/SimuladoQuestao/Tentativa/RespostaSimulado (simulados).
+// Cargo/Vaga/Topico ficam como direção para migrar os dados estáticos depois.
 
 generator client {
   provider = "prisma-client-js"
@@ -14,14 +13,45 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/// Intenção de assinatura captada pela landing (pré-checkout).
+/// Conta de quem se cadastra no site.
+model Usuario {
+  id            String       @id @default(cuid())
+  email         String?      @unique // opcional: contas TikTok entram sem e-mail
+  senhaHash     String? // opcional: contas sociais não têm senha
+  nome          String
+  telefone      String?
+  plano         String? // "transpetro" | "completo"
+  planoStatus   String       @default("nenhum") // nenhum | pendente | ativo
+  planoAte      DateTime?
+  mpPreferenceId String?
+  mpPaymentId   String?
+  tentativas    Tentativa[]
+  contasOAuth   ContaOAuth[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+/// Vínculo de uma conta de provedor social (Google, Facebook, TikTok) a um Usuario.
+model ContaOAuth {
+  id             String   @id @default(cuid())
+  provedor       String // "google" | "facebook" | "tiktok"
+  provedorUserId String // sub / id / open_id do provedor
+  usuario        Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  usuarioId      String
+  criadoEm       DateTime @default(now())
+
+  @@unique([provedor, provedorUserId])
+  @@index([usuarioId])
+}
+
+/// Intenção de contato captada antes do cadastro ("quero ser avisado").
 model Lead {
   id           String   @id @default(cuid())
   email        String   @unique
   nome         String?
-  plano        String? // "transpetro" | "completo"
-  concursoSlug String? // slug do concurso ou "todos"
-  origem       String? // utm_source ou canal informado
+  plano        String?
+  concursoSlug String?
+  origem       String?
   confirmado   Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
@@ -29,9 +59,77 @@ model Lead {
   @@index([createdAt])
 }
 
-// ----------------------------------------------------------------------------
-// A partir daqui: modelagem da plataforma completa (fases seguintes).
-// ----------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Simulados
+// ---------------------------------------------------------------------------
+
+model Questao {
+  id          String             @id @default(cuid())
+  disciplina  String
+  banca       String             @default("Cesgranrio")
+  enunciado   String
+  alternativas Json              // string[5]
+  correta     Int                // índice 0-4
+  comentario  String?
+  dificuldade Int                @default(3)
+  simulados   SimuladoQuestao[]
+  respostas   RespostaSimulado[]
+  createdAt   DateTime           @default(now())
+}
+
+model Simulado {
+  id         String            @id @default(cuid())
+  slug       String            @unique
+  titulo     String
+  descricao  String?
+  disciplina String?
+  duracaoMin Int               @default(60)
+  gratuito   Boolean           @default(false)
+  questoes   SimuladoQuestao[]
+  tentativas Tentativa[]
+  createdAt  DateTime          @default(now())
+}
+
+model SimuladoQuestao {
+  simulado   Simulado @relation(fields: [simuladoId], references: [id], onDelete: Cascade)
+  simuladoId String
+  questao    Questao  @relation(fields: [questaoId], references: [id], onDelete: Cascade)
+  questaoId  String
+  ordem      Int
+
+  @@id([simuladoId, questaoId])
+  @@index([simuladoId, ordem])
+}
+
+model Tentativa {
+  id           String             @id @default(cuid())
+  usuario      Usuario?           @relation(fields: [usuarioId], references: [id])
+  usuarioId    String?
+  simulado     Simulado           @relation(fields: [simuladoId], references: [id])
+  simuladoId   String
+  iniciadoEm   DateTime           @default(now())
+  finalizadoEm DateTime?
+  nota         Float? // 0-100
+  respostas    RespostaSimulado[]
+
+  @@index([usuarioId])
+}
+
+model RespostaSimulado {
+  id          String    @id @default(cuid())
+  tentativa   Tentativa @relation(fields: [tentativaId], references: [id], onDelete: Cascade)
+  tentativaId String
+  questao     Questao   @relation(fields: [questaoId], references: [id])
+  questaoId   String
+  marcada     Int // índice marcado (-1 = em branco)
+  correta     Boolean
+
+  @@index([tentativaId])
+}
+
+// ---------------------------------------------------------------------------
+// Direção para fases seguintes (ainda não usados por rotas)
+// ---------------------------------------------------------------------------
 
 enum Escolaridade {
   MEDIO
@@ -47,72 +145,28 @@ model Cargo {
   area         String
   salario      Decimal      @db.Decimal(10, 2)
   requisito    String
-  vagas        Vaga[]
-  questoes     Questao[]
   createdAt    DateTime     @default(now())
 }
 
 model Vaga {
   id           String       @id @default(cuid())
-  cargo        Cargo        @relation(fields: [cargoId], references: [id])
-  cargoId      String
-  uf           String
-  cidade       String
+  cargoSlug    String
+  polo         String
   unidade      String?
   imediatas    Int          @default(0)
   cadastroRes  Int          @default(0)
   escolaridade Escolaridade
   createdAt    DateTime     @default(now())
 
-  @@index([uf, escolaridade])
+  @@index([polo, escolaridade])
 }
 
-/// Item do conteúdo programático, ligado a disciplinas e questões.
 model Topico {
-  id         String    @id @default(cuid())
+  id         String   @id @default(cuid())
   disciplina String
   titulo     String
   descricao  String?
-  natureza   String // "basico" | "especifico"
-  questoes   Questao[]
+  natureza   String
 
   @@unique([disciplina, titulo])
-}
-
-model Questao {
-  id          String              @id @default(cuid())
-  enunciado   String
-  alternativas Json
-  correta     Int
-  comentario  String?
-  dificuldade Int                 @default(3)
-  topico      Topico?             @relation(fields: [topicoId], references: [id])
-  topicoId    String?
-  cargo       Cargo?              @relation(fields: [cargoId], references: [id])
-  cargoId     String?
-  respostas   RespostaSimulado[]
-  createdAt   DateTime            @default(now())
-}
-
-model Simulado {
-  id        String             @id @default(cuid())
-  titulo    String
-  descricao String?
-  duracaoMin Int               @default(240)
-  respostas RespostaSimulado[]
-  createdAt DateTime           @default(now())
-}
-
-model RespostaSimulado {
-  id          String   @id @default(cuid())
-  simulado    Simulado @relation(fields: [simuladoId], references: [id])
-  simuladoId  String
-  questao     Questao  @relation(fields: [questaoId], references: [id])
-  questaoId   String
-  leadEmail   String?
-  marcada     Int
-  correta     Boolean
-  respondidoEm DateTime @default(now())
-
-  @@index([simuladoId])
 }
