@@ -73,12 +73,17 @@ export interface Concurso {
   destaque: boolean;
   status: ConcursoStatus;
   vagasTotais?: number;
+  /** Piso da faixa salarial, quando o concurso divulga um intervalo. */
+  salarioDe?: number;
   salarioAte?: number;
   /** ISO. Fim das inscrições. */
   inscricoesAte?: string;
   /** ISO. Data da prova — usada no countdown e na ordenação. */
   dataProva?: string;
+  /** Usado pelo filtro (só relevante onde há dados profundos). */
   escolaridades: Escolaridade[];
+  /** Frase de escolaridade exibida no banner (aceita "Fundamental" etc.). */
+  escolaridadeTexto: string;
   resumo: string;
   linkOficial?: string;
   /** Dados profundos — presentes só onde já foram preenchidos. */
@@ -385,8 +390,9 @@ const listaBruta: Concurso[] = [
     inscricoesAte: "2026-09-14",
     dataProva: "2026-11-29",
     escolaridades: ["medio", "tecnico", "superior"],
+    escolaridadeTexto: "Médio, técnico e superior (conforme o cargo)",
     resumo:
-      "Quadros Terra e Mar. Vagas de nível médio, técnico e superior em terminais e dutos pelo país, com prova no estilo Cesgranrio.",
+      "Quadros Terra e Mar. Vagas em terminais e dutos pelo país, com prova no estilo Cesgranrio.",
     linkOficial: "https://www.cesgranrio.org.br/concurso/transpetro-2026/",
     cargos: cargosTranspetro,
     vagas: vagasTranspetro,
@@ -401,9 +407,11 @@ const listaBruta: Concurso[] = [
     destaque: false,
     status: "inscricoes_abertas",
     vagasTotais: 5124,
+    salarioDe: 1735,
     salarioAte: 17727.63,
     inscricoesAte: "2026-09-10",
     escolaridades: ["medio", "tecnico", "superior"],
+    escolaridadeTexto: "Médio/técnico (ex.: técnico de enfermagem) e superior (médico, enfermeiro, fisioterapeuta)",
     resumo:
       "Maior concurso de saúde aberto no momento: milhares de vagas para todos os níveis em unidades de saúde do estado.",
   },
@@ -415,11 +423,56 @@ const listaBruta: Concurso[] = [
     destaque: false,
     status: "inscricoes_abertas",
     vagasTotais: 750,
+    salarioDe: 6433.06,
     salarioAte: 16495.67,
     inscricoesAte: "2026-09-08",
     escolaridades: ["superior"],
+    escolaridadeTexto: "Superior (Delegado, Escrivão e Investigador)",
     resumo:
-      "Vagas para Delegado, Investigador e Escrivão, com exigência de nível superior e etapas de aptidão física e psicológica.",
+      "Carreiras policiais com etapas de aptidão física e psicológica. Salário de Delegado no topo.",
+  },
+  {
+    slug: "pc-ma-2026",
+    nome: "PC MA",
+    tituloCompleto: "Polícia Civil do Maranhão 2026",
+    orgao: "Polícia Civil do Estado do Maranhão",
+    destaque: false,
+    status: "inscricoes_abertas",
+    salarioDe: 6514.3,
+    salarioAte: 22820.23,
+    inscricoesAte: "2026-08-24",
+    escolaridades: ["superior"],
+    escolaridadeTexto: "Superior (Delegado, Oficial e Investigador)",
+    resumo:
+      "Cargos de Delegado, Oficial de Polícia e Investigador, com remuneração de Delegado acima de R$ 22 mil.",
+  },
+  {
+    slug: "pc-pr-2026",
+    nome: "PC PR",
+    tituloCompleto: "Polícia Civil do Paraná 2026",
+    orgao: "Polícia Civil do Estado do Paraná",
+    destaque: false,
+    status: "inscricoes_abertas",
+    salarioDe: 9007.67,
+    salarioAte: 26876.48,
+    escolaridades: ["superior"],
+    escolaridadeTexto: "Superior (Delegado, Agente e Papiloscopista)",
+    resumo:
+      "Uma das carreiras policiais mais bem pagas em disputa: Delegado do PR passa de R$ 26 mil iniciais.",
+  },
+  {
+    slug: "tce-sp-2026",
+    nome: "TCE SP",
+    tituloCompleto: "Tribunal de Contas do Estado de São Paulo 2026",
+    orgao: "Tribunal de Contas do Estado de São Paulo",
+    destaque: false,
+    status: "inscricoes_abertas",
+    salarioAte: 20940.2,
+    inscricoesAte: "2026-09-17",
+    escolaridades: ["superior"],
+    escolaridadeTexto: "Superior (Auditor / Agente da Fiscalização)",
+    resumo:
+      "Controle externo em São Paulo, com salário inicial acima de R$ 20 mil e prova de alto nível.",
   },
   {
     slug: "tj-pr-2026",
@@ -431,8 +484,24 @@ const listaBruta: Concurso[] = [
     salarioAte: 23264.47,
     inscricoesAte: "2026-09-14",
     escolaridades: ["superior"],
+    escolaridadeTexto: "Superior (ex.: Contador)",
     resumo:
-      "Carreiras de nível superior no Judiciário paranaense, com um dos salários iniciais mais altos entre os concursos abertos.",
+      "Carreiras de nível superior no Judiciário paranaense, entre os maiores salários iniciais dos concursos abertos.",
+  },
+  {
+    slug: "mp-sp-2026",
+    nome: "MP SP",
+    tituloCompleto: "Ministério Público de São Paulo 2026",
+    orgao: "Ministério Público do Estado de São Paulo",
+    destaque: false,
+    status: "inscricoes_abertas",
+    salarioDe: 9114.75,
+    salarioAte: 12494.68,
+    inscricoesAte: "2026-09-15",
+    escolaridades: ["superior"],
+    escolaridadeTexto: "Superior (Analista de Promotoria)",
+    resumo:
+      "Analista de Promotoria de Justiça, com atuação de apoio técnico às promotorias do estado.",
   },
   {
     slug: "iss-manaus-2026",
@@ -445,8 +514,37 @@ const listaBruta: Concurso[] = [
     salarioAte: 27270.61,
     inscricoesAte: "2026-08-27",
     escolaridades: ["superior"],
+    escolaridadeTexto: "Superior (Auditor Fiscal de Tributos Municipais)",
     resumo:
-      "Poucas vagas, salário no topo da lista. Auditor Fiscal de Tributos Municipais, prova de alto nível em Direito Tributário e Contabilidade.",
+      "Poucas vagas, salário no topo da lista. Prova de alto nível em Direito Tributário e Contabilidade.",
+  },
+  {
+    slug: "bombeiros-rr-2026",
+    nome: "CBM RR",
+    tituloCompleto: "Corpo de Bombeiros Militar de Roraima 2026",
+    orgao: "Corpo de Bombeiros Militar do Estado de Roraima",
+    destaque: false,
+    status: "inscricoes_abertas",
+    vagasTotais: 300,
+    salarioAte: 13817.22,
+    inscricoesAte: "2026-08-24",
+    escolaridades: ["medio", "superior"],
+    escolaridadeTexto: "Médio (Soldado) e superior (Oficial)",
+    resumo:
+      "Ingresso na carreira militar de bombeiro, com vagas de praça e de oficial e etapas de aptidão física.",
+  },
+  {
+    slug: "prefeitura-santos-2026",
+    nome: "Pref. Santos",
+    tituloCompleto: "Prefeitura de Santos 2026",
+    orgao: "Prefeitura Municipal de Santos (SP)",
+    destaque: false,
+    status: "inscricoes_abertas",
+    salarioAte: 13263.43,
+    escolaridades: ["medio", "superior"],
+    escolaridadeTexto: "Fundamental, médio e superior (vários cargos)",
+    resumo:
+      "Concurso municipal amplo, com cargos administrativos, técnicos e de nível superior na Baixada Santista.",
   },
   {
     slug: "receita-federal-2026",
@@ -457,8 +555,9 @@ const listaBruta: Concurso[] = [
     status: "previsto",
     vagasTotais: 146,
     escolaridades: ["superior"],
+    escolaridadeTexto: "Superior (Auditor-Fiscal e Analista-Tributário)",
     resumo:
-      "Auditor-Fiscal e Analista-Tributário. Edital ainda não publicado — um dos mais aguardados da esfera federal.",
+      "Um dos concursos federais mais aguardados. Edital ainda não publicado.",
   },
   {
     slug: "tcu-2026",
@@ -469,8 +568,9 @@ const listaBruta: Concurso[] = [
     status: "previsto",
     vagasTotais: 100,
     escolaridades: ["superior"],
+    escolaridadeTexto: "Superior (Auditor Federal de Controle Externo)",
     resumo:
-      "Auditor Federal de Controle Externo. Previsto para 2026, com remuneração inicial acima de R$ 20 mil.",
+      "Controle externo federal, com remuneração inicial acima de R$ 20 mil. Previsto para 2026.",
   },
   {
     slug: "pm-sp-2026",
@@ -481,6 +581,7 @@ const listaBruta: Concurso[] = [
     status: "previsto",
     vagasTotais: 2000,
     escolaridades: ["medio", "superior"],
+    escolaridadeTexto: "Médio (Soldado) e superior (Oficial)",
     resumo:
       "Soldado PM 2ª Classe. Um dos maiores concursos de segurança previstos para o ano.",
   },
@@ -493,8 +594,9 @@ const listaBruta: Concurso[] = [
     status: "previsto",
     vagasTotais: 200,
     escolaridades: ["superior"],
+    escolaridadeTexto: "Superior (Auditor Fiscal e Agente de Tributos)",
     resumo:
-      "Auditor Fiscal e Agente de Tributos. Carreira fiscal estadual, edital previsto para 2026.",
+      "Carreira fiscal estadual. Edital previsto para 2026.",
   },
 ];
 

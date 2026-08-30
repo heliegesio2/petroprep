@@ -123,6 +123,15 @@ function Slide({ concurso }: { concurso: Concurso }) {
           {concurso.tituloCompleto}
         </h1>
         <p className="mt-1 text-sm text-white/60">{concurso.orgao}</p>
+
+        <p className="mt-2 flex items-start gap-1.5 text-sm text-white/75">
+          <svg viewBox="0 0 24 24" className="mt-0.5 h-4 w-4 flex-none text-accent" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <path d="M22 10L12 5 2 10l10 5 10-5z" />
+            <path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5" />
+          </svg>
+          {concurso.escolaridadeTexto}
+        </p>
+
         <p className="mt-3 max-w-2xl text-sm text-white/80 sm:text-base">
           {concurso.resumo}
         </p>
@@ -148,9 +157,13 @@ function Slide({ concurso }: { concurso: Concurso }) {
           )}
           {concurso.salarioAte && (
             <div>
-              <dt className="text-white/50">Salário até</dt>
+              <dt className="text-white/50">
+                {concurso.salarioDe ? "Salário" : "Salário até"}
+              </dt>
               <dd className="text-lg font-bold">
-                {formatBRL(concurso.salarioAte)}
+                {concurso.salarioDe
+                  ? `${formatBRL(concurso.salarioDe)} a ${formatBRL(concurso.salarioAte)}`
+                  : formatBRL(concurso.salarioAte)}
               </dd>
             </div>
           )}
