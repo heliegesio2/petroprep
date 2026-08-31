@@ -164,6 +164,15 @@ export function SimuladoResultado({
             <span className="text-lg font-normal text-muted"> de {total} questões</span>
           </p>
           <p className="mt-1 text-sm text-muted">{frasePorNota(notaInt)}</p>
+          {salvo && (
+            <p className="mt-2 text-sm">
+              <span className="font-mono font-semibold tabular-nums">{acertos} pontos</span>
+              <span className="text-muted"> para o </span>
+              <Link href="/ranking" className="font-medium text-brand hover:underline">
+                ranking
+              </Link>
+            </p>
+          )}
         </div>
         <div className="flex w-full flex-col gap-2 sm:w-40">
           <Link

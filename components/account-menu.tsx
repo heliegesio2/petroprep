@@ -9,6 +9,7 @@ import {
   ListChecksIcon,
   ShieldCheckIcon,
   SignOutIcon,
+  TrophyIcon,
 } from "@phosphor-icons/react/dist/ssr";
 
 const CORES = [
@@ -85,7 +86,27 @@ export function AccountMenu({
 }) {
   const router = useRouter();
   const [aberto, setAberto] = useState(false);
+  const [ranking, setRanking] = useState<{
+    concurso: string;
+    posicao: number | null;
+    total: number;
+    pontos: number;
+  } | null>(null);
   const raiz = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!aberto || ranking) return;
+    let vivo = true;
+    fetch("/api/ranking/eu")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (vivo && d) setRanking(d);
+      })
+      .catch(() => {});
+    return () => {
+      vivo = false;
+    };
+  }, [aberto, ranking]);
 
   useEffect(() => {
     if (!aberto) return;
@@ -146,6 +167,38 @@ export function AccountMenu({
               )}
             </div>
           </div>
+
+          <Link
+            href="/ranking"
+            onClick={() => setAberto(false)}
+            className="flex items-center gap-3 border-b bg-brand-soft/40 px-4 py-2.5 text-sm hover:bg-brand-soft"
+          >
+            <TrophyIcon
+              size={18}
+              weight="fill"
+              className="flex-none text-brand"
+              aria-hidden
+            />
+            <span className="min-w-0">
+              {ranking?.concurso ? (
+                <>
+                  <span className="font-medium">
+                    {ranking.posicao
+                      ? `${ranking.posicao}º no ranking`
+                      : "Fora do ranking"}
+                  </span>
+                  <span className="block text-xs text-muted">
+                    {ranking.concurso}
+                    {ranking.posicao
+                      ? ` · ${ranking.pontos} pts · ${ranking.total} candidatos`
+                      : " · faça um simulado para entrar"}
+                  </span>
+                </>
+              ) : (
+                <span className="text-muted">Ver ranking</span>
+              )}
+            </span>
+          </Link>
 
           <div className="p-1.5">
             <Link
