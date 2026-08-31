@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  CaretRightIcon,
   FacebookLogoIcon,
   GoogleLogoIcon,
   TiktokLogoIcon,
@@ -21,7 +20,7 @@ const PROVEDORES: Provedor[] = [
   { id: "tiktok", label: "TikTok", Icon: TiktokLogoIcon, cor: "text-[#EE1D52]" },
 ];
 
-/** Linhas de provedor social no estilo "escolha uma conta" do Google. */
+/** Botões sociais em largura total, ícone da marca à esquerda. */
 export function SocialRows({
   provedores,
   next,
@@ -35,23 +34,17 @@ export function SocialRows({
   const qs = next ? `?next=${encodeURIComponent(next)}` : "";
 
   return (
-    <>
+    <div className="grid gap-2">
       {lista.map(({ id, label, Icon, cor }) => (
         <a
           key={id}
           href={`/api/auth/${id}${qs}`}
-          className="flex items-center gap-3 rounded-lg px-2 py-2.5 text-left transition-colors hover:bg-background"
+          className="flex items-center justify-center gap-2.5 rounded-lg border bg-surface px-4 py-2.5 text-sm font-medium transition-colors hover:bg-background"
         >
-          <span className="grid h-10 w-10 flex-none place-items-center rounded-full border bg-surface">
-            <Icon size={20} weight="fill" className={cor} aria-hidden />
-          </span>
-          <span className="min-w-0 flex-1">
-            <span className="block text-sm font-medium">Continuar com {label}</span>
-            <span className="block text-xs text-muted">Login rápido, sem senha</span>
-          </span>
-          <CaretRightIcon size={16} className="flex-none text-muted" aria-hidden />
+          <Icon size={18} weight="fill" className={cor} aria-hidden />
+          Continuar com {label}
         </a>
       ))}
-    </>
+    </div>
   );
 }
