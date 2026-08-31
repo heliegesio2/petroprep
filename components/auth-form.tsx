@@ -64,11 +64,11 @@ export function AuthForm({
   }
 
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-5">
       <SocialButtons provedores={provedores} next={next} />
 
       {provedores.length > 0 && (
-        <div className="flex items-center gap-3 text-xs text-muted">
+        <div className="flex items-center gap-3 text-xs uppercase tracking-wide text-muted">
           <span className="h-px flex-1 bg-border" />
           ou com e-mail
           <span className="h-px flex-1 bg-border" />
