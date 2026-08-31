@@ -11,6 +11,7 @@ import {
 import { hasDatabase, prisma } from "@/lib/prisma";
 import { usuarioAtual, planoAtivo } from "@/lib/auth";
 import { idsTentativasAnonimas } from "@/lib/tentativas-anonimas";
+import { SimuladoDownload } from "@/components/simulado-download";
 
 export const metadata: Metadata = {
   title: "Simulados",
@@ -75,7 +76,7 @@ export default async function SimuladoListaPage() {
         demais liberam com qualquer plano.
       </p>
 
-      {!liberado && (
+      {!liberado ? (
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-brand/30 bg-brand-soft/50 p-4 text-sm">
           <span>Assine para liberar todos os simulados e a correção completa.</span>
           <Link
@@ -85,6 +86,13 @@ export default async function SimuladoListaPage() {
             Ver planos
           </Link>
         </div>
+      ) : (
+        <p className="mt-4 text-sm text-muted">
+          <Link href="/estudar-offline" className="font-medium text-brand hover:underline">
+            Simulados baixados
+          </Link>{" "}
+          para estudar sem internet.
+        </p>
       )}
 
       <ul className="mt-8 grid gap-4">
@@ -94,10 +102,8 @@ export default async function SimuladoListaPage() {
           const feito = ultimaPorSimulado.get(s.id);
 
           return (
-            <li
-              key={s.id}
-              className="flex flex-col gap-4 rounded-2xl border bg-surface p-5 sm:flex-row sm:items-center sm:justify-between"
-            >
+            <li key={s.id} className="rounded-2xl border bg-surface p-5">
+             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <h2 className="font-semibold">{s.titulo}</h2>
@@ -166,6 +172,9 @@ export default async function SimuladoListaPage() {
                   Começar
                 </Link>
               )}
+             </div>
+
+              {!s.gratuito && liberado && <SimuladoDownload slug={s.slug} />}
             </li>
           );
         })}

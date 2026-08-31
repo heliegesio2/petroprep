@@ -33,6 +33,12 @@ interface Props {
   tentativaId: string;
   questoes: QuestaoView[];
   respondidas: Record<string, { marcada: number; correta: boolean }>;
+  /** Offline: corrige a questão localmente em vez de chamar a API. */
+  corrigir?: (questaoId: string, marcada: number) => Feedback | Promise<Feedback>;
+  /** Offline: recebe o mapa de respostas no fim; o chamador mostra o resultado. */
+  aoFinalizar?: (respostas: Record<string, number>) => void | Promise<void>;
+  /** Offline: para onde ir ao sair (default: navega para /simulado). */
+  aoSair?: () => void;
 }
 
 export function SimuladoPlayer({
@@ -41,6 +47,9 @@ export function SimuladoPlayer({
   tentativaId,
   questoes,
   respondidas,
+  corrigir,
+  aoFinalizar,
+  aoSair,
 }: Props) {
   const router = useRouter();
   const reduce = useReducedMotion();
@@ -75,6 +84,17 @@ export function SimuladoPlayer({
     async (mapa: Record<string, number>) => {
       setOcupado(true);
       setErro("");
+
+      if (aoFinalizar) {
+        try {
+          await aoFinalizar(mapa);
+        } catch {
+          setErro("Não foi possível salvar. Tente de novo.");
+          setOcupado(false);
+        }
+        return;
+      }
+
       try {
         const res = await fetch(`/api/simulado/${slug}/submeter`, {
           method: "POST",
@@ -94,7 +114,7 @@ export function SimuladoPlayer({
         setOcupado(false);
       }
     },
-    [slug, tentativaId, router],
+    [slug, tentativaId, router, aoFinalizar],
   );
 
   const finalizarRef = useRef(finalizar);
@@ -140,6 +160,19 @@ export function SimuladoPlayer({
     if (selecionada === null || feedback || ocupado) return;
     setOcupado(true);
     setErro("");
+
+    if (corrigir) {
+      try {
+        const fb = await corrigir(q.id, selecionada);
+        setRespostas((r) => ({ ...r, [q.id]: selecionada }));
+        setFeedback(fb);
+      } catch {
+        setErro("Não foi possível verificar.");
+      }
+      setOcupado(false);
+      return;
+    }
+
     try {
       const res = await fetch(`/api/simulado/${slug}/responder`, {
         method: "POST",
@@ -383,7 +416,7 @@ export function SimuladoPlayer({
             <div className="mt-4 flex gap-3">
               <button
                 type="button"
-                onClick={() => router.push("/simulado")}
+                onClick={() => (aoSair ? aoSair() : router.push("/simulado"))}
                 className="rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-strong"
               >
                 Sair

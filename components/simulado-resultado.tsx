@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import type { Icon } from "@phosphor-icons/react";
 import {
@@ -32,6 +34,8 @@ interface Props {
   total: number;
   itens: ItemResultado[];
   salvo: boolean;
+  /** false quando o chamador já explica por que não foi salvo (ex.: offline). */
+  mostrarAvisoConta?: boolean;
 }
 
 const DICAS_GERAIS: { icon: Icon; texto: string }[] = [
@@ -126,6 +130,7 @@ export function SimuladoResultado({
   total,
   itens,
   salvo,
+  mostrarAvisoConta = true,
 }: Props) {
   const acertos = itens.filter((i) => i.acertou).length;
   const notaInt = Math.round(nota);
@@ -191,7 +196,7 @@ export function SimuladoResultado({
         </div>
       </div>
 
-      {!salvo && (
+      {!salvo && mostrarAvisoConta && (
         <p className="mt-4 rounded-lg border border-accent/40 bg-accent/10 p-3 text-xs leading-relaxed">
           Este resultado não foi salvo no seu histórico.{" "}
           <Link href="/cadastro" className="font-semibold underline">

@@ -2,10 +2,17 @@
 // Objetivo: um F5 sem internet abre a ultima versao da pagina em vez de erro.
 // Nao guarda simulado para estudo offline ainda (isso e a Fase 2, no IndexedDB).
 
-const VERSION = "v1";
+const VERSION = "v2";
 const APP_CACHE = `petroprep-app-${VERSION}`;
 const STATIC_CACHE = `petroprep-static-${VERSION}`;
 const OFFLINE_URL = "/offline";
+const PRECACHE = [
+  OFFLINE_URL,
+  "/manifest.webmanifest",
+  "/",
+  "/simulado",
+  "/estudar-offline",
+];
 
 // Paginas atras de login: nao ficam no cache para nao vazar entre pessoas
 // que usam o mesmo navegador.
@@ -15,7 +22,12 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(APP_CACHE)
-      .then((cache) => cache.addAll([OFFLINE_URL, "/manifest.webmanifest"]))
+      // ignora falha individual de precache para nao travar a instalacao
+      .then((cache) =>
+        Promise.all(
+          PRECACHE.map((u) => cache.add(u).catch(() => undefined)),
+        ),
+      )
       .then(() => self.skipWaiting()),
   );
 });
@@ -75,11 +87,13 @@ self.addEventListener("fetch", (event) => {
           }
           return resposta;
         })
-        .catch(() =>
-          caches
-            .match(request)
-            .then((hit) => hit || caches.match(OFFLINE_URL)),
-        ),
+        .catch(async () => {
+          const exato = await caches.match(request);
+          if (exato) return exato;
+          const semQuery = await caches.match(request, { ignoreSearch: true });
+          if (semQuery) return semQuery;
+          return caches.match(OFFLINE_URL);
+        }),
     );
     return;
   }
