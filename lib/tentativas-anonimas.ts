@@ -18,6 +18,12 @@ function lerIds(valor: string | undefined): string[] {
     .filter(Boolean);
 }
 
+/** Ids das tentativas feitas deslogado neste navegador (para listar "feito"). */
+export async function idsTentativasAnonimas(): Promise<string[]> {
+  const jar = await cookies();
+  return lerIds(jar.get(COOKIE)?.value);
+}
+
 /** Registra uma tentativa finalizada deslogado para reivindicá-la no login. */
 export async function lembrarTentativaAnonima(tentativaId: string): Promise<void> {
   const jar = await cookies();
