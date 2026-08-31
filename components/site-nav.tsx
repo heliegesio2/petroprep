@@ -1,8 +1,7 @@
 import Link from "next/link";
-import { UserCircleIcon } from "@phosphor-icons/react/dist/ssr";
 import { concursoDestaque, formatData } from "@/lib/concursos";
 import { lerSessao } from "@/lib/auth";
-import { LogoutButton } from "@/components/logout-button";
+import { AccountMenu } from "@/components/account-menu";
 
 const links = [
   { href: "/#vagas", label: "Vagas e cotas" },
@@ -49,18 +48,11 @@ export async function SiteNav() {
           </ul>
 
           {sessao ? (
-            <div className="flex items-center gap-4">
-              <Link
-                href="/minha-conta"
-                className="inline-flex items-center gap-1.5 text-sm font-medium hover:text-brand"
-              >
-                <UserCircleIcon size={18} weight="bold" aria-hidden />
-                <span className="max-w-[8rem] truncate">
-                  {sessao.nome.split(" ")[0]}
-                </span>
-              </Link>
-              <LogoutButton />
-            </div>
+            <AccountMenu
+              nome={sessao.nome}
+              email={sessao.email}
+              avatar={sessao.avatar ?? null}
+            />
           ) : (
             <div className="flex items-center gap-3">
               <Link

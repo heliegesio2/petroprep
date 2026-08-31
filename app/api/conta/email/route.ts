@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 import { hasDatabase, prisma } from "@/lib/prisma";
-import { usuarioAtual, criarSessao } from "@/lib/auth";
+import { usuarioAtual, criarSessao, lerSessao } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
@@ -35,10 +35,12 @@ export async function POST(request: Request) {
       where: { id: usuario.id },
       data: { email },
     });
+    const sessao = await lerSessao();
     await criarSessao({
       id: atualizado.id,
       email: atualizado.email,
       nome: atualizado.nome,
+      avatar: sessao?.avatar ?? null,
     });
     return NextResponse.json({ ok: true });
   } catch (error) {

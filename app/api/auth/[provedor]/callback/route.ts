@@ -110,6 +110,7 @@ export async function GET(
       id: usuario.id,
       email: usuario.email,
       nome: usuario.nome,
+      avatar: dados.avatarUrl,
     });
   } catch (e) {
     console.error(`[oauth ${provedor}] falha ao gravar usuário:`, e);

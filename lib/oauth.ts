@@ -27,6 +27,7 @@ export interface UsuarioProvedor {
   nome: string;
   email: string | null;
   emailVerificado: boolean;
+  avatarUrl: string | null;
 }
 
 interface ConfigProvedor {
@@ -65,6 +66,7 @@ const CONFIG: Record<Provedor, ConfigProvedor> = {
         nome: str(claims.name) || str(claims.email) || "Usuário",
         email: str(claims.email) || null,
         emailVerificado: claims.email_verified === true,
+        avatarUrl: str(claims.picture) || null,
       };
     },
   },
@@ -78,15 +80,17 @@ const CONFIG: Record<Provedor, ConfigProvedor> = {
     async buscarUsuario(tokenJson, fetchJson) {
       const accessToken = str(tokenJson.access_token);
       const me = await fetchJson(
-        `https://graph.facebook.com/v21.0/me?fields=id,name,email&access_token=${encodeURIComponent(accessToken)}`,
+        `https://graph.facebook.com/v21.0/me?fields=id,name,email,picture.width(200)&access_token=${encodeURIComponent(accessToken)}`,
       );
       const email = str(me.email) || null;
+      const pic = (me.picture as { data?: { url?: string } })?.data?.url;
       return {
         provedorUserId: str(me.id),
         nome: str(me.name) || email || "Usuário",
         email,
         // O Facebook só devolve e-mails já confirmados na conta.
         emailVerificado: Boolean(email),
+        avatarUrl: str(pic) || null,
       };
     },
   },
@@ -100,7 +104,7 @@ const CONFIG: Record<Provedor, ConfigProvedor> = {
     async buscarUsuario(tokenJson, fetchJson) {
       const accessToken = str(tokenJson.access_token);
       const resp = await fetchJson(
-        "https://open.tiktokapis.com/v2/user/info/?fields=open_id,display_name",
+        "https://open.tiktokapis.com/v2/user/info/?fields=open_id,display_name,avatar_url",
         { headers: { Authorization: `Bearer ${accessToken}` } },
       );
       const data = (resp.data ?? {}) as Record<string, unknown>;
@@ -109,6 +113,7 @@ const CONFIG: Record<Provedor, ConfigProvedor> = {
         nome: str(data.display_name) || "Usuário do TikTok",
         email: null, // TikTok Login Kit v2 não fornece e-mail
         emailVerificado: false,
+        avatarUrl: str(data.avatar_url) || null,
       };
     },
   },

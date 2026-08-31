@@ -21,6 +21,8 @@ export interface SessaoUsuario {
   id: string;
   email: string | null;
   nome: string;
+  /** URL da foto do provedor social, se houver. */
+  avatar?: string | null;
 }
 
 export function hashSenha(senha: string): Promise<string> {
@@ -32,7 +34,11 @@ export function verificarSenha(senha: string, hash: string): Promise<boolean> {
 }
 
 export async function criarSessao(u: SessaoUsuario): Promise<void> {
-  const token = await new SignJWT({ email: u.email ?? "", nome: u.nome })
+  const token = await new SignJWT({
+    email: u.email ?? "",
+    nome: u.nome,
+    avatar: u.avatar ?? "",
+  })
     .setProtectedHeader({ alg: "HS256" })
     .setSubject(u.id)
     .setIssuedAt()
@@ -61,6 +67,7 @@ export async function lerSessao(): Promise<SessaoUsuario | null> {
       id: String(payload.sub),
       email: String(payload.email ?? "") || null,
       nome: String(payload.nome ?? ""),
+      avatar: String(payload.avatar ?? "") || null,
     };
   } catch {
     return null;
