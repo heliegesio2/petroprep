@@ -1,6 +1,14 @@
 import Link from "next/link";
+import type { Icon } from "@phosphor-icons/react";
 import {
+  ArrowClockwiseIcon,
   CheckCircleIcon,
+  ListChecksIcon,
+  MagnifyingGlassIcon,
+  NotebookIcon,
+  ScalesIcon,
+  TargetIcon,
+  TimerIcon,
   XCircleIcon,
 } from "@phosphor-icons/react/dist/ssr";
 
@@ -26,6 +34,91 @@ interface Props {
   salvo: boolean;
 }
 
+const DICAS_GERAIS: { icon: Icon; texto: string }[] = [
+  {
+    icon: ArrowClockwiseIcon,
+    texto:
+      "Refaça as questões que errou 2 a 3 dias depois, sem olhar o gabarito. O que você acerta na revisão foi o que de fato fixou.",
+  },
+  {
+    icon: TimerIcon,
+    texto:
+      "Cronometre todo simulado. A Cesgranrio cobra ritmo tanto quanto conteúdo. Mire de 2 a 3 minutos por questão.",
+  },
+  {
+    icon: MagnifyingGlassIcon,
+    texto:
+      "Leia o enunciado inteiro antes das alternativas e marque palavras como 'exceto', 'incorreto' e 'sempre'.",
+  },
+  {
+    icon: NotebookIcon,
+    texto:
+      "Mantenha um caderno de erros separado por disciplina e revise no fim de cada semana.",
+  },
+  {
+    icon: ScalesIcon,
+    texto:
+      "Priorize as disciplinas com mais questões no edital. Peso conta mais do que preferência pessoal.",
+  },
+  {
+    icon: ListChecksIcon,
+    texto:
+      "Estude por questões comentadas da própria banca, não só por resumo teórico.",
+  },
+];
+
+function frasePorNota(nota: number): string {
+  if (nota >= 80)
+    return "Excelente aproveitamento. Foque em manter o ritmo e lapidar os detalhes.";
+  if (nota >= 60)
+    return "Bom começo. Com revisão dirigida das matérias mais fracas, a nota sobe rápido.";
+  if (nota >= 40)
+    return "Você já tem uma base. O próximo passo é atacar as matérias em vermelho abaixo.";
+  return "Início de jornada. Use o plano abaixo para priorizar o que rende mais pontos agora.";
+}
+
+function orientacaoDisciplina(pct: number): string {
+  if (pct < 40)
+    return `Base ainda frágil (${pct}%). Comece pela teoria do assunto e resolva questões comentadas fáceis antes de partir para provas antigas.`;
+  return `Você já tem noção do conteúdo (${pct}%). Refaça questões da Cesgranrio sobre o tema e revise cada erro, um a um, até entender o porquê.`;
+}
+
+function Donut({
+  pct,
+  size,
+  fraca,
+}: {
+  pct: number;
+  size: number;
+  fraca?: boolean;
+}) {
+  const cor = fraca ? "#ef4444" : "var(--color-brand)";
+  const trilho = fraca
+    ? "color-mix(in srgb, #ef4444 22%, var(--color-surface))"
+    : "var(--color-border)";
+  const graus = Math.round((pct / 100) * 360);
+  const furo = Math.round(size * 0.72);
+  return (
+    <div
+      className="relative grid flex-none place-items-center rounded-full"
+      style={{
+        width: size,
+        height: size,
+        background: `conic-gradient(${cor} ${graus}deg, ${trilho} ${graus}deg)`,
+      }}
+      role="img"
+      aria-label={`${pct} por cento`}
+    >
+      <div
+        className="grid place-items-center rounded-full bg-surface font-mono font-bold tabular-nums"
+        style={{ width: furo, height: furo, fontSize: size > 100 ? 22 : 12 }}
+      >
+        {pct}%
+      </div>
+    </div>
+  );
+}
+
 export function SimuladoResultado({
   titulo,
   slug,
@@ -35,6 +128,7 @@ export function SimuladoResultado({
   salvo,
 }: Props) {
   const acertos = itens.filter((i) => i.acertou).length;
+  const notaInt = Math.round(nota);
 
   const porDisciplina = new Map<string, { acertos: number; total: number }>();
   for (const i of itens) {
@@ -44,6 +138,16 @@ export function SimuladoResultado({
     porDisciplina.set(i.disciplina, d);
   }
 
+  const disciplinas = [...porDisciplina.entries()]
+    .map(([disciplina, d]) => ({
+      disciplina,
+      ...d,
+      pct: Math.round((d.acertos / d.total) * 100),
+    }))
+    .sort((a, b) => a.pct - b.pct);
+
+  const focar = disciplinas.filter((d) => d.pct < 70);
+
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
       <p className="text-xs font-semibold uppercase tracking-wide text-muted">
@@ -51,26 +155,22 @@ export function SimuladoResultado({
       </p>
       <h1 className="mt-1 text-2xl font-bold tracking-tight">{titulo}</h1>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border bg-surface p-5">
-          <p className="text-sm text-muted">Nota</p>
-          <p className="mt-1 font-mono text-4xl font-bold tabular-nums">
-            {Math.round(nota)}
-            <span className="text-base font-normal text-muted"> / 100</span>
-          </p>
-        </div>
-        <div className="rounded-2xl border bg-surface p-5">
-          <p className="text-sm text-muted">Acertos</p>
-          <p className="mt-1 font-mono text-4xl font-bold tabular-nums">
+      <div className="mt-6 flex flex-col items-center gap-5 rounded-2xl border bg-surface p-6 text-center sm:flex-row sm:text-left">
+        <Donut pct={notaInt} size={128} />
+        <div className="flex-1">
+          <p className="text-sm text-muted">Você acertou</p>
+          <p className="font-mono text-3xl font-bold tabular-nums">
             {acertos}
-            <span className="text-base font-normal text-muted"> / {total}</span>
+            <span className="text-lg font-normal text-muted"> de {total} questões</span>
           </p>
+          <p className="mt-1 text-sm text-muted">{frasePorNota(notaInt)}</p>
         </div>
-        <div className="flex flex-col justify-center gap-2 rounded-2xl border bg-surface p-5">
+        <div className="flex w-full flex-col gap-2 sm:w-40">
           <Link
             href={`/simulado/${slug}`}
-            className="rounded-lg bg-brand px-4 py-2 text-center text-sm font-semibold text-white hover:bg-brand-strong"
+            className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand px-4 py-2 text-sm font-semibold text-white hover:bg-brand-strong"
           >
+            <ArrowClockwiseIcon size={16} weight="bold" aria-hidden />
             Refazer
           </Link>
           <Link
@@ -92,32 +192,82 @@ export function SimuladoResultado({
         </p>
       )}
 
-      <section className="mt-8">
-        <h2 className="font-semibold">Desempenho por disciplina</h2>
-        <ul className="mt-3 grid gap-2">
-          {[...porDisciplina.entries()].map(([disciplina, d]) => {
-            const pct = Math.round((d.acertos / d.total) * 100);
-            return (
-              <li key={disciplina} className="rounded-lg border bg-surface p-3">
-                <div className="flex items-center justify-between gap-3 text-sm">
-                  <span className="font-medium">{disciplina}</span>
-                  <span className="font-mono tabular-nums text-muted">
+      <section className="mt-10">
+        <h2 className="font-semibold">Como você foi em cada matéria</h2>
+        <p className="mt-1 text-sm text-muted">
+          Quanto mais preenchido o círculo, melhor o aproveitamento. Vermelho marca
+          onde você acertou menos de 40 por cento.
+        </p>
+        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          {disciplinas.map((d) => (
+            <div
+              key={d.disciplina}
+              className="flex flex-col items-center gap-2 rounded-2xl border bg-surface p-4 text-center"
+            >
+              <Donut pct={d.pct} size={84} fraca={d.pct < 40} />
+              <p className="text-sm font-medium leading-tight">{d.disciplina}</p>
+              <p className="font-mono text-xs tabular-nums text-muted">
+                {d.acertos}/{d.total} certas
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-10">
+        <h2 className="flex items-center gap-2 font-semibold">
+          <TargetIcon size={18} weight="fill" className="text-brand" aria-hidden />
+          Onde focar seus estudos
+        </h2>
+        {focar.length === 0 ? (
+          <p className="mt-3 rounded-2xl border bg-surface p-4 text-sm text-muted">
+            Você foi bem em todas as matérias deste simulado. Siga para os simulados
+            completos e mantenha a rotina de revisão para não perder o ritmo.
+          </p>
+        ) : (
+          <ol className="mt-3 grid gap-3">
+            {focar.map((d, idx) => (
+              <li
+                key={d.disciplina}
+                className="rounded-2xl border bg-surface p-4"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-sm font-semibold">
+                    {idx + 1}. {d.disciplina}
+                  </span>
+                  <span className="font-mono text-xs tabular-nums text-muted">
                     {d.acertos}/{d.total}
                   </span>
                 </div>
-                <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-background">
-                  <div
-                    className="h-full rounded-full bg-brand"
-                    style={{ width: `${pct}%` }}
-                  />
-                </div>
+                <p className="mt-1.5 text-sm leading-relaxed text-foreground/90">
+                  {orientacaoDisciplina(d.pct)}
+                </p>
               </li>
-            );
-          })}
+            ))}
+          </ol>
+        )}
+      </section>
+
+      <section className="mt-10">
+        <h2 className="font-semibold">Como melhorar sua performance</h2>
+        <ul className="mt-3 grid gap-2.5">
+          {DICAS_GERAIS.map(({ icon: IconDica, texto }) => (
+            <li
+              key={texto}
+              className="flex gap-3 rounded-2xl border bg-surface p-4 text-sm leading-relaxed"
+            >
+              <IconDica
+                size={18}
+                className="mt-0.5 flex-none text-brand"
+                aria-hidden
+              />
+              <span className="text-foreground/90">{texto}</span>
+            </li>
+          ))}
         </ul>
       </section>
 
-      <section className="mt-8">
+      <section className="mt-10">
         <h2 className="font-semibold">Correção comentada</h2>
         <ol className="mt-4 grid gap-4">
           {itens.map((i) => (
