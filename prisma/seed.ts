@@ -9,6 +9,7 @@
  * cópia de nenhuma prova oficial.
  */
 import { PrismaClient } from "@prisma/client";
+import { seedConcursos } from "./seed-concursos";
 
 const prisma = new PrismaClient();
 
@@ -724,6 +725,8 @@ async function main() {
     });
   }
   console.log(`Simulados: ${simulados.length} sincronizados.`);
+
+  await seedConcursos(prisma);
 }
 
 main()

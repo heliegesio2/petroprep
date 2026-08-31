@@ -85,9 +85,13 @@ model Simulado {
   disciplina String?
   duracaoMin Int               @default(60)
   gratuito   Boolean           @default(false)
+  concurso   Concurso?         @relation(fields: [concursoId], references: [id])
+  concursoId String?
   questoes   SimuladoQuestao[]
   tentativas Tentativa[]
   createdAt  DateTime          @default(now())
+
+  @@index([concursoId])
 }
 
 model SimuladoQuestao {
@@ -169,4 +173,91 @@ model Topico {
   natureza   String
 
   @@unique([disciplina, titulo])
+}
+
+// ---------------------------------------------------------------------------
+// Guia de concurso (dados profundos por edital). Populado pelo seed a partir
+// de prisma/dados/<slug>/. O carrossel da landing continua em lib/concursos.ts;
+// as rotas /concurso/[slug]/** leem daqui.
+// ---------------------------------------------------------------------------
+
+model Concurso {
+  id            String            @id @default(cuid())
+  slug          String            @unique
+  nome          String
+  orgao         String
+  banca         String?
+  categoria     String
+  status        String            @default("previsto") // inscricoes_abertas | previsto
+  publicado     Boolean           @default(true)
+  destaque      Boolean           @default(false)
+  ordem         Int               @default(0)
+  fonteOficial  String?
+  linkInscricao String?
+  vagasOficial  Int?
+  salarioDe     Decimal?          @db.Decimal(10, 2)
+  salarioAte    Decimal?          @db.Decimal(10, 2)
+  inscricoesAte DateTime?
+  dataProva     DateTime?
+  resumo        String?
+  cargos        CargoConcurso[]
+  materias      MateriaConcurso[]
+  itensEstudo   ItemEstudo[]
+  simulados     Simulado[]
+  criadoEm      DateTime          @default(now())
+  atualizadoEm  DateTime          @updatedAt
+}
+
+model CargoConcurso {
+  id             String   @id @default(cuid())
+  concurso       Concurso @relation(fields: [concursoId], references: [id], onDelete: Cascade)
+  concursoId     String
+  slug           String
+  nome           String
+  area           String
+  nivel          String
+  cargaHoraria   String?
+  salario        Decimal? @db.Decimal(10, 2)
+  requisito      String?
+  conteudoItens  String[]
+  vagasImediatas Int      @default(0)
+  vagasReserva   Int      @default(0)
+  localidades    Json     @default("[]")
+  materiasSlugs  String[]
+  criadoEm       DateTime @default(now())
+
+  @@unique([concursoId, slug])
+  @@index([concursoId, nivel])
+}
+
+model MateriaConcurso {
+  id           String       @id @default(cuid())
+  concurso     Concurso     @relation(fields: [concursoId], references: [id], onDelete: Cascade)
+  concursoId   String
+  slug         String // ex.: "superior--lingua-portuguesa"
+  nome         String
+  nivel        String // medio | superior
+  simuladoSlug String? // liga a matéria a um Simulado, quando há teste
+  itens        ItemEstudo[]
+
+  @@unique([concursoId, slug])
+}
+
+model ItemEstudo {
+  id         String           @id @default(cuid())
+  chave      String           @unique // seed: "<concursoId>:mat:<materiaSlug>:<slug>" ou ":cargo:<cargoSlug>:<slug>"
+  concurso   Concurso         @relation(fields: [concursoId], references: [id], onDelete: Cascade)
+  concursoId String
+  materia    MateriaConcurso? @relation(fields: [materiaId], references: [id], onDelete: Cascade)
+  materiaId  String?
+  cargoSlug  String? // conteúdo específico (Módulo II) de um cargo
+  ordem      Int              @default(0)
+  slug       String
+  titulo     String
+  resumo     String?
+  pontos     String[]
+  dica       String?
+
+  @@index([concursoId, cargoSlug])
+  @@index([materiaId])
 }
