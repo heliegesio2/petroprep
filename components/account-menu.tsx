@@ -7,6 +7,7 @@ import {
   CaretDownIcon,
   GearSixIcon,
   ListChecksIcon,
+  ShieldCheckIcon,
   SignOutIcon,
 } from "@phosphor-icons/react/dist/ssr";
 
@@ -75,10 +76,12 @@ export function AccountMenu({
   nome,
   email,
   avatar,
+  admin = false,
 }: {
   nome: string;
   email: string | null;
   avatar: string | null;
+  admin?: boolean;
 }) {
   const router = useRouter();
   const [aberto, setAberto] = useState(false);
@@ -163,6 +166,17 @@ export function AccountMenu({
               <ListChecksIcon size={18} className="flex-none text-muted" aria-hidden />
               Meus simulados
             </Link>
+            {admin && (
+              <Link
+                href="/admin"
+                role="menuitem"
+                onClick={() => setAberto(false)}
+                className="flex items-center gap-3 rounded-lg px-2.5 py-2 text-sm hover:bg-background"
+              >
+                <ShieldCheckIcon size={18} className="flex-none text-muted" aria-hidden />
+                Administração
+              </Link>
+            )}
           </div>
 
           <div className="border-t p-1.5">

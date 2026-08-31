@@ -96,3 +96,13 @@ export function planoAtivo(u: { planoStatus: string; planoAte: Date | null } | n
   if (!u || u.planoStatus !== "ativo") return false;
   return !u.planoAte || u.planoAte.getTime() > Date.now();
 }
+
+const ADMIN_EMAILS = (process.env.ADMIN_EMAIL ?? "heliegesio@gmail.com")
+  .split(",")
+  .map((s) => s.trim().toLowerCase())
+  .filter(Boolean);
+
+/** Acesso ao painel de administração: e-mail na lista ADMIN_EMAIL (padrão: o dono). */
+export function ehAdmin(u: { email: string | null } | null | undefined): boolean {
+  return !!u?.email && ADMIN_EMAILS.includes(u.email.toLowerCase());
+}

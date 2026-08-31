@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { concursoDestaque, formatData } from "@/lib/concursos";
-import { lerSessao } from "@/lib/auth";
+import { lerSessao, ehAdmin } from "@/lib/auth";
 import { AccountMenu } from "@/components/account-menu";
 
 const links = [
@@ -52,6 +52,7 @@ export async function SiteNav() {
               nome={sessao.nome}
               email={sessao.email}
               avatar={sessao.avatar ?? null}
+              admin={ehAdmin(sessao)}
             />
           ) : (
             <div className="flex items-center gap-3">
