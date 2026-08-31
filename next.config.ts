@@ -12,6 +12,34 @@ const nextConfig: NextConfig = {
   outputFileTracingIncludes: {
     "/": ["./public/edital/**/*"],
   },
+
+  // Detecção de conexão + re-tentativa automática de navegação/Server Action que
+  // falha por falta de rede. Expõe o hook useOffline (usado no banner).
+  experimental: {
+    useOffline: true,
+  },
+
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+        ],
+      },
+      {
+        // O service worker nunca pode ser cacheado: o browser precisa sempre
+        // pegar a versão nova para detectar atualização.
+        source: "/sw.js",
+        headers: [
+          { key: "Content-Type", value: "application/javascript; charset=utf-8" },
+          { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" },
+          { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self'" },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
