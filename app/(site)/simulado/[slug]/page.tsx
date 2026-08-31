@@ -121,13 +121,23 @@ export default async function SimuladoPage({ params, searchParams }: Params) {
     tentativaId = nova.id;
   }
 
+  // Retomada: questões já respondidas nesta tentativa (não revela o gabarito).
+  const respostasSalvas = await prisma.respostaSimulado.findMany({
+    where: { tentativaId },
+    select: { questaoId: true, marcada: true, correta: true },
+  });
+  const respondidas: Record<string, { marcada: number; correta: boolean }> = {};
+  for (const r of respostasSalvas) {
+    respondidas[r.questaoId] = { marcada: r.marcada, correta: r.correta };
+  }
+
   return (
     <SimuladoPlayer
       slug={slug}
-      titulo={simulado.titulo}
       duracaoMin={simulado.duracaoMin}
       tentativaId={tentativaId}
       questoes={simulado.questoes}
+      respondidas={respondidas}
     />
   );
 }
