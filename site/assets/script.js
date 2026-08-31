@@ -29,31 +29,34 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ---- Busca/filtro no índice ----
+  // ---- Busca/filtro no índice (lista única com todas as vagas dos 4 editais) ----
   var searchInput = document.getElementById('vaga-search');
   if (searchInput) {
     var cards = Array.prototype.slice.call(document.querySelectorAll('.vaga-card'));
-    var sections = Array.prototype.slice.call(document.querySelectorAll('.edital-section'));
     var emptyState = document.getElementById('empty-state');
 
-    searchInput.addEventListener('input', function () {
+    function applyFilter() {
       var q = searchInput.value.trim().toLowerCase();
       var anyVisible = false;
-
-      sections.forEach(function (section) {
-        var sectionHasMatch = false;
-        var sectionCards = section.querySelectorAll('.vaga-card');
-        sectionCards.forEach(function (card) {
-          var haystack = card.getAttribute('data-search') || '';
-          var match = q === '' || haystack.indexOf(q) !== -1;
-          card.style.display = match ? '' : 'none';
-          if (match) { sectionHasMatch = true; anyVisible = true; }
-        });
-        section.style.display = sectionHasMatch ? '' : 'none';
+      cards.forEach(function (card) {
+        var haystack = card.getAttribute('data-search') || '';
+        var match = q === '' || haystack.indexOf(q) !== -1;
+        card.style.display = match ? '' : 'none';
+        if (match) anyVisible = true;
       });
-
       if (emptyState) emptyState.style.display = anyVisible ? 'none' : 'block';
-    });
+    }
+
+    searchInput.addEventListener('input', applyFilter);
+
+    // Link vindo da página "editais.html" (?edital=01) pré-filtra pelo edital escolhido
+    var params = new URLSearchParams(window.location.search);
+    var editalParam = params.get('edital');
+    if (editalParam) {
+      searchInput.value = 'edital ' + editalParam;
+      applyFilter();
+      searchInput.focus();
+    }
   }
 
   // ---- Toggle "outras vagas do mesmo edital" ----
