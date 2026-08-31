@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  CaretRightIcon,
   FacebookLogoIcon,
   GoogleLogoIcon,
   TiktokLogoIcon,
@@ -20,7 +21,8 @@ const PROVEDORES: Provedor[] = [
   { id: "tiktok", label: "TikTok", Icon: TiktokLogoIcon, cor: "text-[#EE1D52]" },
 ];
 
-export function SocialButtons({
+/** Linhas de provedor social no estilo "escolha uma conta" do Google. */
+export function SocialRows({
   provedores,
   next,
 }: {
@@ -33,19 +35,23 @@ export function SocialButtons({
   const qs = next ? `?next=${encodeURIComponent(next)}` : "";
 
   return (
-    <div className="grid gap-2.5">
+    <>
       {lista.map(({ id, label, Icon, cor }) => (
         <a
           key={id}
           href={`/api/auth/${id}${qs}`}
-          className="flex items-center gap-3 rounded-lg border bg-surface px-4 py-3 text-sm font-medium transition-colors hover:border-foreground/25 hover:bg-background"
+          className="flex items-center gap-3 rounded-lg px-2 py-2.5 text-left transition-colors hover:bg-background"
         >
-          <Icon size={20} weight="fill" className={`flex-none ${cor}`} aria-hidden />
-          <span className="flex-1 text-center">Continuar com {label}</span>
-          {/* espaço espelhando o ícone p/ o texto ficar centralizado */}
-          <span className="w-5 flex-none" aria-hidden />
+          <span className="grid h-10 w-10 flex-none place-items-center rounded-full border bg-surface">
+            <Icon size={20} weight="fill" className={cor} aria-hidden />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-sm font-medium">Continuar com {label}</span>
+            <span className="block text-xs text-muted">Login rápido, sem senha</span>
+          </span>
+          <CaretRightIcon size={16} className="flex-none text-muted" aria-hidden />
         </a>
       ))}
-    </div>
+    </>
   );
 }

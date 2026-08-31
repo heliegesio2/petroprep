@@ -25,6 +25,11 @@
 .DS_Store
 *.pem
 
+# PDFs de trabalho baixados na raiz (os assets do app ficam em public/edital/)
+/editais/
+/ratificacao/
+/.env.vercel
+
 # debug
 npm-debug.log*
 yarn-debug.log*
