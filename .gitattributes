@@ -1,0 +1,15 @@
+# Fim de linha LF para todo o repo - o codigo e bind-mounted em containers
+# Linux (docker compose) e CRLF quebraria scripts/config.
+* text=auto eol=lf
+
+# Binarios - Git nao mexe
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
