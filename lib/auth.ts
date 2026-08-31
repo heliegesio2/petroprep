@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import bcrypt from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
 import { prisma } from "@/lib/prisma";
+import { vincularTentativasAnonimas } from "@/lib/tentativas-anonimas";
 
 const COOKIE = "petroprep_sessao";
 const DIAS = 30;
@@ -52,6 +53,9 @@ export async function criarSessao(u: SessaoUsuario): Promise<void> {
     path: "/",
     maxAge: DIAS * 24 * 60 * 60,
   });
+
+  // Puxa para a conta os simulados feitos deslogado neste navegador.
+  await vincularTentativasAnonimas(u.id);
 }
 
 export async function encerrarSessao(): Promise<void> {

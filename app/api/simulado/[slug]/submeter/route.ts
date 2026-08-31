@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { hasDatabase, prisma } from "@/lib/prisma";
 import { usuarioAtual } from "@/lib/auth";
+import { lembrarTentativaAnonima } from "@/lib/tentativas-anonimas";
 
 export const runtime = "nodejs";
 
@@ -50,11 +51,15 @@ export async function POST(
     return NextResponse.json({ message: "Tentativa não encontrada." }, { status: 404 });
   }
 
-  if (tentativa.usuarioId !== null) {
-    const usuario = await usuarioAtual();
-    if (!usuario || usuario.id !== tentativa.usuarioId) {
+  const usuario = await usuarioAtual();
+  let donoId = tentativa.usuarioId;
+  if (donoId !== null) {
+    if (!usuario || usuario.id !== donoId) {
       return NextResponse.json({ message: "Sem permissão." }, { status: 403 });
     }
+  } else if (usuario) {
+    // Começou deslogado e entrou durante a prova: a tentativa passa a ser dele.
+    donoId = usuario.id;
   }
 
   if (tentativa.finalizadoEm) {
@@ -79,9 +84,14 @@ export async function POST(
     }),
     prisma.tentativa.update({
       where: { id: tentativaId },
-      data: { finalizadoEm: new Date(), nota },
+      data: { finalizadoEm: new Date(), nota, usuarioId: donoId },
     }),
   ]);
+
+  // Feito deslogado: guarda o id para vincular à conta no próximo login.
+  if (donoId === null) {
+    await lembrarTentativaAnonima(tentativaId);
+  }
 
   return NextResponse.json({ ok: true, tentativaId, nota: Math.round(nota) });
 }
