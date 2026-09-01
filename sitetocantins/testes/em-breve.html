@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teste em breve | PetroPrep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="../index.html#top" class="brand"><span class="brand-mark">P</span>PetroPrep</a>
+    <a href="../index.html#filtro" class="btn btn-accent">Ver vagas</a>
+  </div>
+</header>
+<div class="wrap">
+  <div class="soon-box">
+    <span class="badge">Em breve</span>
+    <h1 id="soon-title">Teste desta matéria chegando em breve</h1>
+    <p>Estamos preparando questões comentadas para esta matéria. Enquanto isso, revise o resumo do conteúdo na página do cargo.</p>
+    <a href="../index.html#filtro" class="btn btn-primary">Voltar para as vagas</a>
+  </div>
+</div>
+<script>
+  (function(){
+    var params = new URLSearchParams(window.location.search);
+    var nome = params.get('nome');
+    if (!nome) {
+      var m = params.get('materia');
+      if (m) {
+        nome = m.split('--').slice(1).join(' ').replace(/-/g, ' ');
+        nome = nome.replace(/\b\w/g, function(c){ return c.toUpperCase(); });
+      }
+    }
+    var el = document.getElementById('soon-title');
+    if (el && nome) el.textContent = 'Teste de ' + nome + ' chegando em breve';
+  })();
+</script>
+</body>
+</html>
