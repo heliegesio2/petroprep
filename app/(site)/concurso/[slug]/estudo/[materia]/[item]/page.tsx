@@ -40,6 +40,9 @@ export default async function ItemMateriaPage({ params }: Params) {
       resumo={it.resumo}
       pontos={it.pontos}
       dica={it.dica}
+      textoOficial={it.textoOficial}
+      comoFunciona={it.comoFunciona}
+      exemplos={it.exemplos}
       voltarHref={`/concurso/${slug}/estudo/${materia}`}
       voltarLabel={m.nome}
       testeHref={m.simuladoSlug ? `/simulado/${m.simuladoSlug}` : null}

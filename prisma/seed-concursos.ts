@@ -274,6 +274,26 @@ interface CargoTranspetro {
   vagas_reserva: number;
 }
 
+interface CargoDetalhe {
+  slug: string;
+  requisito: string | null;
+  finalidade: string | null;
+  remuneracao: string | null;
+  atribuicoes: string | null;
+  conteudo_especifico: string[];
+}
+
+interface TopicoTranspetro {
+  slug_file: string;
+  edital: string;
+  materia: string;
+  titulo: string;
+  oficial: string | null;
+  oque: string | null;
+  como: string | null;
+  exemplos: string[];
+}
+
 /** Concurso Transpetro: metadados + os 61 cargos (extraídos de site/index.html). */
 async function seedTranspetro(prisma: PrismaClient) {
   const cargos = ler<CargoTranspetro[]>(
@@ -315,7 +335,86 @@ async function seedTranspetro(prisma: PrismaClient) {
     data: { concursoId: c.id },
   });
 
+  const detalhe = new Map(
+    ler<CargoDetalhe[]>("prisma/dados/transpetro-2026/cargos-detalhe.json").map(
+      (d) => [d.slug, d] as const,
+    ),
+  );
+  const topicos = ler<TopicoTranspetro[]>(
+    "prisma/dados/transpetro-2026/topicos.json",
+  );
+
+  // --- Matérias do Módulo I (das páginas de tópico) ----------------------
+  const materiasNomes = [
+    ...new Set(
+      topicos
+        .map((t) => limpar(t.materia) ?? t.materia)
+        .filter((m) => m && !/específic/i.test(m)),
+    ),
+  ];
+  const SIMULADO_POR_MATERIA: Record<string, string> = {
+    "Língua Portuguesa": "portugues",
+    Matemática: "matematica",
+  };
+  const materiaId = new Map<string, string>();
+  for (const nome of materiasNomes) {
+    const slug = slugify(nome);
+    const mat = await prisma.materiaConcurso.upsert({
+      where: { concursoId_slug: { concursoId: c.id, slug } },
+      update: { nome, simuladoSlug: SIMULADO_POR_MATERIA[nome] ?? null },
+      create: {
+        concursoId: c.id,
+        slug,
+        nome,
+        nivel: "geral",
+        simuladoSlug: SIMULADO_POR_MATERIA[nome] ?? null,
+      },
+    });
+    materiaId.set(nome, mat.id);
+  }
+
+  // --- Itens de estudo das matérias (tópicos com conteúdo) --------------
+  const conteudoPorTitulo = new Map<string, TopicoTranspetro>();
+  let ordemMat = 0;
+  for (const t of topicos) {
+    const nomeMateria = limpar(t.materia) ?? t.materia;
+    const mid = materiaId.get(nomeMateria);
+    if (!mid) continue; // tópico de conteúdo específico
+    const titulo = limpar(t.titulo) ?? t.titulo;
+    const slug = slugify(titulo);
+    conteudoPorTitulo.set(titulo.toLowerCase(), t);
+    ordemMat += 1;
+    await prisma.itemEstudo.upsert({
+      where: { chave: `${c.id}:mat:${slugify(nomeMateria)}:${slug}` },
+      update: {
+        titulo,
+        ordem: ordemMat,
+        resumo: limpar(t.oque),
+        comoFunciona: limpar(t.como),
+        textoOficial: limpar(t.oficial),
+        exemplos: (t.exemplos ?? []).map((x) => limpar(x) ?? x),
+      },
+      create: {
+        chave: `${c.id}:mat:${slugify(nomeMateria)}:${slug}`,
+        concursoId: c.id,
+        materiaId: mid,
+        ordem: ordemMat,
+        slug,
+        titulo,
+        resumo: limpar(t.oque),
+        comoFunciona: limpar(t.como),
+        textoOficial: limpar(t.oficial),
+        exemplos: (t.exemplos ?? []).map((x) => limpar(x) ?? x),
+      },
+    });
+  }
+
+  // --- Cargos (metadados + detalhe + conteúdo específico) --------------
   for (const cg of cargos) {
+    const d = detalhe.get(cg.slug);
+    const especItens = (d?.conteudo_especifico ?? []).flatMap((bloco) =>
+      itensDeLista(bloco).map((x) => limpar(x) ?? x),
+    );
     const dados = {
       nome: limpar(cg.nome) ?? cg.nome,
       area: limpar(cg.edital_label) ?? cg.edital_label,
@@ -323,21 +422,51 @@ async function seedTranspetro(prisma: PrismaClient) {
       salario: moeda(cg.salario_basico ?? undefined),
       vagasImediatas: cg.vagas_imediatas,
       vagasReserva: cg.vagas_reserva,
+      requisito: limpar(d?.requisito),
+      finalidade: limpar(d?.finalidade),
+      atribuicoes: limpar(d?.atribuicoes),
+      remuneracao: limpar(d?.remuneracao),
+      conteudoItens: especItens,
+      materiasSlugs: materiasNomes.map((m) => slugify(m)),
     };
     await prisma.cargoConcurso.upsert({
       where: { concursoId_slug: { concursoId: c.id, slug: cg.slug } },
       update: dados,
-      create: {
-        concursoId: c.id,
-        slug: cg.slug,
-        localidades: [],
-        materiasSlugs: [],
-        conteudoItens: [],
-        ...dados,
-      },
+      create: { concursoId: c.id, slug: cg.slug, localidades: [], ...dados },
     });
+
+    for (let i = 0; i < especItens.length; i++) {
+      const titulo = especItens[i];
+      const slug = slugify(titulo) || `item-${i + 1}`;
+      const t = conteudoPorTitulo.get(titulo.toLowerCase());
+      await prisma.itemEstudo.upsert({
+        where: { chave: `${c.id}:cargo:${cg.slug}:${slug}` },
+        update: {
+          titulo,
+          ordem: i + 1,
+          resumo: limpar(t?.oque),
+          comoFunciona: limpar(t?.como),
+          textoOficial: limpar(t?.oficial),
+          exemplos: (t?.exemplos ?? []).map((x) => limpar(x) ?? x),
+        },
+        create: {
+          chave: `${c.id}:cargo:${cg.slug}:${slug}`,
+          concursoId: c.id,
+          cargoSlug: cg.slug,
+          ordem: i + 1,
+          slug,
+          titulo,
+          resumo: limpar(t?.oque),
+          comoFunciona: limpar(t?.como),
+          textoOficial: limpar(t?.oficial),
+          exemplos: (t?.exemplos ?? []).map((x) => limpar(x) ?? x),
+        },
+      });
+    }
   }
-  console.log(`Concurso ${c.slug}: ${cargos.length} cargos.`);
+  console.log(
+    `Concurso ${c.slug}: ${cargos.length} cargos, ${topicos.length} tópicos.`,
+  );
 }
 
 export async function seedConcursos(prisma: PrismaClient) {

@@ -85,11 +85,38 @@ export default async function CargoPage({ params }: Params) {
         </div>
       </div>
 
+      {c.finalidade && (
+        <section className="mt-8">
+          <h2 className="font-semibold">Finalidade do cargo</h2>
+          <p className="mt-2 text-sm leading-relaxed text-foreground/90">
+            {c.finalidade}
+          </p>
+        </section>
+      )}
+
       {c.requisito && (
         <section className="mt-8">
           <h2 className="font-semibold">Requisito de investidura</h2>
           <p className="mt-2 text-sm leading-relaxed text-foreground/90">
             {c.requisito}
+          </p>
+        </section>
+      )}
+
+      {c.remuneracao && (
+        <section className="mt-8">
+          <h2 className="font-semibold">Remuneração</h2>
+          <p className="mt-2 text-sm leading-relaxed text-foreground/90">
+            {c.remuneracao}
+          </p>
+        </section>
+      )}
+
+      {c.atribuicoes && (
+        <section className="mt-8">
+          <h2 className="font-semibold">Síntese das atribuições</h2>
+          <p className="mt-2 text-sm leading-relaxed text-foreground/90">
+            {c.atribuicoes}
           </p>
         </section>
       )}

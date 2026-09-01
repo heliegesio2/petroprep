@@ -1,0 +1,429 @@
+[
+ {
+  "slug_file": "edital01-lingua-portuguesa-01-compreensao-de-textos-de-generos-variados",
+  "edital": "01",
+  "materia": "Língua Portuguesa",
+  "titulo": "Compreensão de textos de gêneros variados",
+  "oficial": "Compreensão de textos de gêneros variados.",
+  "oque": "Compreensão de textos de gêneros variados é a capacidade de entender o sentido de um texto - não só o que ele diz \"ao pé da letra\", mas também as ideias que ficam implícitas (subentendidas) e a intenção de quem escreveu. A prova costuma trazer gêneros diferentes: notícia, crônica, artigo de opinião, propaganda, tirinha, poema, texto instrucional etc., cada um com um objetivo comunicativo próprio.",
+  "como": "Na leitura de um texto de prova, vale sempre: (1) identificar o tema (do que o texto trata) e a ideia central (o que o autor defende ou informa sobre esse tema); (2) separar fato (informação verificável) de opinião (juízo de valor do autor); (3) prestar atenção aos conectivos (\"mas\", \"porém\", \"portanto\", \"além disso\"), que sinalizam como as ideias se relacionam; (4) fazer inferências - concluir algo que o texto sugere sem dizer explicitamente, sempre com base no que está escrito (nunca \"chutando\" algo de fora do texto). Cada gênero tem marcas próprias: a notícia é objetiva e responde \"o quê, quem, quando, onde, como, por quê\"; o artigo de opinião defende um ponto de vista com argumentos; a propaganda busca persuadir usando recursos como apelo emocional, humor ou repetição de uma ideia-chave.",
+  "exemplos": [
+   "Um texto afirma: \"Apesar da chuva forte, o evento não foi cancelado.\" O que essa frase permite inferir? Resolução: o conectivo \"apesar de\" indica uma relação de contraste/concessão - a expectativa seria que a chuva forte levasse ao cancelamento, mas isso não aconteceu. Infere-se que os organizadores decidiram manter o evento mesmo diante de uma condição desfavorável.",
+   "Diferencie fato de opinião nas frases: (a) \"A prova teve 40 questões.\" (b) \"A prova estava extremamente difícil.\" Resolução: (a) é fato - um dado verificável e objetivo. (b) é opinião - depende do julgamento de quem avalia (\"difícil\" é subjetivo, varia de pessoa para pessoa)."
+  ]
+ },
+ {
+  "slug_file": "edital01-lingua-portuguesa-02-ortografia-oficial",
+  "edital": "01",
+  "materia": "Língua Portuguesa",
+  "titulo": "Ortografia oficial",
+  "oficial": "Ortografia oficial.",
+  "oque": "Ortografia oficial é o conjunto de regras que define a forma correta de escrever as palavras da língua portuguesa, conforme o Acordo Ortográfico vigente no Brasil - inclui regras de acentuação, uso de letras que geram confusão (s/z, x/ch, g/j) e grafia de palavras parônimas/homônimas.",
+  "como": "Acentuação: oxítonas terminadas em a(s), e(s), o(s), em, ens são acentuadas (ex.: café, também); paroxítonas são acentuadas quando terminam em l, n, r, x, ã(s), ão(s), um/uns, ditongo (ex.: fácil, hífen, açúcar); proparoxítonas são sempre acentuadas (ex.: médico, público). Confusões comuns: \"mas\" (conjunção adversativa, = \"porém\") vs \"mais\" (quantidade); \"porque\" (resposta/explicação, geralmente em afirmações) vs \"por que\" (em perguntas) vs \"por quê\" (final de frase/isolado) vs \"porquê\" (substantivo, = \"motivo\"); \"há\" (verbo haver, tempo passado) vs \"a\" (preposição, tempo futuro: \"daqui a dois dias\").",
+  "exemplos": [
+   "Complete: \"Não sei ___ ele não veio.\" / \"___ você não veio?\" Resolução: \"Não sei por que ele não veio\" (explicação, separado); \"Por que você não veio?\" (pergunta direta, separado).",
+   "\"Ele mora aqui ___ dez anos.\" - há ou a? Resolução: \"há\" (verbo haver indicando tempo decorrido/passado): \"Ele mora aqui há dez anos.\"",
+   "Classifique quanto à acentuação: \"júri\", \"também\", \"fácil\", \"médico\". Resolução: júri (paroxítona terminada em i, acentuada por ser hiato/regra específica de paroxítona terminada em \"i\" tônico) - na prática, exemplo clássico de paroxítona acentuada; também (oxítona terminada em em); fácil (paroxítona terminada em l); médico (proparoxítona, sempre acentuada)."
+  ]
+ },
+ {
+  "slug_file": "edital01-lingua-portuguesa-03-mecanismos-de-coesao-textual",
+  "edital": "01",
+  "materia": "Língua Portuguesa",
+  "titulo": "Mecanismos de coesão textual",
+  "oficial": "Mecanismos de coesão textual.",
+  "oque": "Coesão textual é o conjunto de recursos linguísticos que \"amarram\" as partes do texto entre si, evitando repetições desnecessárias e deixando claras as relações entre as ideias. Sem coesão, um texto vira uma sequência de frases soltas, sem conexão aparente.",
+  "como": "Coesão referencial: retomar um termo já citado usando pronome (\"ele\", \"essa\", \"tal\"), sinônimo ou expressão equivalente, em vez de repetir a mesma palavra várias vezes. Coesão sequencial: uso de conectivos (conjunções e advérbios) que amarram uma ideia à seguinte, indicando a relação lógica entre elas: adição (\"além disso\", \"também\"), oposição (\"mas\", \"porém\", \"contudo\"), causa/consequência (\"porque\", \"portanto\", \"por isso\"), conclusão (\"logo\", \"assim\"), tempo (\"quando\", \"enquanto\").",
+  "exemplos": [
+   "Na frase \"Maria comprou um carro novo. Ela está muito feliz com a compra.\", o que a palavra \"Ela\" retoma? Resolução: \"Ela\" retoma \"Maria\" - é um exemplo de coesão referencial por pronome.",
+   "Escolha o conectivo adequado: \"Estudou bastante para a prova, ___ não conseguiu passar.\" Resolução: \"Estudou bastante para a prova, mas não conseguiu passar.\" - o conectivo precisa indicar oposição/contraste entre esforço e resultado."
+  ]
+ },
+ {
+  "slug_file": "edital01-lingua-portuguesa-04-emprego-das-classes-de-palavras",
+  "edital": "01",
+  "materia": "Língua Portuguesa",
+  "titulo": "Emprego das classes de palavras",
+  "oficial": "Emprego das classes de palavras.",
+  "oque": "As classes de palavras (também chamadas classes gramaticais) são as 10 categorias em que se dividem as palavras da língua portuguesa: substantivo, artigo, adjetivo, numeral, pronome, verbo, advérbio, preposição, conjunção e interjeição. Cada uma tem uma função própria dentro da frase.",
+  "como": "As classes se dividem em variáveis (mudam de forma conforme gênero, número, grau ou pessoa: substantivo, artigo, adjetivo, numeral, pronome, verbo) e invariáveis (não mudam de forma: advérbio, preposição, conjunção, interjeição). O mais cobrado em prova é reconhecer a classe de uma palavra pela função que ela exerce naquela frase específica - a mesma palavra pode mudar de classe conforme o uso (ex.: \"só\" pode ser advérbio de exclusão (\"Só ele veio\") ou adjetivo (\"Ele ficou só\")).",
+  "exemplos": [
+   "Classifique as palavras destacadas: \"O rápido carro azul passou rapidamente pela rua.\" Resolução: \"rápido\" e \"azul\" são adjetivos (caracterizam o substantivo \"carro\"); \"rapidamente\" é advérbio (modifica o verbo \"passou\").",
+   "Na frase \"Comprei três livros para ela\", classifique \"três\" e \"para\". Resolução: \"três\" é numeral; \"para\" é preposição."
+  ]
+ },
+ {
+  "slug_file": "edital01-lingua-portuguesa-05-concordancia-nominal-e-verbal",
+  "edital": "01",
+  "materia": "Língua Portuguesa",
+  "titulo": "Concordância nominal e verbal",
+  "oficial": "Concordância nominal e verbal.",
+  "oque": "Concordância nominal é a regra pela qual artigos, adjetivos, pronomes e numerais devem concordar em gênero (masculino/feminino) e número (singular/plural) com o substantivo a que se referem. Concordância verbal é a regra pela qual o verbo deve concordar em número e pessoa com o sujeito da oração.",
+  "como": "Regra geral da concordância verbal: o verbo vai para a mesma pessoa e número do sujeito (\"Ele estuda\" / \"Eles estudam\"). Casos que geram dúvida: sujeito composto anteposto ao verbo → verbo no plural (\"João e Maria chegaram\"); expressões partitivas como \"a maioria de\", \"grande parte de\" → o verbo pode concordar tanto com a expressão (singular) quanto com o termo no plural que a segue (\"A maioria dos alunos faltou/faltaram\"); verbos impessoais (haver no sentido de existir, e fazer indicando tempo decorrido) ficam sempre na 3ª pessoa do singular, sem sujeito: \"Há dois anos\" (nunca \"Hão dois anos\"); \"Faz dois anos\" (nunca \"Fazem dois anos\"). Concordância nominal: quando um adjetivo se refere a mais de um substantivo de gêneros diferentes, geralmente vai para o masculino plural (\"Comprou casa e carro novos\").",
+  "exemplos": [
+   "Corrija se necessário: \"Fazem dois anos que ele se formou.\" Resolução: incorreto - \"fazer\" indicando tempo decorrido é impessoal. Correto: \"Faz dois anos que ele se formou.\"",
+   "Corrija se necessário: \"Existe muitos candidatos inscritos no concurso.\" Resolução: incorreto - \"existir\" tem sujeito (aqui, \"muitos candidatos\", plural) e concorda normalmente com ele. Correto: \"Existem muitos candidatos inscritos no concurso.\""
+  ]
+ },
+ {
+  "slug_file": "edital01-lingua-portuguesa-06-emprego-do-sinal-indicativo-de-crase",
+  "edital": "01",
+  "materia": "Língua Portuguesa",
+  "titulo": "Emprego do sinal indicativo de crase",
+  "oficial": "Emprego do sinal indicativo de crase.",
+  "oque": "A crase é a fusão da preposição \"a\" com o artigo definido feminino \"a\" (ou \"as\"), representada pelo acento grave (à/às). Ela só existe quando as duas condições estão presentes ao mesmo tempo: um termo que exige a preposição \"a\" e outro que exige o artigo \"a\".",
+  "como": "Truque prático: troque a palavra feminina por uma masculina equivalente. Se aparecer \"ao\" na frase transformada, há crase no feminino; se aparecer só \"a\", não há crase. Exemplo: \"Vou ___ escola\" → trocando para masculino: \"Vou ao colégio\" → como apareceu \"ao\", há crase: \"Vou à escola\". Não se usa crase antes de palavra masculina, antes de verbo, antes de pronomes pessoais (ela, você) ou antes da maioria dos pronomes demonstrativos (esta, essa) - exceto diante de \"aquela(s)\", \"aquele(s)\" e \"aquilo\", onde a crase é facultativa/obrigatória conforme o caso. Sempre se usa crase em expressões de horas determinadas (\"às 14h\"), e em locuções adverbiais femininas de tempo, modo ou lugar formadas por palavras repetidas (\"cara a cara\" não tem crase, mas \"frente a frente\" também não - cuidado, pois isso é exceção; o mais seguro é aplicar o truque da troca por masculino em cada caso).",
+  "exemplos": [
+   "\"Vou ___ pé\" - tem crase? Resolução: trocando para masculino, \"vou a cavalo\" (não \"ao cavalo\") - não há artigo, logo não há crase: \"Vou a pé\".",
+   "\"Refiro-me ___ funcionária que atendeu ontem.\" - tem crase? Resolução: trocando para masculino, \"refiro-me ao funcionário\" → apareceu \"ao\", então há crase: \"Refiro-me à funcionária\".",
+   "\"Cheguei ___ uma hora do compromisso.\" - tem crase? Resolução: quando \"a\" indica distância/tempo aproximado (não hora exata), normalmente não há artigo definido envolvido - \"Cheguei a uma hora do compromisso\" (sem crase, pois não se refere a \"a uma hora\" = horário exato das 13h, mas sim a \"uma hora de distância\")."
+  ]
+ },
+ {
+  "slug_file": "edital01-lingua-portuguesa-07-sinais-de-pontuacao",
+  "edital": "01",
+  "materia": "Língua Portuguesa",
+  "titulo": "Sinais de pontuação",
+  "oficial": "Sinais de pontuação.",
+  "oque": "Os sinais de pontuação (vírgula, ponto final, ponto e vírgula, dois-pontos, ponto de exclamação, ponto de interrogação, travessão, aspas, reticências) organizam o texto, marcam pausas e entonação, e sinalizam relações sintáticas entre os termos da frase.",
+  "como": "Vírgula: separa itens de uma enumeração (\"Comprei maçã, pera e uva\"); isola aposto e vocativo (\"Pedro, meu amigo, chegou\" / \"Maria, venha aqui\"); separa orações coordenadas e a maioria das orações subordinadas adverbiais deslocadas para o início da frase. Nunca se separa o sujeito do verbo com vírgula (ex.: \"O aluno[,] fez a prova\" está errado). Ponto e vírgula: separa itens de uma enumeração mais longa/complexa (que já têm vírgulas internas) ou orações coordenadas de sentidos contrastantes. Dois-pontos: introduzem uma enumeração, uma citação/fala ou uma explicação/conclusão do que foi dito antes.",
+  "exemplos": [
+   "Aponte o erro: \"O candidato, estudou muito para a prova.\" Resolução: a vírgula está separando indevidamente o sujeito (\"O candidato\") do verbo (\"estudou\"). Correto: \"O candidato estudou muito para a prova.\"",
+   "Pontue corretamente: \"Precisamos de três itens papel caneta e borracha\" Resolução: \"Precisamos de três itens: papel, caneta e borracha.\" (dois-pontos antes da enumeração; vírgulas separando os itens)."
+  ]
+ },
+ {
+  "slug_file": "edital01-lingua-portuguesa-08-significacao-das-palavras",
+  "edital": "01",
+  "materia": "Língua Portuguesa",
+  "titulo": "Significação das palavras",
+  "oficial": "Significação das palavras.",
+  "oque": "Significação das palavras (semântica lexical) trata do sentido das palavras: sinônimos (sentido igual/parecido), antônimos (sentido oposto), denotação (sentido literal, \"de dicionário\") versus conotação (sentido figurado, dependente do contexto), além de palavras que se confundem por serem parecidas na escrita ou no som - os parônimos (parecidos, mas com sentidos diferentes) e homônimos (escrita ou som iguais, sentidos diferentes).",
+  "como": "Em prova, o mais cobrado é: (1) identificar sinônimos/antônimos de uma palavra destacada no texto; (2) identificar se uma palavra está em sentido denotativo ou conotativo (ex.: \"coração\" pode ser o órgão - denotativo - ou representar sentimento/coragem - conotativo); (3) diferenciar parônimos clássicos de concurso: descriminar (retirar a culpa/inocentar) x discriminar (diferenciar, separar, ou tratar de forma desigual); emigrar (sair do próprio país) x imigrar (entrar em país estrangeiro); mandato (período de exercício de um cargo eletivo) x mandado (ordem judicial); cumprimento (saudação, ou ato de cumprir) x comprimento (medida de extensão).",
+  "exemplos": [
+   "Complete: \"O juiz expediu um ___ de prisão.\" (mandato ou mandado?) Resolução: \"mandado\" - ordem judicial. \"Mandato\" seria usado para o período de um cargo eletivo (ex.: \"mandato de quatro anos\").",
+   "Complete: \"Muitos brasileiros ___ para outros países em busca de trabalho.\" (emigram ou imigram?) Resolução: \"emigram\" - o verbo certo quando o sujeito está saindo do próprio país é \"emigrar\". (\"Imigrar\" seria usado do ponto de vista do país que os recebe.)",
+   "A frase \"Ele tem um coração de pedra\" usa a palavra \"coração\" em sentido denotativo ou conotativo? Resolução: conotativo - não se refere ao órgão físico, mas à insensibilidade/frieza emocional da pessoa."
+  ]
+ },
+ {
+  "slug_file": "edital03-lingua-portuguesa-01-compreensao-de-textos-de-generos-variados",
+  "edital": "03",
+  "materia": "Língua Portuguesa",
+  "titulo": "Compreensão de textos de gêneros variados",
+  "oficial": "Compreensão de textos de gêneros variados.",
+  "oque": "Compreensão de textos de gêneros variados é a capacidade de entender o sentido de um texto - não só o que ele diz \"ao pé da letra\", mas também as ideias que ficam implícitas (subentendidas) e a intenção de quem escreveu. A prova costuma trazer gêneros diferentes: notícia, crônica, artigo de opinião, propaganda, tirinha, poema, texto instrucional etc., cada um com um objetivo comunicativo próprio.",
+  "como": "Na leitura de um texto de prova, vale sempre: (1) identificar o tema (do que o texto trata) e a ideia central (o que o autor defende ou informa sobre esse tema); (2) separar fato (informação verificável) de opinião (juízo de valor do autor); (3) prestar atenção aos conectivos (\"mas\", \"porém\", \"portanto\", \"além disso\"), que sinalizam como as ideias se relacionam; (4) fazer inferências - concluir algo que o texto sugere sem dizer explicitamente, sempre com base no que está escrito (nunca \"chutando\" algo de fora do texto). Cada gênero tem marcas próprias: a notícia é objetiva e responde \"o quê, quem, quando, onde, como, por quê\"; o artigo de opinião defende um ponto de vista com argumentos; a propaganda busca persuadir usando recursos como apelo emocional, humor ou repetição de uma ideia-chave.",
+  "exemplos": [
+   "Um texto afirma: \"Apesar da chuva forte, o evento não foi cancelado.\" O que essa frase permite inferir? Resolução: o conectivo \"apesar de\" indica uma relação de contraste/concessão - a expectativa seria que a chuva forte levasse ao cancelamento, mas isso não aconteceu. Infere-se que os organizadores decidiram manter o evento mesmo diante de uma condição desfavorável.",
+   "Diferencie fato de opinião nas frases: (a) \"A prova teve 40 questões.\" (b) \"A prova estava extremamente difícil.\" Resolução: (a) é fato - um dado verificável e objetivo. (b) é opinião - depende do julgamento de quem avalia (\"difícil\" é subjetivo, varia de pessoa para pessoa)."
+  ]
+ },
+ {
+  "slug_file": "edital03-lingua-portuguesa-02-ortografia-oficial",
+  "edital": "03",
+  "materia": "Língua Portuguesa",
+  "titulo": "Ortografia oficial",
+  "oficial": "Ortografia oficial.",
+  "oque": "Ortografia oficial é o conjunto de regras que define a forma correta de escrever as palavras da língua portuguesa, conforme o Acordo Ortográfico vigente no Brasil - inclui regras de acentuação, uso de letras que geram confusão (s/z, x/ch, g/j) e grafia de palavras parônimas/homônimas.",
+  "como": "Acentuação: oxítonas terminadas em a(s), e(s), o(s), em, ens são acentuadas (ex.: café, também); paroxítonas são acentuadas quando terminam em l, n, r, x, ã(s), ão(s), um/uns, ditongo (ex.: fácil, hífen, açúcar); proparoxítonas são sempre acentuadas (ex.: médico, público). Confusões comuns: \"mas\" (conjunção adversativa, = \"porém\") vs \"mais\" (quantidade); \"porque\" (resposta/explicação, geralmente em afirmações) vs \"por que\" (em perguntas) vs \"por quê\" (final de frase/isolado) vs \"porquê\" (substantivo, = \"motivo\"); \"há\" (verbo haver, tempo passado) vs \"a\" (preposição, tempo futuro: \"daqui a dois dias\").",
+  "exemplos": [
+   "Complete: \"Não sei ___ ele não veio.\" / \"___ você não veio?\" Resolução: \"Não sei por que ele não veio\" (explicação, separado); \"Por que você não veio?\" (pergunta direta, separado).",
+   "\"Ele mora aqui ___ dez anos.\" - há ou a? Resolução: \"há\" (verbo haver indicando tempo decorrido/passado): \"Ele mora aqui há dez anos.\"",
+   "Classifique quanto à acentuação: \"júri\", \"também\", \"fácil\", \"médico\". Resolução: júri (paroxítona terminada em i, acentuada por ser hiato/regra específica de paroxítona terminada em \"i\" tônico) - na prática, exemplo clássico de paroxítona acentuada; também (oxítona terminada em em); fácil (paroxítona terminada em l); médico (proparoxítona, sempre acentuada)."
+  ]
+ },
+ {
+  "slug_file": "edital03-lingua-portuguesa-03-mecanismos-de-coesao-textual",
+  "edital": "03",
+  "materia": "Língua Portuguesa",
+  "titulo": "Mecanismos de coesão textual",
+  "oficial": "Mecanismos de coesão textual.",
+  "oque": "Coesão textual é o conjunto de recursos linguísticos que \"amarram\" as partes do texto entre si, evitando repetições desnecessárias e deixando claras as relações entre as ideias. Sem coesão, um texto vira uma sequência de frases soltas, sem conexão aparente.",
+  "como": "Coesão referencial: retomar um termo já citado usando pronome (\"ele\", \"essa\", \"tal\"), sinônimo ou expressão equivalente, em vez de repetir a mesma palavra várias vezes. Coesão sequencial: uso de conectivos (conjunções e advérbios) que amarram uma ideia à seguinte, indicando a relação lógica entre elas: adição (\"além disso\", \"também\"), oposição (\"mas\", \"porém\", \"contudo\"), causa/consequência (\"porque\", \"portanto\", \"por isso\"), conclusão (\"logo\", \"assim\"), tempo (\"quando\", \"enquanto\").",
+  "exemplos": [
+   "Na frase \"Maria comprou um carro novo. Ela está muito feliz com a compra.\", o que a palavra \"Ela\" retoma? Resolução: \"Ela\" retoma \"Maria\" - é um exemplo de coesão referencial por pronome.",
+   "Escolha o conectivo adequado: \"Estudou bastante para a prova, ___ não conseguiu passar.\" Resolução: \"Estudou bastante para a prova, mas não conseguiu passar.\" - o conectivo precisa indicar oposição/contraste entre esforço e resultado."
+  ]
+ },
+ {
+  "slug_file": "edital03-lingua-portuguesa-04-emprego-das-classes-de-palavras",
+  "edital": "03",
+  "materia": "Língua Portuguesa",
+  "titulo": "Emprego das classes de palavras",
+  "oficial": "Emprego das classes de palavras.",
+  "oque": "As classes de palavras (também chamadas classes gramaticais) são as 10 categorias em que se dividem as palavras da língua portuguesa: substantivo, artigo, adjetivo, numeral, pronome, verbo, advérbio, preposição, conjunção e interjeição. Cada uma tem uma função própria dentro da frase.",
+  "como": "As classes se dividem em variáveis (mudam de forma conforme gênero, número, grau ou pessoa: substantivo, artigo, adjetivo, numeral, pronome, verbo) e invariáveis (não mudam de forma: advérbio, preposição, conjunção, interjeição). O mais cobrado em prova é reconhecer a classe de uma palavra pela função que ela exerce naquela frase específica - a mesma palavra pode mudar de classe conforme o uso (ex.: \"só\" pode ser advérbio de exclusão (\"Só ele veio\") ou adjetivo (\"Ele ficou só\")).",
+  "exemplos": [
+   "Classifique as palavras destacadas: \"O rápido carro azul passou rapidamente pela rua.\" Resolução: \"rápido\" e \"azul\" são adjetivos (caracterizam o substantivo \"carro\"); \"rapidamente\" é advérbio (modifica o verbo \"passou\").",
+   "Na frase \"Comprei três livros para ela\", classifique \"três\" e \"para\". Resolução: \"três\" é numeral; \"para\" é preposição."
+  ]
+ },
+ {
+  "slug_file": "edital03-lingua-portuguesa-05-concordancia-nominal-e-verbal",
+  "edital": "03",
+  "materia": "Língua Portuguesa",
+  "titulo": "Concordância nominal e verbal",
+  "oficial": "Concordância nominal e verbal.",
+  "oque": "Concordância nominal é a regra pela qual artigos, adjetivos, pronomes e numerais devem concordar em gênero (masculino/feminino) e número (singular/plural) com o substantivo a que se referem. Concordância verbal é a regra pela qual o verbo deve concordar em número e pessoa com o sujeito da oração.",
+  "como": "Regra geral da concordância verbal: o verbo vai para a mesma pessoa e número do sujeito (\"Ele estuda\" / \"Eles estudam\"). Casos que geram dúvida: sujeito composto anteposto ao verbo → verbo no plural (\"João e Maria chegaram\"); expressões partitivas como \"a maioria de\", \"grande parte de\" → o verbo pode concordar tanto com a expressão (singular) quanto com o termo no plural que a segue (\"A maioria dos alunos faltou/faltaram\"); verbos impessoais (haver no sentido de existir, e fazer indicando tempo decorrido) ficam sempre na 3ª pessoa do singular, sem sujeito: \"Há dois anos\" (nunca \"Hão dois anos\"); \"Faz dois anos\" (nunca \"Fazem dois anos\"). Concordância nominal: quando um adjetivo se refere a mais de um substantivo de gêneros diferentes, geralmente vai para o masculino plural (\"Comprou casa e carro novos\").",
+  "exemplos": [
+   "Corrija se necessário: \"Fazem dois anos que ele se formou.\" Resolução: incorreto - \"fazer\" indicando tempo decorrido é impessoal. Correto: \"Faz dois anos que ele se formou.\"",
+   "Corrija se necessário: \"Existe muitos candidatos inscritos no concurso.\" Resolução: incorreto - \"existir\" tem sujeito (aqui, \"muitos candidatos\", plural) e concorda normalmente com ele. Correto: \"Existem muitos candidatos inscritos no concurso.\""
+  ]
+ },
+ {
+  "slug_file": "edital03-lingua-portuguesa-06-emprego-do-sinal-indicativo-de-crase",
+  "edital": "03",
+  "materia": "Língua Portuguesa",
+  "titulo": "Emprego do sinal indicativo de crase",
+  "oficial": "Emprego do sinal indicativo de crase.",
+  "oque": "A crase é a fusão da preposição \"a\" com o artigo definido feminino \"a\" (ou \"as\"), representada pelo acento grave (à/às). Ela só existe quando as duas condições estão presentes ao mesmo tempo: um termo que exige a preposição \"a\" e outro que exige o artigo \"a\".",
+  "como": "Truque prático: troque a palavra feminina por uma masculina equivalente. Se aparecer \"ao\" na frase transformada, há crase no feminino; se aparecer só \"a\", não há crase. Exemplo: \"Vou ___ escola\" → trocando para masculino: \"Vou ao colégio\" → como apareceu \"ao\", há crase: \"Vou à escola\". Não se usa crase antes de palavra masculina, antes de verbo, antes de pronomes pessoais (ela, você) ou antes da maioria dos pronomes demonstrativos (esta, essa) - exceto diante de \"aquela(s)\", \"aquele(s)\" e \"aquilo\", onde a crase é facultativa/obrigatória conforme o caso. Sempre se usa crase em expressões de horas determinadas (\"às 14h\"), e em locuções adverbiais femininas de tempo, modo ou lugar formadas por palavras repetidas (\"cara a cara\" não tem crase, mas \"frente a frente\" também não - cuidado, pois isso é exceção; o mais seguro é aplicar o truque da troca por masculino em cada caso).",
+  "exemplos": [
+   "\"Vou ___ pé\" - tem crase? Resolução: trocando para masculino, \"vou a cavalo\" (não \"ao cavalo\") - não há artigo, logo não há crase: \"Vou a pé\".",
+   "\"Refiro-me ___ funcionária que atendeu ontem.\" - tem crase? Resolução: trocando para masculino, \"refiro-me ao funcionário\" → apareceu \"ao\", então há crase: \"Refiro-me à funcionária\".",
+   "\"Cheguei ___ uma hora do compromisso.\" - tem crase? Resolução: quando \"a\" indica distância/tempo aproximado (não hora exata), normalmente não há artigo definido envolvido - \"Cheguei a uma hora do compromisso\" (sem crase, pois não se refere a \"a uma hora\" = horário exato das 13h, mas sim a \"uma hora de distância\")."
+  ]
+ },
+ {
+  "slug_file": "edital03-lingua-portuguesa-07-sinais-de-pontuacao",
+  "edital": "03",
+  "materia": "Língua Portuguesa",
+  "titulo": "Sinais de pontuação",
+  "oficial": "Sinais de pontuação.",
+  "oque": "Os sinais de pontuação (vírgula, ponto final, ponto e vírgula, dois-pontos, ponto de exclamação, ponto de interrogação, travessão, aspas, reticências) organizam o texto, marcam pausas e entonação, e sinalizam relações sintáticas entre os termos da frase.",
+  "como": "Vírgula: separa itens de uma enumeração (\"Comprei maçã, pera e uva\"); isola aposto e vocativo (\"Pedro, meu amigo, chegou\" / \"Maria, venha aqui\"); separa orações coordenadas e a maioria das orações subordinadas adverbiais deslocadas para o início da frase. Nunca se separa o sujeito do verbo com vírgula (ex.: \"O aluno[,] fez a prova\" está errado). Ponto e vírgula: separa itens de uma enumeração mais longa/complexa (que já têm vírgulas internas) ou orações coordenadas de sentidos contrastantes. Dois-pontos: introduzem uma enumeração, uma citação/fala ou uma explicação/conclusão do que foi dito antes.",
+  "exemplos": [
+   "Aponte o erro: \"O candidato, estudou muito para a prova.\" Resolução: a vírgula está separando indevidamente o sujeito (\"O candidato\") do verbo (\"estudou\"). Correto: \"O candidato estudou muito para a prova.\"",
+   "Pontue corretamente: \"Precisamos de três itens papel caneta e borracha\" Resolução: \"Precisamos de três itens: papel, caneta e borracha.\" (dois-pontos antes da enumeração; vírgulas separando os itens)."
+  ]
+ },
+ {
+  "slug_file": "edital03-lingua-portuguesa-08-significacao-das-palavras",
+  "edital": "03",
+  "materia": "Língua Portuguesa",
+  "titulo": "Significação das palavras",
+  "oficial": "Significação das palavras.",
+  "oque": "Significação das palavras (semântica lexical) trata do sentido das palavras: sinônimos (sentido igual/parecido), antônimos (sentido oposto), denotação (sentido literal, \"de dicionário\") versus conotação (sentido figurado, dependente do contexto), além de palavras que se confundem por serem parecidas na escrita ou no som - os parônimos (parecidos, mas com sentidos diferentes) e homônimos (escrita ou som iguais, sentidos diferentes).",
+  "como": "Em prova, o mais cobrado é: (1) identificar sinônimos/antônimos de uma palavra destacada no texto; (2) identificar se uma palavra está em sentido denotativo ou conotativo (ex.: \"coração\" pode ser o órgão - denotativo - ou representar sentimento/coragem - conotativo); (3) diferenciar parônimos clássicos de concurso: descriminar (retirar a culpa/inocentar) x discriminar (diferenciar, separar, ou tratar de forma desigual); emigrar (sair do próprio país) x imigrar (entrar em país estrangeiro); mandato (período de exercício de um cargo eletivo) x mandado (ordem judicial); cumprimento (saudação, ou ato de cumprir) x comprimento (medida de extensão).",
+  "exemplos": [
+   "Complete: \"O juiz expediu um ___ de prisão.\" (mandato ou mandado?) Resolução: \"mandado\" - ordem judicial. \"Mandato\" seria usado para o período de um cargo eletivo (ex.: \"mandato de quatro anos\").",
+   "Complete: \"Muitos brasileiros ___ para outros países em busca de trabalho.\" (emigram ou imigram?) Resolução: \"emigram\" - o verbo certo quando o sujeito está saindo do próprio país é \"emigrar\". (\"Imigrar\" seria usado do ponto de vista do país que os recebe.)",
+   "A frase \"Ele tem um coração de pedra\" usa a palavra \"coração\" em sentido denotativo ou conotativo? Resolução: conotativo - não se refere ao órgão físico, mas à insensibilidade/frieza emocional da pessoa."
+  ]
+ },
+ {
+  "slug_file": "edital03-matematica-01-conjuntos-numericos",
+  "edital": "03",
+  "materia": "Matemática",
+  "titulo": "Conjuntos numéricos",
+  "oficial": "Conjuntos numéricos: naturais, inteiros, racionais e reais; ordem, operações e suas propriedades.",
+  "oque": "Os conjuntos numéricos organizam os números em famílias, uma dentro da outra: os Naturais (ℕ) = {0, 1, 2, 3, ...}; os Inteiros (ℤ) , que acrescentam os negativos aos naturais; os Racionais (ℚ) , todo número que pode ser escrito como fração a/b (com b ≠ 0), incluindo decimais exatos e dízimas periódicas; e os Reais (ℝ) , que juntam os racionais aos irracionais (dízimas não periódicas, como √2 e π). Vale a relação de inclusão ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ.",
+  "como": "Ordem: os números reais podem sempre ser comparados e posicionados numa reta numérica - para qualquer dois números a e b, vale exatamente uma das relações a < b, a = b ou a > b. Operações e propriedades: adição e multiplicação são comutativas (a+b=b+a) e associativas ((a+b)+c=a+(b+c)); a multiplicação é distributiva em relação à adição (a·(b+c)=a·b+a·c); existe elemento neutro (0 na adição, 1 na multiplicação) e, nos racionais e reais, elemento inverso (para todo a≠0, existe 1/a tal que a·1/a=1). Atenção: a subtração e a divisão não têm essas propriedades - não são comutativas nem sempre \"fecham\" no mesmo conjunto (ex.: 3−5 não é natural; a divisão de dois inteiros nem sempre é inteira).",
+  "exemplos": [
+   "Classifique os números −3, 0, 2/5, √2 e 7 quanto ao conjunto numérico a que pertencem. Resolução: −3 é inteiro (ℤ) mas não natural; 0 é natural (e portanto também inteiro, racional e real); 2/5 é racional (ℚ); √2 é irracional (não pode ser escrito como fração - faz parte de ℝ mas não de ℚ); 7 é natural.",
+   "Ordene em ordem crescente: −3; 0,5; −1/2; 2. Resolução: convertendo tudo para decimal fica −3; −0,5; 0,5; 2. Ordem crescente: −3 < −1/2 < 0,5 < 2.",
+   "Mostre, com um exemplo numérico, que a subtração não é comutativa. Resolução: 8 − 3 = 5, mas 3 − 8 = −5. Como 5 ≠ −5, fica demonstrado que a ordem importa na subtração."
+  ]
+ },
+ {
+  "slug_file": "edital03-matematica-02-razao-e-proporcao",
+  "edital": "03",
+  "materia": "Matemática",
+  "titulo": "Razão e proporção",
+  "oficial": "Razão e proporção: regra de três simples e regra de três composta; porcentagem.",
+  "oque": "Razão é a comparação entre duas grandezas por meio de uma divisão (a razão entre a e b é a/b, lida \"a para b\"). Proporção é a igualdade entre duas razões: a/b = c/d. Nela vale a propriedade fundamental das proporções : o produto dos meios é igual ao produto dos extremos (a·d = b·c). Porcentagem é apenas uma razão especial, com denominador 100 (p% = p/100).",
+  "como": "Regra de três simples relaciona duas grandezas. Primeiro identifique se elas são diretamente proporcionais (uma sobe, a outra sobe na mesma razão - ex.: quantidade e preço) ou inversamente proporcionais (uma sobe, a outra desce - ex.: nº de operários e tempo de obra). Nas diretas, monta-se a proporção normalmente; nas inversas, inverte-se uma das razões antes de multiplicar cruzado. Regra de três composta funciona do mesmo jeito, mas com três ou mais grandezas ao mesmo tempo: analisa-se a relação de cada grandeza com a grandeza que se quer descobrir, isoladamente, e monta-se uma proporção com todas elas de uma vez. Porcentagem: para calcular p% de um valor V, faz-se (p/100) × V. Um desconto de p% deixa o valor final em V × (1 − p/100); um acréscimo de p% deixa em V × (1 + p/100).",
+  "exemplos": [
+   "(Regra de três simples direta) 3 kg de um produto custam R$ 15,00. Quanto custam 8 kg? Resolução: 3/15 = 8/x → 3x = 120 → x = R$ 40,00. (Mais quilos, mais dinheiro: grandezas diretas.)",
+   "(Regra de três simples inversa) 4 máquinas idênticas fazem um serviço em 15 dias. Em quantos dias 6 máquinas fariam o mesmo serviço? Resolução: mais máquinas, menos dias - grandezas inversas. Inverte-se uma razão: 4/6 = x/15 → 6x = 60 → x = 10 dias.",
+   "(Porcentagem) Um produto de R$ 250,00 tem desconto de 12%. Qual o valor final? Resolução: 250 × (1 − 0,12) = 250 × 0,88 = R$ 220,00.",
+   "(Regra de três composta) 5 pedreiros constroem 40 m² de parede em 8 dias. Quantos dias 4 pedreiros levariam para construir 64 m²? Resolução: comparando cada grandeza com \"dias\": mais pedreiros → menos dias (inversa); mais m² → mais dias (direta). Monta-se: 8/x = (4/5) × (40/64) → 8/x = 0,5 → x = 16 dias."
+  ]
+ },
+ {
+  "slug_file": "edital03-matematica-03-relacoes-funcoes",
+  "edital": "03",
+  "materia": "Matemática",
+  "titulo": "Relações, funções",
+  "oficial": "Relações, funções: funções polinomiais, exponenciais, logarítmicas e trigonométricas.",
+  "oque": "Uma função associa a cada elemento de um conjunto (domínio) exatamente um elemento de outro conjunto (contradomínio), normalmente escrita y = f(x). Os tipos mais cobrados são: polinomial (f(x) = aₙxⁿ + ... + a₁x + a₀ - inclui a função do 1º grau e a do 2º grau); exponencial (f(x) = aˣ, com a > 0 e a ≠ 1 - a variável está no expoente); logarítmica (f(x) = log_a(x), a operação inversa da exponenciação); e trigonométrica (seno, cosseno e tangente - funções periódicas ligadas aos ângulos de um triângulo/círculo).",
+  "como": "Polinomial: para calcular f de um valor, basta substituir x pelo número dado. Exponencial: cresce (a > 1) ou decresce (0 < a < 1) rapidamente; f(0) = 1 sempre, pois qualquer número elevado a 0 é 1. Logarítmica: log_a(x) = y significa \"a elevado a y dá x\" (aʸ = x). É a função inversa da exponencial de mesma base. Trigonométrica: num triângulo retângulo, seno é cateto oposto/hipotenusa, cosseno é cateto adjacente/hipotenusa e tangente é cateto oposto/cateto adjacente. Vale saber de cor os valores notáveis de 30°, 45° e 60°.",
+  "exemplos": [
+   "Dada f(x) = 2x + 3, calcule f(4). Resolução: f(4) = 2·4 + 3 = 11.",
+   "Dada f(x) = 3ˣ, calcule f(2) e f(0). Resolução: f(2) = 3² = 9; f(0) = 3⁰ = 1.",
+   "Resolva log₂(8). Resolução: pergunta-se \"2 elevado a quê dá 8?\" → 2³ = 8 → log₂(8) = 3.",
+   "Calcule sen(30°), cos(60°) e tan(45°). Resolução: sen(30°) = 1/2; cos(60°) = 1/2; tan(45°) = 1 (valores notáveis a decorar)."
+  ]
+ },
+ {
+  "slug_file": "edital03-matematica-04-equacoes",
+  "edital": "03",
+  "materia": "Matemática",
+  "titulo": "Equações",
+  "oficial": "Equações: equações do 1º grau, do 2º grau, exponenciais, logarítmicas e sistemas de equações lineares.",
+  "oque": "Equações são igualdades com uma incógnita a ser descoberta. As mais cobradas: 1º grau (ax + b = 0); 2º grau (ax² + bx + c = 0); exponenciais (a incógnita aparece no expoente); logarítmicas (a incógnita aparece dentro de um logaritmo); e sistemas de equações lineares (duas ou mais equações do 1º grau que devem ser satisfeitas ao mesmo tempo).",
+  "como": "1º grau: isola-se x → x = −b/a. 2º grau: usa-se a fórmula de Bhaskara : x = (−b ± √Δ) / 2a, onde Δ = b² − 4ac (o \"discriminante\"). Se Δ > 0, há duas raízes reais distintas; se Δ = 0, uma raiz dupla; se Δ < 0, não há raiz real. Exponenciais: quando possível, reduz-se os dois lados à mesma base e iguala-se os expoentes (se aˣ = aʸ, então x = y). Logarítmicas: usa-se as propriedades dos logaritmos para isolar a incógnita, sempre verificando as condições de existência (o \"logaritmando\" precisa ser positivo). Sistemas lineares: resolve-se por substituição (isola uma variável numa equação e substitui na outra) ou por adição (soma ou subtrai as equações, multiplicadas por constantes convenientes, para eliminar uma variável).",
+  "exemplos": [
+   "Resolva 3x − 7 = 11. Resolução: 3x = 18 → x = 6.",
+   "Resolva x² − 5x + 6 = 0. Resolução: Δ = (−5)² − 4·1·6 = 25 − 24 = 1. x = (5 ± 1)/2 → x = 3 ou x = 2.",
+   "Resolva 2ˣ = 32. Resolução: 32 = 2⁵, então 2ˣ = 2⁵ → x = 5.",
+   "Resolva o sistema {x + y = 10; x − y = 2}. Resolução (por adição): somando as duas equações, 2x = 12 → x = 6; substituindo, 6 + y = 10 → y = 4."
+  ]
+ },
+ {
+  "slug_file": "edital03-matematica-05-analise-combinatoria",
+  "edital": "03",
+  "materia": "Matemática",
+  "titulo": "Análise combinatória",
+  "oficial": "Análise combinatória: princípio fundamental da contagem; permutação; arranjo e combinação.",
+  "oque": "Análise combinatória estuda como contar agrupamentos sem precisar listar um por um. O Princípio Fundamental da Contagem (PFC) diz que, se uma etapa pode ocorrer de m maneiras e outra etapa (independente) de n maneiras, as duas juntas ocorrem de m×n maneiras. A partir dele derivam-se três casos clássicos: permutação (organizar todos os n elementos, importando a ordem), arranjo (escolher e ordenar p elementos entre n, importando a ordem) e combinação (escolher p elementos entre n, sem importar a ordem).",
+  "como": "Permutação simples: Pₙ = n! (n fatorial = n×(n−1)×...×2×1). Arranjo: A(n,p) = n! / (n−p)! - usa-se quando a ordem importa e os elementos não se repetem (ex.: 1º, 2º e 3º lugar de um pódio). Combinação: C(n,p) = n! / [p!·(n−p)!] - usa-se quando a ordem não importa (ex.: escolher um grupo de pessoas para uma comissão). Dica rápida para decidir entre arranjo e combinação: se trocar a ordem dos escolhidos gera um resultado diferente (times, senhas, pódios), é arranjo; se o resultado é o mesmo grupo independente da ordem (comissões, duplas sem função definida), é combinação.",
+  "exemplos": [
+   "(PFC) Uma senha tem 2 letras seguidas de 3 dígitos. Quantas senhas diferentes existem (com repetição permitida)? Resolução: 26 × 26 × 10 × 10 × 10 = 676.000 senhas.",
+   "(Permutação) De quantas formas posso organizar 4 livros diferentes numa estante? Resolução: P₄ = 4! = 24 formas.",
+   "(Arranjo) Numa corrida com 5 competidores, de quantas formas o pódio (1º, 2º e 3º lugar) pode ser formado? Resolução: A(5,3) = 5!/(5−3)! = 5!/2! = 120/2 = 60 formas.",
+   "(Combinação) De quantos modos posso escolher uma comissão de 3 pessoas entre 8 candidatos? Resolução: C(8,3) = 8!/(3!·5!) = (8×7×6)/(3×2×1) = 336/6 = 56 formas."
+  ]
+ },
+ {
+  "slug_file": "edital03-matematica-06-probabilidade-basica",
+  "edital": "03",
+  "materia": "Matemática",
+  "titulo": "Probabilidade básica",
+  "oficial": "Probabilidade básica: probabilidade em espaços equiprováveis.",
+  "oque": "Probabilidade mede a chance de um evento acontecer. Em um espaço equiprovável (todos os resultados possíveis têm a mesma chance de ocorrer - como um dado não viciado), a probabilidade de um evento A é: P(A) = (número de casos favoráveis a A) / (número de casos possíveis).",
+  "como": "P(A) é sempre um número entre 0 (impossível) e 1 (certo) - ou, em porcentagem, entre 0% e 100%. Probabilidade do complementar: P(A) + P(não A) = 1, ou seja, P(não A) = 1 − P(A). Probabilidade da união de dois eventos: P(A∪B) = P(A) + P(B) − P(A∩B) (subtrai-se a intersecção para não contá-la duas vezes).",
+  "exemplos": [
+   "Ao lançar um dado de 6 faces, qual a probabilidade de sair um número par? Resolução: casos favoráveis {2,4,6} = 3; casos possíveis = 6. P = 3/6 = 1/2 = 50%.",
+   "Num baralho de 52 cartas, qual a probabilidade de tirar uma carta de copas? Resolução: existem 13 cartas de copas em 52. P = 13/52 = 1/4 = 25%.",
+   "Uma urna tem 5 bolas vermelhas e 3 azuis. Qual a probabilidade de tirar uma bola azul? Resolução: total de bolas = 8; favoráveis (azuis) = 3. P = 3/8 = 37,5%."
+  ]
+ },
+ {
+  "slug_file": "edital03-matematica-07-estatistica-basica",
+  "edital": "03",
+  "materia": "Matemática",
+  "titulo": "Estatística básica",
+  "oficial": "Estatística básica: representação tabular e gráfica; medidas de tendência central (média, mediana, moda); medidas de dispersão (amplitude, variância, desvio padrão).",
+  "oque": "Estatística básica organiza e resume conjuntos de dados. Envolve a representação tabular e gráfica (tabelas de frequência, gráficos de barras, de setores/pizza, histogramas), as medidas de tendência central - média, mediana e moda - que indicam um valor \"típico\" do conjunto, e as medidas de dispersão - amplitude, variância e desvio padrão - que indicam o quanto os dados variam em torno desse valor típico.",
+  "como": "Média: soma de todos os valores dividida pela quantidade de valores. Mediana: valor central quando os dados estão ordenados (se houver dois valores centrais, faz-se a média entre eles). Moda: valor que mais se repete no conjunto. Amplitude: maior valor menos o menor valor. Variância: média dos quadrados dos desvios de cada valor em relação à média - mede o quanto os dados, em geral, se afastam da média. Desvio padrão: raiz quadrada da variância - está na mesma unidade dos dados originais, por isso costuma ser mais fácil de interpretar que a variância.",
+  "exemplos": [
+   "Para o conjunto {4, 8, 6, 5, 3, 7}, calcule a média, a mediana e a moda. Resolução: Média = (4+8+6+5+3+7)/6 = 33/6 = 5,5. Mediana : ordenando {3,4,5,6,7,8}, os dois valores centrais são 5 e 6 → mediana = (5+6)/2 = 5,5. Moda : não há valor repetido - conjunto amodal.",
+   "Para o conjunto {2, 2, 4, 6}, calcule a amplitude e a variância. Resolução: Amplitude = 6 − 2 = 4. Média = (2+2+4+6)/4 = 3,5. Desvios ao quadrado: (2−3,5)²=2,25; (2−3,5)²=2,25; (4−3,5)²=0,25; (6−3,5)²=6,25. Variância = (2,25+2,25+0,25+6,25)/4 = 11/4 = 2,75."
+  ]
+ },
+ {
+  "slug_file": "edital03-matematica-08-matematica-financeira",
+  "edital": "03",
+  "materia": "Matemática",
+  "titulo": "Matemática financeira",
+  "oficial": "Matemática financeira: juros simples e juros compostos (cálculo do montante, do tempo, da taxa e do juro).",
+  "oque": "Matemática financeira calcula como o dinheiro rende (ou custa) ao longo do tempo, através de juros. No juro simples , o juro incide sempre sobre o capital inicial (cresce de forma linear). No juro composto , o juro de cada período passa a incidir também sobre os juros já acumulados (cresce de forma exponencial - \"juros sobre juros\").",
+  "como": "Juro simples: J = C · i · t, e o montante final M = C + J = C · (1 + i·t), onde C é o capital inicial, i é a taxa de juros (na forma decimal) e t é o tempo, na mesma unidade da taxa. Juro composto: M = C · (1 + i)ᵗ. Para calcular tempo ou taxa em vez do montante, isola-se a variável desejada na mesma fórmula (no juro composto, isolar t exige logaritmo).",
+  "exemplos": [
+   "(Juro simples) Um capital de R$ 1.000,00 é aplicado a 2% ao mês, durante 6 meses. Calcule o juro e o montante. Resolução: J = 1000 × 0,02 × 6 = R$ 120,00. M = 1000 + 120 = R$ 1.120,00.",
+   "(Juro composto) O mesmo capital de R$ 1.000,00, a 2% ao mês, por 3 meses, a juros compostos. Calcule o montante. Resolução: M = 1000 × (1,02)³ = 1000 × 1,061208 = R$ 1.061,21 (aproximadamente).",
+   "(Cálculo da taxa) Um capital de R$ 2.000,00 rendeu R$ 200,00 de juro simples em 5 meses. Qual foi a taxa mensal? Resolução: J = C·i·t → 200 = 2000 × i × 5 → 200 = 10000i → i = 0,02 = 2% ao mês."
+  ]
+ },
+ {
+  "slug_file": "edital03-matematica-09-geometria-plana",
+  "edital": "03",
+  "materia": "Matemática",
+  "titulo": "Geometria plana",
+  "oficial": "Geometria plana: relações métricas no triângulo retângulo; perímetros e áreas.",
+  "oque": "Geometria plana estuda figuras em duas dimensões. As relações métricas no triângulo retângulo ligam os lados de um triângulo com ângulo de 90° - a mais famosa é o Teorema de Pitágoras . Perímetro é a soma de todos os lados de uma figura; área é a medida da superfície que ela ocupa.",
+  "como": "Teorema de Pitágoras: num triângulo retângulo, a² = b² + c², onde a é a hipotenusa (o lado oposto ao ângulo reto, sempre o maior) e b, c são os catetos. Relações métricas com a altura: ao traçar a altura relativa à hipotenusa, formam-se dois triângulos menores semelhantes ao original, dos quais saem outras relações úteis (h² = m·n; cada cateto² = hipotenusa × sua projeção sobre ela). Perímetros e áreas usuais: quadrado (perímetro = 4·lado; área = lado²); retângulo (perímetro = 2·(base+altura); área = base × altura); triângulo (área = base × altura / 2); círculo (perímetro/circunferência = 2πr; área = πr²).",
+  "exemplos": [
+   "Um triângulo retângulo tem catetos 3 e 4. Calcule a hipotenusa. Resolução: a² = 3² + 4² = 9 + 16 = 25 → a = 5.",
+   "Calcule a área de um retângulo de base 8 e altura 5. Resolução: área = 8 × 5 = 40 (unidades de área).",
+   "Calcule a área de um círculo de raio 4 (use π ≈ 3,14). Resolução: área = π·r² = 3,14 × 16 = 50,24 (unidades de área)."
+  ]
+ },
+ {
+  "slug_file": "edital03-matematica-10-geometria-espacial",
+  "edital": "03",
+  "materia": "Matemática",
+  "titulo": "Geometria espacial",
+  "oficial": "Geometria espacial: áreas e volumes.",
+  "oque": "Geometria espacial estende a geometria para três dimensões, calculando a área (superfície externa) e o volume (espaço interno ocupado) de sólidos como cubo, paralelepípedo (caixa retangular), cilindro, cone e esfera.",
+  "como": "Cubo (aresta a): volume V = a³; área total (soma das 6 faces quadradas) = 6a². Paralelepípedo (dimensões a, b, c): volume V = a·b·c. Cilindro (raio r, altura h): volume V = π·r²·h. Cone (raio r, altura h): volume V = (1/3)·π·r²·h - um terço do cilindro de mesma base e altura. Esfera (raio r): volume V = (4/3)·π·r³.",
+  "exemplos": [
+   "Calcule o volume de um cubo de aresta 3. Resolução: V = 3³ = 27 (unidades de volume).",
+   "Calcule o volume de um cilindro com raio 2 e altura 5 (use π ≈ 3,14). Resolução: V = π·r²·h = 3,14 × 2² × 5 = 3,14 × 4 × 5 = 62,8 (unidades de volume).",
+   "Calcule a área total de um cubo de aresta 4. Resolução: área total = 6 × 4² = 6 × 16 = 96 (unidades de área)."
+  ]
+ },
+ {
+  "slug_file": "edital04-analise-de-sistemas-sap-especifico-01-erp-sap-erp-versao-4-7",
+  "edital": "04",
+  "materia": "Conhecimentos Específicos - Análise de Sistemas - SAP",
+  "titulo": "ERP - SAP-ERP (versão >4.7)",
+  "oficial": "ERP - SAP-ERP (versão >4.7): módulos FI-AP/AR/GL/TRM/FM/BCS/CO (Finanças); MM/SD (Logística); HCM (Pessoas); SAP-BI; Report Writer/Painter; perfil de acesso.",
+  "oque": "ERP (Enterprise Resource Planning, ou \"Planejamento de Recursos Empresariais\") é um sistema único que integra os principais processos de uma empresa - finanças, compras, vendas, estoque, produção, recursos humanos - num só banco de dados, evitando retrabalho e informação duplicada entre setores. O SAP-ERP (a partir da versão 4.7, usada como referência no edital) é o ERP mais usado por grandes empresas no mundo, organizado em módulos : FI (Financial Accounting - contabilidade financeira, com submódulos como AP /Contas a Pagar, AR /Contas a Receber, GL /Livro-Razão, TRM /gestão de risco de tesouraria, FM /gestão orçamentária, BCS /consolidação de balanços), CO (Controlling - controladoria e custos), MM (Materials Management - compras e estoque) e SD (Sales and Distribution - vendas), juntos formando a área de Logística, e HCM (Human Capital Management - folha de pagamento e gestão de pessoas). O SAP-BI é o módulo de inteligência de negócios do SAP, e Report Writer/Painter são ferramentas do SAP para montar relatórios financeiros e gerenciais sem programar.",
+  "como": "Os módulos do SAP-ERP não funcionam isolados: eles compartilham a mesma base de dados, então um lançamento feito em um módulo reflete automaticamente nos outros. Por exemplo, uma venda registrada em SD gera automaticamente a baixa de estoque em MM e o lançamento contábil da receita em FI - é essa integração em tempo real que diferencia um ERP de vários sistemas separados. Cada operação no SAP é identificada por um código de transação ( T-code ), e os dados \"mestres\" (materiais, clientes, fornecedores, funcionários) são cadastrados uma única vez e reutilizados por todos os módulos que precisam deles. O perfil de acesso (authorization profile) é o mecanismo de segurança do SAP: define quais transações, telas e dados cada usuário pode ver ou alterar, seguindo o princípio de que ninguém deve ter mais acesso do que precisa para seu trabalho (segregação de funções) - por exemplo, quem lança uma nota fiscal de compra normalmente não deve ser o mesmo usuário que aprova o pagamento dela.",
+  "exemplos": [
+   "Uma empresa registra a venda de um produto no módulo SD. Quais outros módulos são impactados automaticamente, e o quê acontece em cada um? Resolução: o módulo MM dá baixa na quantidade vendida do estoque, e o módulo FI lança automaticamente a receita da venda e a saída do produto do ativo \"estoque\" na contabilidade - tudo isso sem que ninguém precise digitar a informação duas vezes, porque os módulos compartilham a mesma base de dados.",
+   "Por que um analista financeiro que lança contas a pagar (submódulo AP) normalmente não deve ter também o perfil de acesso para aprovar esses pagamentos? Resolução: por segregação de funções - se a mesma pessoa lança e aprova o pagamento, ela pode criar e liberar um pagamento fraudulento sozinha, sem nenhuma outra pessoa conferindo. Separar essas permissões em perfis de acesso diferentes é um controle interno básico contra fraude e erro.",
+   "Para que serve o módulo CO em relação ao módulo FI? Resolução: enquanto o FI registra a contabilidade \"oficial\" (para fins fiscais e societários), o CO (Controlling) usa essas mesmas informações para a contabilidade gerencial interna - apurar custo por centro de custo, por produto, por projeto - ajudando a gestão a tomar decisões, sem que isso apareça no balanço publicado."
+  ]
+ },
+ {
+  "slug_file": "edital04-analise-de-sistemas-sap-especifico-02-modelagem-de-sistemas-de-informacao-aris-epc-bpmn-2-0-uml-2-5-1-processo-unificado",
+  "edital": "04",
+  "materia": "Conhecimentos Específicos - Análise de Sistemas - SAP",
+  "titulo": "Modelagem de Sistemas de Informação (Aris-EPC, BPMN 2.0, UML 2.5.1, Processo Unificado)",
+  "oficial": "Modelagem de Sistemas de Informação (Aris-EPC, BPMN 2.0, UML 2.5.1, Processo Unificado).",
+  "oque": "A modelagem de sistemas de informação usa diagramas padronizados para representar, de forma visual e sem ambiguidade, como um processo de negócio ou um sistema funciona - facilitando a comunicação entre quem entende do negócio e quem vai desenvolver ou configurar o sistema. As notações cobradas no edital são: ARIS-EPC (Event-driven Process Chain - cadeia de processos orientada a eventos, que alterna eventos - o que aconteceu - e funções - o que é feito em resposta), BPMN 2.0 (Business Process Model and Notation, o padrão mais usado atualmente para desenhar fluxos de processo, com raias/pools para cada área responsável), UML 2.5.1 (Unified Modeling Language - não modela o processo de negócio em si, mas a estrutura e o comportamento de um sistema de software, por meio de diferentes tipos de diagrama) e o Processo Unificado (metodologia de desenvolvimento de software iterativa, também chamada de RUP quando na versão comercial da Rational/IBM).",
+  "como": "EPC: a regra de ouro é que eventos e funções sempre se alternam (evento → função → evento → função...) e são ligados por conectores lógicos (E, OU, OU-exclusivo) quando o fluxo se ramifica ou se junta. BPMN 2.0: usa pools (uma organização/participante inteira) divididas em lanes /raias (um papel ou setor dentro dela), eventos (círculos: início, intermediário, fim), atividades (retângulos de cantos arredondados) e gateways (losangos: pontos de decisão ou divisão/junção do fluxo). UML 2.5.1: organiza os diagramas em dois grupos - estruturais (ex.: diagrama de classes, que mostra as entidades do sistema e como se relacionam) e comportamentais (ex.: diagrama de casos de uso, que mostra o que cada tipo de usuário/ator pode fazer no sistema; diagrama de sequência, que mostra a ordem temporal das mensagens trocadas entre os componentes). Processo Unificado: organiza o desenvolvimento em quatro fases sequenciais - Iniciação (entender o escopo e viabilidade), Elaboração (arquitetura e principais riscos), Construção (desenvolvimento da maior parte do sistema) e Transição (implantação) - sendo iterativo : cada fase pode ter várias iterações curtas que entregam versões cada vez mais completas do sistema.",
+  "exemplos": [
+   "Em um diagrama EPC, depois do evento \"Pedido de compra recebido\", o que deve vir em seguida? Resolução: uma função (uma ação), nunca outro evento diretamente - por exemplo, a função \"Analisar pedido de compra\". EPC sempre alterna evento e função.",
+   "Que elemento do BPMN 2.0 é usado para representar um ponto onde o processo se divide em dois caminhos possíveis, dependendo de uma condição (ex.: \"crédito aprovado?\")? Resolução: um gateway (losango) - no caso, um gateway exclusivo (XOR), que só permite seguir por um dos caminhos, conforme a condição avaliada.",
+   "Que diagrama UML você usaria para mostrar, na ordem exata em que acontecem, as mensagens trocadas entre a tela de login, o servidor de autenticação e o banco de dados? Resolução: o diagrama de sequência - ele é o diagrama comportamental da UML voltado justamente para mostrar a ordem temporal da troca de mensagens entre objetos/componentes."
+  ]
+ },
+ {
+  "slug_file": "edital04-analise-de-sistemas-sap-especifico-03-business-intelligence-etl-data-warehouse-marts-olap-drill-down-up-across",
+  "edital": "04",
+  "materia": "Conhecimentos Específicos - Análise de Sistemas - SAP",
+  "titulo": "Business Intelligence (ETL, Data Warehouse/Marts, OLAP, Drill down/up/across)",
+  "oficial": "Business Intelligence (ETL, Data Warehouse/Marts, OLAP, Drill down/up/across).",
+  "oque": "Business Intelligence (BI) é o conjunto de processos e ferramentas usados para transformar dados brutos, espalhados em vários sistemas, em informação organizada para apoiar decisões. O processo de ETL (Extract, Transform, Load) é quem faz esse trabalho: extrai os dados dos sistemas de origem, transforma (limpa, padroniza, calcula) e carrega num repositório próprio de análise. O Data Warehouse (DW) é esse grande repositório central, organizado por assunto e histórico (guarda dados de vários anos), enquanto um Data Mart é uma versão menor e mais específica do DW, voltada a um departamento ou processo (ex.: um data mart só de vendas). O OLAP (Online Analytical Processing) é a tecnologia que permite analisar esses dados por múltiplas dimensões (tempo, produto, região) de forma rápida e interativa.",
+  "como": "No OLAP , os dados são organizados em \"cubos\" com dimensões (ex.: tempo, produto, região) e medidas (ex.: valor vendido). As operações clássicas de navegação num cubo OLAP são: drill down (descer o nível de detalhe - ex.: de \"vendas por ano\" para \"vendas por mês\"); drill up (o inverso - subir o nível de detalhe, de \"vendas por mês\" para \"vendas por ano\"); e drill across (navegar entre dimensões diferentes no mesmo nível de detalhe - ex.: sair de \"vendas por região\" e ir para \"vendas por linha de produto\", mantendo o mesmo período). O processo ETL roda tipicamente em lotes (batch), fora do horário de pico do sistema de origem, para não atrapalhar a operação do dia a dia - por isso os dados de um DW normalmente não são \"em tempo real\", e sim atualizados periodicamente (diária ou semanalmente, por exemplo).",
+  "exemplos": [
+   "Um gestor está vendo o total de vendas do ano e quer ver o detalhe mês a mês. Que operação OLAP ele está fazendo? Resolução: drill down - está descendo de um nível mais resumido (ano) para um mais detalhado (mês).",
+   "Depois de ver as vendas por mês, o gestor quer voltar a ver só o total anual. Que operação é essa? Resolução: drill up (também chamado de roll up) - o caminho inverso do drill down, subindo o nível de agregação.",
+   "Qual a diferença principal entre um Data Warehouse e um Data Mart? Resolução: o Data Warehouse é corporativo, reúne dados de toda a empresa e de vários assuntos; o Data Mart é um recorte menor, geralmente de um único departamento ou processo de negócio (ex.: só vendas, ou só RH), normalmente derivado do próprio Data Warehouse."
+  ]
+ },
+ {
+  "slug_file": "edital04-analise-de-sistemas-sap-especifico-04-mineracao-de-dados-balanced-scorecard",
+  "edital": "04",
+  "materia": "Conhecimentos Específicos - Análise de Sistemas - SAP",
+  "titulo": "Mineração de dados (Balanced Scorecard)",
+  "oficial": "Mineração de dados (Balanced Scorecard).",
+  "oque": "Mineração de dados (data mining) é o processo de explorar grandes volumes de dados em busca de padrões, relações e tendências que não são óbvios à primeira vista - usando técnicas como classificação (prever a qual categoria um caso pertence, ex.: \"esse cliente vai cancelar o serviço?\"), agrupamento/clusterização (juntar casos parecidos sem categorias pré-definidas, ex.: perfis de clientes) e associação (encontrar itens que costumam aparecer juntos, ex.: \"quem compra X também compra Y\"). O Balanced Scorecard (BSC) , citado junto no edital, é uma ferramenta de gestão estratégica que usa indicadores para acompanhar se a empresa está de fato executando sua estratégia - e não uma técnica de mineração de dados propriamente dita, mas um dos principais consumidores dos indicadores gerados por BI e mineração de dados dentro da empresa.",
+  "como": "O BSC organiza os objetivos e indicadores da empresa em quatro perspectivas que se conectam numa relação de causa e efeito: Financeira (o resultado final que os acionistas esperam), Clientes (o que precisa ser entregue a eles para gerar esse resultado), Processos internos (o que a empresa precisa fazer bem para satisfazer os clientes) e Aprendizado e crescimento (pessoas, sistemas e cultura - a base que sustenta tudo o resto). A lógica é: investir em Aprendizado e crescimento melhora os Processos internos, que melhoram a entrega aos Clientes, que gera o resultado Financeiro esperado. Um projeto de mineração de dados costuma seguir etapas parecidas com o ciclo CRISP-DM : entender o problema de negócio, entender e preparar os dados, construir o modelo (ex.: uma árvore de decisão para classificação), avaliar se o modelo é bom o suficiente e, por fim, implantá-lo no processo real da empresa.",
+  "exemplos": [
+   "Um supermercado descobre, analisando o histórico de compras, que quem compra fraldas também costuma comprar cerveja no mesmo carrinho. Que técnica de mineração de dados foi usada? Resolução: análise de associação (o clássico exemplo de \"market basket analysis\" / análise de cesta de compras) - busca padrões do tipo \"quem compra X também compra Y\".",
+   "Uma operadora de telecom quer prever, para cada cliente atual, se ele vai cancelar o plano nos próximos 3 meses. Que técnica de mineração de dados se aplica melhor? Resolução: classificação - o objetivo é prever a qual categoria (vai cancelar / não vai cancelar) cada cliente pertence, com base no histórico de clientes que já cancelaram ou não antes.",
+   "No BSC, um indicador de \"tempo médio de treinamento por funcionário\" pertence a qual das quatro perspectivas? Resolução: Aprendizado e crescimento - é a perspectiva que trata de pessoas, capacitação, sistemas e cultura organizacional, a base que sustenta as demais perspectivas."
+  ]
+ },
+ {
+  "slug_file": "edital04-analise-de-sistemas-sap-especifico-05-gestao-de-projetos-pmbok-ageis-scrum-kanban",
+  "edital": "04",
+  "materia": "Conhecimentos Específicos - Análise de Sistemas - SAP",
+  "titulo": "Gestão de Projetos (PMBoK, ágeis, Scrum, Kanban)",
+  "oficial": "Gestão de Projetos (PMBoK, ágeis, Scrum, Kanban).",
+  "oque": "O PMBoK (Project Management Body of Knowledge), do PMI, é o guia de referência mais usado em gestão de projetos \"tradicional\" (preditiva): organiza a gestão de um projeto em 5 grupos de processos - Iniciação, Planejamento, Execução, Monitoramento e Controle, e Encerramento - e em áreas de conhecimento (escopo, cronograma, custos, qualidade, riscos, etc.). Já as metodologias ágeis partem de outra lógica: em vez de planejar tudo detalhadamente no início, entregam o projeto em ciclos curtos e incrementais, ajustando o rumo conforme o aprendizado. O Scrum é o framework ágil mais usado, organizado em sprints (ciclos curtos e de duração fixa, tipicamente 2 a 4 semanas). O Kanban é outra abordagem ágil, mais simples, focada em visualizar o fluxo de trabalho num quadro (colunas como \"a fazer\", \"fazendo\", \"pronto\") e limitar a quantidade de tarefas em andamento ao mesmo tempo.",
+  "como": "Scrum define três papéis: Product Owner (prioriza o que precisa ser feito, dono do \"backlog\" do produto), Scrum Master (remove obstáculos e garante que o time siga o framework) e o Time de desenvolvimento (quem executa o trabalho). Os eventos incluem o Sprint Planning (planejamento do que será feito na sprint), a Daily Scrum (reunião diária curta de alinhamento), a Sprint Review (apresentação do que foi entregue) e a Sprint Retrospective (o time reflete sobre como melhorar o próprio processo). Kanban segue princípios como: visualizar o fluxo de trabalho, limitar o trabalho em andamento (WIP - work in progress) para evitar sobrecarga e gargalos, e gerenciar o fluxo continuamente - ao contrário do Scrum, o Kanban não trabalha necessariamente com ciclos fixos (sprints): o trabalho flui continuamente, e uma tarefa nova só entra quando outra sai (respeitando o limite de WIP de cada coluna).",
+  "exemplos": [
+   "Em qual grupo de processos do PMBoK se define o termo de abertura do projeto (project charter), que formaliza sua existência? Resolução: Iniciação - é o primeiro grupo de processos, onde o projeto (ou uma fase dele) é formalmente autorizado.",
+   "Um quadro Kanban tem a coluna \"Em desenvolvimento\" com limite de WIP igual a 3, e ela já tem 3 tarefas. Um desenvolvedor termina uma tarefa da coluna \"A fazer\" e quer começar outra. O que ele deve fazer, segundo o método Kanban? Resolução: ele não deve puxar uma nova tarefa para \"Em desenvolvimento\" até que uma das 3 tarefas atuais saia dessa coluna - respeitar o limite de WIP é a essência do Kanban, mesmo que isso signifique esperar ou ajudar a destravar uma tarefa já em andamento.",
+   "Qual evento do Scrum tem como objetivo o time refletir sobre o próprio processo de trabalho e identificar melhorias para a próxima sprint? Resolução: a Sprint Retrospective - diferente da Sprint Review (que foca no produto entregue), a Retrospective foca em como o time trabalhou e no que pode melhorar."
+  ]
+ }
+]

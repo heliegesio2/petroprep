@@ -219,6 +219,9 @@ model CargoConcurso {
   cargaHoraria   String?
   salario        Decimal? @db.Decimal(10, 2)
   requisito      String?
+  finalidade     String?
+  atribuicoes    String?
+  remuneracao    String?
   conteudoItens  String[]
   vagasImediatas Int      @default(0)
   vagasReserva   Int      @default(0)
@@ -252,11 +255,14 @@ model ItemEstudo {
   materiaId  String?
   cargoSlug  String? // conteúdo específico (Módulo II) de um cargo
   ordem      Int              @default(0)
-  slug       String
-  titulo     String
-  resumo     String?
-  pontos     String[]
-  dica       String?
+  slug         String
+  titulo       String
+  resumo       String? // "O que e"
+  pontos       String[]
+  dica         String?
+  textoOficial String? // "Como consta no edital"
+  comoFunciona String? // "Como funciona"
+  exemplos     String[] // "Exemplos resolvidos"
 
   @@index([concursoId, cargoSlug])
   @@index([materiaId])

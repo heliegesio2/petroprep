@@ -40,6 +40,9 @@ export default async function ItemCargoPage({ params }: Params) {
       resumo={it.resumo}
       pontos={it.pontos}
       dica={it.dica}
+      textoOficial={it.textoOficial}
+      comoFunciona={it.comoFunciona}
+      exemplos={it.exemplos}
       voltarHref={`/concurso/${slug}/vaga/${cargo}`}
       voltarLabel={dados.cargo.nome}
       testeHref={null}
