@@ -14,6 +14,7 @@ export async function listarCargosDoConcurso(concursoId: string) {
       nome: true,
       area: true,
       nivel: true,
+      cargaHoraria: true,
       salario: true,
       vagasImediatas: true,
       vagasReserva: true,

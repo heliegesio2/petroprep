@@ -32,10 +32,14 @@ export default async function ConcursoGuiaPage({ params }: Params) {
     nome: c.nome,
     area: c.area,
     nivel: c.nivel,
+    cargaHoraria: c.cargaHoraria,
     salario: c.salario ? c.salario.toNumber() : null,
     imediatas: c.vagasImediatas,
     reserva: c.vagasReserva,
-    localidades: Array.isArray(c.localidades) ? c.localidades.length : 0,
+    localidades: (Array.isArray(c.localidades) ? c.localidades : []) as {
+      cidade: string;
+      vagas: number;
+    }[],
   }));
 
   return (
@@ -49,6 +53,7 @@ export default async function ConcursoGuiaPage({ params }: Params) {
           resumo: concurso.resumo,
           dataProva: concurso.dataProva ? concurso.dataProva.toISOString() : null,
           vagasOficial: concurso.vagasOficial,
+          fonteOficial: concurso.fonteOficial,
         }}
         concursos={[{ slug: concurso.slug, nome: concurso.nome }]}
         atual={concurso.slug}

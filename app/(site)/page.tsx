@@ -39,10 +39,14 @@ export default async function Home({ searchParams }: Props) {
     nome: cg.nome,
     area: cg.area,
     nivel: cg.nivel,
+    cargaHoraria: cg.cargaHoraria,
     salario: cg.salario ? cg.salario.toNumber() : null,
     imediatas: cg.vagasImediatas,
     reserva: cg.vagasReserva,
-    localidades: Array.isArray(cg.localidades) ? cg.localidades.length : 0,
+    localidades: (Array.isArray(cg.localidades) ? cg.localidades : []) as {
+      cidade: string;
+      vagas: number;
+    }[],
   }));
 
   return (
@@ -58,6 +62,7 @@ export default async function Home({ searchParams }: Props) {
             ? concurso.dataProva.toISOString()
             : null,
           vagasOficial: concurso.vagasOficial,
+          fonteOficial: concurso.fonteOficial,
         }}
         concursos={concursos}
         atual={atual}
