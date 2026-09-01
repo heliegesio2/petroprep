@@ -40,6 +40,7 @@ export default async function Home({ searchParams }: Props) {
     area: cg.area,
     nivel: cg.nivel,
     cargaHoraria: cg.cargaHoraria,
+    requisito: cg.requisito,
     salario: cg.salario ? cg.salario.toNumber() : null,
     imediatas: cg.vagasImediatas,
     reserva: cg.vagasReserva,

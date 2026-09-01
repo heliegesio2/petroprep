@@ -33,6 +33,7 @@ export default async function ConcursoGuiaPage({ params }: Params) {
     area: c.area,
     nivel: c.nivel,
     cargaHoraria: c.cargaHoraria,
+    requisito: c.requisito,
     salario: c.salario ? c.salario.toNumber() : null,
     imediatas: c.vagasImediatas,
     reserva: c.vagasReserva,

@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import {
   ArrowSquareOutIcon,
   CoinsIcon,
+  HourglassIcon,
   MagnifyingGlassIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { formatBRL, formatData } from "@/lib/concursos";
@@ -22,6 +23,7 @@ export interface GuiaCargo {
   area: string;
   nivel: string;
   cargaHoraria: string | null;
+  requisito: string | null;
   salario: number | null;
   imediatas: number;
   reserva: number;
@@ -61,6 +63,12 @@ const PALETA_PADRAO = { accent: "#0f6e3f", dark: "#0a4c2b", light: "#e6f3ec" };
 function paletaDe(area: string | null | undefined) {
   const m = /edital\s*0?(\d)/i.exec(area ?? "");
   return (m && PALETAS[m[1].padStart(2, "0")]) || PALETA_PADRAO;
+}
+
+/** Cargo de nivel medio que exige curso tecnico ainda em andamento. */
+function exigeCursoTecnico(requisito: string | null) {
+  if (!requisito) return false;
+  return /curso t[ée]cnico/i.test(requisito) && !/n[ãa]o exige/i.test(requisito);
 }
 
 export function GuiaIndex({
@@ -471,8 +479,29 @@ export function GuiaIndex({
                     )}
 
                     <span className="flex-1" />
+
+                    {exigeCursoTecnico(c.requisito) && (
+                      <span
+                        className="mb-2 flex items-center justify-center gap-1.5 rounded-lg px-2.5 py-2 text-center text-[0.78rem] font-semibold leading-tight"
+                        style={{
+                          background: "#fff3cd",
+                          color: "#7a4d05",
+                          border: "1px solid #f0d787",
+                        }}
+                      >
+                        <HourglassIcon
+                          size={13}
+                          weight="fill"
+                          className="shrink-0"
+                          aria-hidden
+                        />
+                        Ainda dá tempo: pelo menos 6 meses p/ concluir o curso
+                        técnico
+                      </span>
+                    )}
+
                     <span
-                      className="mt-3 rounded-lg px-4 py-2.5 text-center text-sm font-semibold text-white transition group-hover:brightness-95"
+                      className="mt-1 rounded-lg px-4 py-2.5 text-center text-sm font-semibold text-white transition group-hover:brightness-95"
                       style={{ background: p.accent }}
                     >
                       Saiba mais →
