@@ -1,17 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import {
-  ArrowSquareOutIcon,
-  BookOpenIcon,
-  CalendarBlankIcon,
-} from "@phosphor-icons/react/dist/ssr";
-import { formatBRL, formatData } from "@/lib/concursos";
+import { ArrowSquareOutIcon, BookOpenIcon } from "@phosphor-icons/react/dist/ssr";
 import {
   carregarConcursoGuia,
   listarCargosDoConcurso,
 } from "@/lib/concurso-guia";
-import { CargoLista } from "@/components/cargo-lista";
+import { GuiaIndex } from "@/components/guia-index";
 
 interface Params {
   params: Promise<{ slug: string }>;
@@ -44,46 +39,27 @@ export default async function ConcursoGuiaPage({ params }: Params) {
   }));
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-10">
-      <section className="rounded-2xl border bg-[#062a1c] p-6 text-white sm:p-8">
-        <p className="text-xs font-semibold uppercase tracking-wide text-accent">
-          {concurso.banca ? `Banca ${concurso.banca}` : "Guia do concurso"}
-        </p>
-        <h1 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
-          {concurso.nome}
-        </h1>
-        <p className="mt-1 text-sm text-white/80">{concurso.orgao}</p>
+    <>
+      <GuiaIndex
+        concurso={{
+          slug: concurso.slug,
+          nome: concurso.nome,
+          orgao: concurso.orgao,
+          banca: concurso.banca,
+          resumo: concurso.resumo,
+          dataProva: concurso.dataProva ? concurso.dataProva.toISOString() : null,
+          vagasOficial: concurso.vagasOficial,
+        }}
+        concursos={[{ slug: concurso.slug, nome: concurso.nome }]}
+        atual={concurso.slug}
+        cargos={cargosView}
+      />
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          <div>
-            <p className="text-xs text-white/60">Vagas (edital)</p>
-            <p className="font-mono text-2xl font-bold tabular-nums">
-              {concurso.vagasOficial?.toLocaleString("pt-BR") ?? "-"}
-            </p>
-          </div>
-          <div>
-            <p className="text-xs text-white/60">Salários</p>
-            <p className="text-sm font-semibold">
-              {concurso.salarioDe
-                ? `${formatBRL(concurso.salarioDe.toNumber())} a ${formatBRL(
-                    concurso.salarioAte?.toNumber() ?? concurso.salarioDe.toNumber(),
-                  )}`
-                : "conforme o cargo"}
-            </p>
-          </div>
-          <div>
-            <p className="text-xs text-white/60">Prova</p>
-            <p className="inline-flex items-center gap-1.5 text-sm font-semibold">
-              <CalendarBlankIcon size={14} aria-hidden />
-              {concurso.dataProva ? formatData(concurso.dataProva.toISOString()) : "a definir"}
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-6 flex flex-wrap gap-3 text-sm">
+      <div className="mx-auto max-w-5xl px-4 pb-12">
+        <div className="flex flex-wrap gap-3 border-t pt-4 text-sm">
           <Link
             href={`/concurso/${concurso.slug}/estudo`}
-            className="inline-flex items-center gap-1.5 rounded-lg bg-white px-4 py-2 font-semibold text-[#062a1c] hover:bg-white/90"
+            className="inline-flex items-center gap-1.5 rounded-lg bg-brand px-4 py-2 font-semibold text-white hover:bg-brand-strong"
           >
             <BookOpenIcon size={16} weight="fill" aria-hidden />
             O que cai na prova
@@ -93,41 +69,20 @@ export default async function ConcursoGuiaPage({ params }: Params) {
               href={concurso.fonteOficial}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-white/25 px-4 py-2 font-medium hover:bg-white/10"
+              className="inline-flex items-center gap-1.5 rounded-lg border px-4 py-2 font-medium hover:bg-surface"
             >
               Edital oficial
               <ArrowSquareOutIcon size={14} aria-hidden />
             </a>
           )}
         </div>
-      </section>
-
-      {concurso.resumo && (
-        <p className="mt-6 max-w-2xl text-sm leading-relaxed text-muted">
-          {concurso.resumo}
+        <p className="mt-4 text-xs leading-relaxed text-muted">
+          A PetroPrep não tem vínculo com {concurso.orgao}
+          {concurso.banca ? ` nem com a ${concurso.banca}` : ""}. Vagas,
+          salários e datas são do edital citado e podem mudar; o documento
+          oficial prevalece.
         </p>
-      )}
-
-      <section className="mt-8">
-        <h2 className="text-lg font-bold tracking-tight">
-          Cargos e vagas
-          <span className="ml-2 font-mono text-sm font-normal text-muted">
-            {cargosView.length}
-          </span>
-        </h2>
-        <p className="mt-1 text-sm text-muted">
-          Dados extraídos do edital. Confira sempre a fonte oficial.
-        </p>
-        <div className="mt-4">
-          <CargoLista concursoSlug={concurso.slug} cargos={cargosView} />
-        </div>
-      </section>
-
-      <p className="mt-10 border-t pt-4 text-xs leading-relaxed text-muted">
-        A PetroPrep não tem vínculo com {concurso.orgao}
-        {concurso.banca ? ` nem com a ${concurso.banca}` : ""}. Vagas, salários e
-        datas são do edital citado e podem mudar; o documento oficial prevalece.
-      </p>
-    </div>
+      </div>
+    </>
   );
 }
