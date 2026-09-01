@@ -100,14 +100,64 @@ export function GuiaIndex({
 
   return (
     <div>
-      {/* HERO - centralizado, gradiente teal (modelo sitetocantins) */}
-      <section
-        className="px-4 py-14 text-center text-white sm:py-16"
-        style={{
-          background: "linear-gradient(180deg, #0b5e59 0%, #083f3c 100%)",
-        }}
-      >
-        <div className="mx-auto max-w-3xl">
+      {/* HERO - centralizado, com o "banner" (skyline) do sitetocantins */}
+      <section className="relative overflow-hidden px-4 py-14 text-center text-white sm:py-16">
+        <svg
+          className="pointer-events-none absolute inset-0 h-full w-full"
+          viewBox="0 0 1600 900"
+          preserveAspectRatio="xMidYMax slice"
+          aria-hidden
+        >
+          <defs>
+            <linearGradient id="gi-sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#052624" />
+              <stop offset="45%" stopColor="#083f3c" />
+              <stop offset="78%" stopColor="#0b5e59" />
+              <stop offset="100%" stopColor="#12716a" />
+            </linearGradient>
+            <radialGradient id="gi-sun" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stopColor="#a7e8d8" stopOpacity="0.9" />
+              <stop offset="35%" stopColor="#3fb89a" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#3fb89a" stopOpacity="0" />
+            </radialGradient>
+            <radialGradient id="gi-shade" cx="50%" cy="34%" r="62%">
+              <stop offset="0%" stopColor="#052624" stopOpacity="0.55" />
+              <stop offset="100%" stopColor="#052624" stopOpacity="0" />
+            </radialGradient>
+          </defs>
+          <rect x="0" y="0" width="1600" height="900" fill="url(#gi-sky)" />
+          <circle cx="1230" cy="290" r="260" fill="url(#gi-sun)" />
+          <g fill="#052624" opacity="0.9">
+            <circle cx="220" cy="470" r="130" />
+            <rect x="180" y="470" width="80" height="190" />
+            <rect x="330" y="560" width="18" height="100" />
+            <circle cx="339" cy="556" r="9" />
+            <rect x="1000" y="500" width="16" height="160" />
+            <circle cx="1008" cy="496" r="8" />
+            <path d="M960,660 h120 v-70 a60,60 0 0 1 60,0 v70 h40 v20 h-220 z" />
+            <rect x="90" y="620" width="70" height="40" rx="4" />
+            <rect x="115" y="600" width="20" height="24" />
+          </g>
+          <rect x="0" y="660" width="1600" height="240" fill="#052624" opacity="0.55" />
+          <path
+            d="M0,672 Q80,662 160,672 T320,672 T480,672 T640,672 T800,672 T960,672 T1120,672 T1280,672 T1440,672 T1600,672"
+            stroke="#12716a"
+            strokeWidth="2"
+            fill="none"
+            opacity="0.5"
+          />
+          <g fill="#fff" opacity="0.85">
+            <path
+              d="M760,610 v-14 h6 v14 M757,600 h12"
+              stroke="#fff"
+              strokeWidth="2"
+            />
+            <rect x="748" y="612" width="30" height="20" rx="3" />
+          </g>
+          <ellipse cx="800" cy="330" rx="760" ry="270" fill="url(#gi-shade)" />
+        </svg>
+
+        <div className="relative z-10 mx-auto max-w-3xl">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wide">
             <span className="h-1.5 w-1.5 rounded-full bg-[#5be08a]" aria-hidden />
             Guia do candidato
