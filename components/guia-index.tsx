@@ -9,6 +9,7 @@ import {
   MagnifyingGlassIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { formatBRL, formatData } from "@/lib/concursos";
+import { HeroParticles } from "@/components/hero-particles";
 
 interface Localidade {
   cidade: string;
@@ -156,6 +157,8 @@ export function GuiaIndex({
           </g>
           <ellipse cx="800" cy="330" rx="760" ry="270" fill="url(#gi-shade)" />
         </svg>
+
+        <HeroParticles />
 
         <div className="relative z-10 mx-auto max-w-3xl">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wide">
