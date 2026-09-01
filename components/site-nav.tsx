@@ -4,11 +4,11 @@ import { lerSessao, ehAdmin } from "@/lib/auth";
 import { AccountMenu } from "@/components/account-menu";
 
 const links = [
-  { href: "/#vagas", label: "Vagas e cotas" },
-  { href: "/#conteudo", label: "O que cai na prova" },
+  { href: "/", label: "Vagas" },
   { href: "/simulado", label: "Simulados" },
-  { href: "/#planos", label: "Planos" },
-  { href: "/#faq", label: "Dúvidas" },
+  { href: "/ranking", label: "Ranking" },
+  { href: "/planos", label: "Planos" },
+  { href: "/duvidas", label: "Dúvidas" },
 ];
 
 export async function SiteNav() {
@@ -23,7 +23,7 @@ export async function SiteNav() {
         {concursoDestaque.inscricoesAte
           ? `inscrições até ${formatData(concursoDestaque.inscricoesAte)}.`
           : "edital em breve."}{" "}
-        <Link href="/#planos" className="font-semibold underline underline-offset-2">
+        <Link href="/planos" className="font-semibold underline underline-offset-2">
           Ver os planos
         </Link>
       </div>

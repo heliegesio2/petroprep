@@ -44,7 +44,7 @@ export default async function SimuladoPage({ params, searchParams }: Params) {
           a correção comentada.
         </p>
         <Link
-          href="/#planos"
+          href="/planos"
           className="mt-6 inline-block rounded-lg bg-brand px-6 py-3 font-semibold text-white hover:bg-brand-strong"
         >
           Ver planos

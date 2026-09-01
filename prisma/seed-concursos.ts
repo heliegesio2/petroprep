@@ -263,11 +263,37 @@ async function seedSesTo(prisma: PrismaClient) {
   );
 }
 
-/** Concurso "guarda-chuva" da Transpetro, para os simulados existentes. */
+interface CargoTranspetro {
+  slug: string;
+  nome: string;
+  edital: string;
+  edital_label: string;
+  nivel: string;
+  salario_basico: string | null;
+  vagas_imediatas: number;
+  vagas_reserva: number;
+}
+
+/** Concurso Transpetro: metadados + os 61 cargos (extraídos de site/index.html). */
 async function seedTranspetro(prisma: PrismaClient) {
+  const cargos = ler<CargoTranspetro[]>(
+    "prisma/dados/transpetro-2026/cargos.json",
+  );
+  const imed = cargos.reduce((s, c) => s + c.vagas_imediatas, 0);
+  const cr = cargos.reduce((s, c) => s + c.vagas_reserva, 0);
+  const sal = cargos
+    .map((c) => moeda(c.salario_basico ?? undefined))
+    .filter((n): n is number => n !== null);
+
   const c = await prisma.concurso.upsert({
     where: { slug: "transpetro-2026" },
-    update: {},
+    update: {
+      vagasOficial: imed + cr,
+      salarioDe: sal.length ? Math.min(...sal) : null,
+      salarioAte: sal.length ? Math.max(...sal) : null,
+      resumo:
+        "Processo seletivo da Transpetro (banca Cesgranrio), 4 editais - Praças, Oficiais, Nível Médio e Nível Superior. Guia com todas as vagas, salário, requisitos e conteúdo programático.",
+    },
     create: {
       slug: "transpetro-2026",
       nome: "Concurso Transpetro 2026",
@@ -277,13 +303,41 @@ async function seedTranspetro(prisma: PrismaClient) {
       status: "inscricoes_abertas",
       publicado: true,
       destaque: true,
+      ordem: -1,
       dataProva: new Date("2026-11-29"),
+      inscricoesAte: new Date("2026-09-14"),
+      fonteOficial: "https://www.cesgranrio.org.br",
     },
   });
+
   await prisma.simulado.updateMany({
     where: { concursoId: null },
     data: { concursoId: c.id },
   });
+
+  for (const cg of cargos) {
+    const dados = {
+      nome: limpar(cg.nome) ?? cg.nome,
+      area: limpar(cg.edital_label) ?? cg.edital_label,
+      nivel: limpar(cg.nivel) ?? cg.nivel,
+      salario: moeda(cg.salario_basico ?? undefined),
+      vagasImediatas: cg.vagas_imediatas,
+      vagasReserva: cg.vagas_reserva,
+    };
+    await prisma.cargoConcurso.upsert({
+      where: { concursoId_slug: { concursoId: c.id, slug: cg.slug } },
+      update: dados,
+      create: {
+        concursoId: c.id,
+        slug: cg.slug,
+        localidades: [],
+        materiasSlugs: [],
+        conteudoItens: [],
+        ...dados,
+      },
+    });
+  }
+  console.log(`Concurso ${c.slug}: ${cargos.length} cargos.`);
 }
 
 export async function seedConcursos(prisma: PrismaClient) {

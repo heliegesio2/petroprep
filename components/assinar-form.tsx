@@ -13,7 +13,7 @@ interface Props {
   onTrocarPlano: (id: string) => void;
 }
 
-const NEXT = encodeURIComponent("/#planos");
+const NEXT = encodeURIComponent("/planos");
 
 export function AssinarForm({ planoId, logado, onTrocarPlano }: Props) {
   const [status, setStatus] = useState<Status>("idle");

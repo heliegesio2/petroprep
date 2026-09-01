@@ -42,7 +42,7 @@ export async function criarPreferencia(
       back_urls: {
         success: `${input.baseUrl}/obrigado`,
         pending: `${input.baseUrl}/obrigado`,
-        failure: `${input.baseUrl}/#planos`,
+        failure: `${input.baseUrl}/planos`,
       },
       auto_return: "approved",
       notification_url: `${input.baseUrl}/api/webhook/mercadopago`,

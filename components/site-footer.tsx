@@ -13,10 +13,10 @@ export function SiteFooter() {
           </Link>
           <nav className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted">
             <Link href="/#plataforma" className="hover:text-foreground">Plataforma</Link>
-            <Link href="/#vagas" className="hover:text-foreground">Vagas e cotas</Link>
-            <Link href="/#conteudo" className="hover:text-foreground">O que cai na prova</Link>
+            <Link href="/" className="hover:text-foreground">Vagas</Link>
+            <Link href="/simulado" className="hover:text-foreground">Simulados</Link>
             <Link href="/#edital" className="hover:text-foreground">Edital</Link>
-            <Link href="/#planos" className="hover:text-foreground">Planos</Link>
+            <Link href="/planos" className="hover:text-foreground">Planos</Link>
           </nav>
         </div>
 

@@ -94,7 +94,7 @@ export default async function MinhaContaPage() {
               completo liberam.
             </p>
             <Link
-              href="/#planos"
+              href="/planos"
               className="mt-3 inline-block rounded-lg bg-brand px-5 py-2.5 text-sm font-semibold text-white hover:bg-brand-strong"
             >
               Ver planos

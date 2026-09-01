@@ -1,0 +1,612 @@
+[
+ {
+  "slug": "edital04-administracao",
+  "nome": "Administração",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 5,
+  "vagas_reserva": 55
+ },
+ {
+  "slug": "edital03-administracao-e-controle",
+  "nome": "Administração e Controle",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 5,
+  "vagas_reserva": 75
+ },
+ {
+  "slug": "edital04-advocacia",
+  "nome": "Advocacia",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital03-ambiental",
+  "nome": "Ambiental",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-analise-ambiental",
+  "nome": "Análise Ambiental",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-analise-de-sistemas-infraestrutura",
+  "nome": "Análise de Sistemas – Infraestrutura",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-analise-de-sistemas-processos-de-negocios",
+  "nome": "Análise de Sistemas – Processos de Negócios",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-analise-de-sistemas-sap",
+  "nome": "Análise de Sistemas – SAP",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-analise-de-sistemas-seguranca-cibernetica-e-da-informacao",
+  "nome": "Análise de Sistemas – Segurança Cibernética e da Informação",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital01-auxiliar-de-saude",
+  "nome": "Auxiliar de Saúde",
+  "edital": "01",
+  "edital_label": "Edital 01 · Praças Marítimas",
+  "nivel": "Nível Fundamental/Médio (Embarque)",
+  "salario_basico": "3.914,02",
+  "vagas_imediatas": 3,
+  "vagas_reserva": 63
+ },
+ {
+  "slug": "edital04-ciencia-de-dados",
+  "nome": "Ciência de Dados",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 16
+ },
+ {
+  "slug": "edital04-comercializacao-e-logistica-comercio-e-suprimentos",
+  "nome": "Comercialização e Logística – Comércio e Suprimentos",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 16
+ },
+ {
+  "slug": "edital04-comercializacao-e-logistica-transporte-maritimo",
+  "nome": "Comercialização e Logística – Transporte Marítimo",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 2,
+  "vagas_reserva": 22
+ },
+ {
+  "slug": "edital04-comunicacao-social-jornalismo",
+  "nome": "Comunicação Social – Jornalismo",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-comunicacao-social-relacoes-publicas",
+  "nome": "Comunicação Social – Relações Públicas",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 3,
+  "vagas_reserva": 33
+ },
+ {
+  "slug": "edital01-condutor-bombeador",
+  "nome": "Condutor Bombeador",
+  "edital": "01",
+  "edital_label": "Edital 01 · Praças Marítimas",
+  "nivel": "Nível Fundamental/Médio (Embarque)",
+  "salario_basico": "3.914,02",
+  "vagas_imediatas": 3,
+  "vagas_reserva": 63
+ },
+ {
+  "slug": "edital01-condutor-mecanico",
+  "nome": "Condutor Mecânico",
+  "edital": "01",
+  "edital_label": "Edital 01 · Praças Marítimas",
+  "nivel": "Nível Fundamental/Médio (Embarque)",
+  "salario_basico": "3.914,02",
+  "vagas_imediatas": 3,
+  "vagas_reserva": 63
+ },
+ {
+  "slug": "edital03-contabilidade",
+  "nome": "Contabilidade",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-contabilidade",
+  "nome": "Contabilidade",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 2,
+  "vagas_reserva": 42
+ },
+ {
+  "slug": "edital01-cozinheiro",
+  "nome": "Cozinheiro",
+  "edital": "01",
+  "edital_label": "Edital 01 · Praças Marítimas",
+  "nivel": "Nível Fundamental/Médio (Embarque)",
+  "salario_basico": "2.515,48",
+  "vagas_imediatas": 12,
+  "vagas_reserva": 252
+ },
+ {
+  "slug": "edital03-dutos-e-terminais",
+  "nome": "Dutos e Terminais",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 8,
+  "vagas_reserva": 158
+ },
+ {
+  "slug": "edital01-eletricista",
+  "nome": "Eletricista",
+  "edital": "01",
+  "edital_label": "Edital 01 · Praças Marítimas",
+  "nivel": "Nível Fundamental/Médio (Embarque)",
+  "salario_basico": "3.914,02",
+  "vagas_imediatas": 4,
+  "vagas_reserva": 84
+ },
+ {
+  "slug": "edital03-enfermagem-do-trabalho",
+  "nome": "Enfermagem do Trabalho",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-enfermagem-do-trabalho",
+  "nome": "Enfermagem do Trabalho",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-engenharia-ambiental",
+  "nome": "Engenharia Ambiental",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-engenharia-civil",
+  "nome": "Engenharia Civil",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 3,
+  "vagas_reserva": 33
+ },
+ {
+  "slug": "edital04-engenharia-eletrica",
+  "nome": "Engenharia Elétrica",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 3,
+  "vagas_reserva": 33
+ },
+ {
+  "slug": "edital04-engenharia-geotecnica",
+  "nome": "Engenharia Geotécnica",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 2,
+  "vagas_reserva": 22
+ },
+ {
+  "slug": "edital04-engenharia-mecanica",
+  "nome": "Engenharia Mecânica",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 6,
+  "vagas_reserva": 86
+ },
+ {
+  "slug": "edital04-engenharia-naval",
+  "nome": "Engenharia Naval",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 2,
+  "vagas_reserva": 22
+ },
+ {
+  "slug": "edital04-engenharia-quimica",
+  "nome": "Engenharia Química",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-engenharia-de-automacao",
+  "nome": "Engenharia de Automação",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-engenharia-de-inspecao",
+  "nome": "Engenharia de Inspeção",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-engenharia-de-producao",
+  "nome": "Engenharia de Produção",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 2,
+  "vagas_reserva": 27
+ },
+ {
+  "slug": "edital04-engenharia-de-seguranca-de-processo",
+  "nome": "Engenharia de Segurança de Processo",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 16
+ },
+ {
+  "slug": "edital04-engenharia-de-seguranca-do-trabalho",
+  "nome": "Engenharia de Segurança do Trabalho",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 2,
+  "vagas_reserva": 22
+ },
+ {
+  "slug": "edital04-engenharia-de-telecomunicacoes",
+  "nome": "Engenharia de Telecomunicações",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital03-faixa-de-dutos",
+  "nome": "Faixa de Dutos",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital03-inspecao-de-equipamentos-e-instalacoes",
+  "nome": "Inspeção de Equipamentos e Instalações",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 3,
+  "vagas_reserva": 38
+ },
+ {
+  "slug": "edital03-manutencao-eletronica",
+  "nome": "Manutenção – Eletrônica",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 2,
+  "vagas_reserva": 27
+ },
+ {
+  "slug": "edital03-manutencao-eletrica",
+  "nome": "Manutenção – Elétrica",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 3,
+  "vagas_reserva": 33
+ },
+ {
+  "slug": "edital03-manutencao-instrumentacao",
+  "nome": "Manutenção – Instrumentação",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 3,
+  "vagas_reserva": 33
+ },
+ {
+  "slug": "edital03-manutencao-mecanica",
+  "nome": "Manutenção – Mecânica",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 5,
+  "vagas_reserva": 85
+ },
+ {
+  "slug": "edital04-medicina-do-trabalho",
+  "nome": "Medicina do Trabalho",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 4,
+  "vagas_reserva": 44
+ },
+ {
+  "slug": "edital03-monitoramento-logistico",
+  "nome": "Monitoramento Logístico",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital01-moco-de-conves",
+  "nome": "Moço de Convés",
+  "edital": "01",
+  "edital_label": "Edital 01 · Praças Marítimas",
+  "nivel": "Nível Fundamental/Médio (Embarque)",
+  "salario_basico": "2.074,66",
+  "vagas_imediatas": 15,
+  "vagas_reserva": 315
+ },
+ {
+  "slug": "edital01-moco-de-maquinas",
+  "nome": "Moço de Máquinas",
+  "edital": "01",
+  "edital_label": "Edital 01 · Praças Marítimas",
+  "nivel": "Nível Fundamental/Médio (Embarque)",
+  "salario_basico": "2.074,66",
+  "vagas_imediatas": 45,
+  "vagas_reserva": 945
+ },
+ {
+  "slug": "edital03-naval",
+  "nome": "Naval",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-nutricao",
+  "nome": "Nutrição",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-odontologia",
+  "nome": "Odontologia",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital03-projeto-construcao-e-montagem-edificacoes",
+  "nome": "Projeto, Construção e Montagem – Edificações",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital03-projeto-construcao-e-montagem-mecanica",
+  "nome": "Projeto, Construção e Montagem – Mecânica",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-psicologia",
+  "nome": "Psicologia",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital04-quimica",
+  "nome": "Química",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital03-quimica-do-petroleo",
+  "nome": "Química do Petróleo",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 2,
+  "vagas_reserva": 22
+ },
+ {
+  "slug": "edital02-segundo-oficial-de-maquinas",
+  "nome": "Segundo Oficial de Máquinas",
+  "edital": "02",
+  "edital_label": "Edital 02 · Oficiais de Náutica e Máquinas",
+  "nivel": "Nível Técnico/Superior Marítimo (Embarque)",
+  "salario_basico": "6.012,10",
+  "vagas_imediatas": 51,
+  "vagas_reserva": 561
+ },
+ {
+  "slug": "edital02-segundo-oficial-de-nautica",
+  "nome": "Segundo Oficial de Náutica",
+  "edital": "02",
+  "edital_label": "Edital 02 · Oficiais de Náutica e Máquinas",
+  "nivel": "Nível Técnico/Superior Marítimo (Embarque)",
+  "salario_basico": "6.012,10",
+  "vagas_imediatas": 40,
+  "vagas_reserva": 440
+ },
+ {
+  "slug": "edital03-seguranca",
+  "nome": "Segurança",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 4,
+  "vagas_reserva": 44
+ },
+ {
+  "slug": "edital04-servico-social",
+  "nome": "Serviço Social",
+  "edital": "04",
+  "edital_label": "Edital 04 · Nível Superior",
+  "nivel": "Nível Superior (Terra)",
+  "salario_basico": "8.647,34",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital03-suprimento-de-bens-e-servicos",
+  "nome": "Suprimento de Bens e Serviços",
+  "edital": "03",
+  "edital_label": "Edital 03 · Nível Médio",
+  "nivel": "Nível Médio/Técnico (Terra)",
+  "salario_basico": "3.776,64",
+  "vagas_imediatas": 1,
+  "vagas_reserva": 11
+ },
+ {
+  "slug": "edital01-taifeiro",
+  "nome": "Taifeiro",
+  "edital": "01",
+  "edital_label": "Edital 01 · Praças Marítimas",
+  "nivel": "Nível Fundamental/Médio (Embarque)",
+  "salario_basico": "2.515,48",
+  "vagas_imediatas": 4,
+  "vagas_reserva": 84
+ }
+]

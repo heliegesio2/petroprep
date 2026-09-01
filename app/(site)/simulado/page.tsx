@@ -80,7 +80,7 @@ export default async function SimuladoListaPage() {
         <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-brand/30 bg-brand-soft/50 p-4 text-sm">
           <span>Assine para liberar todos os simulados e a correção completa.</span>
           <Link
-            href="/#planos"
+            href="/planos"
             className="rounded-lg bg-brand px-4 py-2 font-semibold text-white hover:bg-brand-strong"
           >
             Ver planos
@@ -141,7 +141,7 @@ export default async function SimuladoListaPage() {
 
               {!acessivel ? (
                 <Link
-                  href="/#planos"
+                  href="/planos"
                   className="inline-flex flex-none items-center justify-center gap-1.5 rounded-lg border px-5 py-2.5 text-sm font-semibold text-muted hover:bg-background"
                 >
                   <LockSimpleIcon size={16} aria-hidden />
