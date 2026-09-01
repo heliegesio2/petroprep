@@ -46,6 +46,23 @@ function semAcento(s: string) {
     .toLowerCase();
 }
 
+/**
+ * Paleta por edital (mesmas cores da pasta site/ - style.css .edital-0N).
+ * Colore a borda esquerda, as tags e o botao do card. Sem edital = verde.
+ */
+const PALETAS: Record<string, { accent: string; dark: string; light: string }> = {
+  "01": { accent: "#0f6e3f", dark: "#0a4c2b", light: "#e6f3ec" },
+  "02": { accent: "#0b5aa3", dark: "#073d70", light: "#e6eefb" },
+  "03": { accent: "#8a5a08", dark: "#5c3c05", light: "#fbf1e0" },
+  "04": { accent: "#7a1fa2", dark: "#521470", light: "#f2e6f9" },
+};
+const PALETA_PADRAO = { accent: "#0f6e3f", dark: "#0a4c2b", light: "#e6f3ec" };
+
+function paletaDe(area: string | null | undefined) {
+  const m = /edital\s*0?(\d)/i.exec(area ?? "");
+  return (m && PALETAS[m[1].padStart(2, "0")]) || PALETA_PADRAO;
+}
+
 export function GuiaIndex({
   concurso,
   concursos,
@@ -352,8 +369,9 @@ export function GuiaIndex({
             Nenhum cargo encontrado para essa busca.
           </p>
         ) : (
-          <ul className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ul className="mt-4 grid gap-[18px] sm:grid-cols-2 lg:grid-cols-3">
             {filtrados.map((c) => {
+              const p = paletaDe(c.area);
               const chips = c.localidades
                 .slice()
                 .sort((a, b) => b.vagas - a.vagas);
@@ -361,60 +379,78 @@ export function GuiaIndex({
                 <li key={c.slug}>
                   <Link
                     href={`/concurso/${atual}/vaga/${c.slug}`}
-                    className="flex h-full flex-col rounded-2xl border bg-surface p-5 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
+                    style={{ borderLeftColor: p.accent }}
+                    className="group flex h-full flex-col rounded-2xl border border-l-4 bg-surface p-[18px] shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
                   >
                     <div className="flex flex-wrap gap-1.5">
-                      <span className="rounded-full bg-brand-soft px-2 py-0.5 text-[0.68rem] font-bold uppercase tracking-wide text-brand-strong">
+                      <span
+                        className="rounded-full px-2.5 py-1 text-[0.72rem] font-bold"
+                        style={{ background: p.light, color: p.dark }}
+                      >
                         {c.area}
                       </span>
                       {c.nivel && (
-                        <span className="rounded-full border bg-background px-2 py-0.5 text-[0.68rem] font-bold uppercase tracking-wide text-muted">
+                        <span
+                          className="rounded-full px-2.5 py-1 text-[0.72rem] font-semibold"
+                          style={{ background: p.light, color: p.dark }}
+                        >
                           {c.nivel}
                         </span>
                       )}
                     </div>
 
-                    <h3 className="mt-3 font-semibold leading-snug">{c.nome}</h3>
-                    <p className="mt-1 text-xs text-muted">
-                      {[
-                        c.cargaHoraria,
-                        `${c.localidades.length || "-"} ${
-                          c.localidades.length === 1 ? "localidade" : "localidades"
-                        }`,
-                      ]
-                        .filter(Boolean)
-                        .join(" · ")}
-                    </p>
+                    <h3 className="mt-2.5 min-h-[2.6em] text-[1.04rem] font-semibold leading-snug">
+                      {c.nome}
+                    </h3>
 
-                    <p className="mt-3 flex items-center gap-1.5 border-b pb-3 text-sm font-bold">
-                      <CoinsIcon size={14} className="text-muted" aria-hidden />
+                    <p className="mt-1 flex items-center gap-1.5 text-sm font-bold">
+                      <CoinsIcon
+                        size={15}
+                        style={{ color: p.accent }}
+                        aria-hidden
+                      />
                       {c.salario ? formatBRL(c.salario, false) : "conforme edital"}
-                      <span className="text-[0.68rem] font-normal uppercase tracking-wide text-muted">
+                      <span className="text-xs font-normal text-muted">
                         salário básico
                       </span>
                     </p>
 
-                    <div className="mt-3 flex gap-2.5">
-                      <div className="flex-1 rounded-xl bg-brand-soft px-3 py-2 text-center">
-                        <span className="block font-mono text-lg font-bold text-brand-strong tabular-nums">
+                    <div className="my-2.5 flex flex-col gap-1.5">
+                      <div
+                        className="flex items-baseline gap-2 rounded-lg px-3 py-2"
+                        style={{
+                          background: "#e6f3ec",
+                          border: "1px solid #b7ddc7",
+                        }}
+                      >
+                        <b
+                          className="font-mono text-[1.4rem] leading-none tabular-nums"
+                          style={{ color: "#0f6e3f" }}
+                        >
                           {c.imediatas}
-                        </span>
-                        <span className="text-[0.62rem] font-bold uppercase tracking-wide text-brand">
+                        </b>
+                        <span
+                          className="text-xs font-bold"
+                          style={{ color: "#1f5138" }}
+                        >
                           vagas imediatas
                         </span>
                       </div>
-                      <div className="flex-1 rounded-xl bg-background px-3 py-2 text-center">
-                        <span className="block font-mono text-lg font-bold tabular-nums">
+                      <div className="flex items-baseline gap-2 px-3 opacity-80">
+                        <b
+                          className="font-mono text-[0.92rem] leading-none tabular-nums"
+                          style={{ color: "#96650a" }}
+                        >
                           {c.reserva}
-                        </span>
-                        <span className="text-[0.62rem] font-bold uppercase tracking-wide text-muted">
+                        </b>
+                        <span className="text-xs text-muted">
                           cadastro de reserva
                         </span>
                       </div>
                     </div>
 
                     {chips.length > 0 && (
-                      <div className="mt-3 flex flex-wrap gap-1.5">
+                      <div className="mb-1 flex flex-wrap gap-1.5">
                         {chips.slice(0, 4).map((l) => (
                           <span
                             key={l.cidade}
@@ -424,7 +460,10 @@ export function GuiaIndex({
                           </span>
                         ))}
                         {chips.length > 4 && (
-                          <span className="rounded-full bg-background px-2 py-0.5 text-[0.68rem] font-medium text-brand">
+                          <span
+                            className="rounded-full bg-background px-2 py-0.5 text-[0.68rem] font-medium"
+                            style={{ color: p.accent }}
+                          >
                             +{chips.length - 4} cidades
                           </span>
                         )}
@@ -432,7 +471,10 @@ export function GuiaIndex({
                     )}
 
                     <span className="flex-1" />
-                    <span className="mt-4 rounded-lg border-[1.5px] border-brand px-4 py-2 text-center text-sm font-bold text-brand transition-colors hover:bg-brand-soft">
+                    <span
+                      className="mt-3 rounded-lg px-4 py-2.5 text-center text-sm font-semibold text-white transition group-hover:brightness-95"
+                      style={{ background: p.accent }}
+                    >
                       Saiba mais →
                     </span>
                   </Link>
