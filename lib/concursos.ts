@@ -136,6 +136,8 @@ export interface Concurso {
   linkOficial?: string;
   /** Página onde o candidato cria a conta, escolhe o cargo e paga a taxa. */
   linkInscricao?: string;
+  /** Rota interna do guia completo (cargos + conteúdo no banco), quando existe. */
+  linkGuia?: string;
   /** Caminho da foto do slide (ex.: "/banner/<slug>.jpg"). Ver public/banner/LEIA-ME.md. */
   imagem?: string;
   /** Dados profundos - presentes só onde já foram preenchidos. */
@@ -457,19 +459,23 @@ const listaBruta: Concurso[] = [
   {
     slug: "ses-to-2026",
     categoria: "saude",
-    nome: "SES TO",
-    tituloCompleto: "Secretaria de Saúde do Tocantins 2026",
-    orgao: "Governo do Tocantins",
+    nome: "Saúde Tocantins",
+    tituloCompleto: "Concurso Saúde Tocantins 2026",
+    orgao: "Secretaria de Estado da Saúde do Tocantins (SES/TO)",
+    banca: "FGV",
     destaque: false,
     status: "inscricoes_abertas",
     vagasTotais: 5124,
     salarioDe: 1735,
     salarioAte: 17727.63,
     inscricoesAte: "2026-09-10",
+    dataProva: "2026-11-01",
+    linkOficial: "https://conhecimento.fgv.br/concursos/sesto26/",
+    linkGuia: "/concurso/ses-to-2026",
     escolaridades: ["medio", "tecnico", "superior"],
     escolaridadeTexto: "Médio/técnico (ex.: técnico de enfermagem) e superior (médico, enfermeiro, fisioterapeuta)",
     resumo:
-      "Maior concurso de saúde aberto no momento: milhares de vagas para todos os níveis em unidades de saúde do estado.",
+      "Maior concurso de saúde aberto no momento: 5.124 vagas para todos os níveis em unidades de saúde do estado. Guia completo com os 72 cargos e o que cai na prova.",
   },
   {
     slug: "pc-ba-2026",

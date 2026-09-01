@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { CaretLeftIcon, CaretRightIcon, GraduationCapIcon, ArrowUpRightIcon, IdentificationCardIcon } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
+import { CaretLeftIcon, CaretRightIcon, GraduationCapIcon, ArrowUpRightIcon, IdentificationCardIcon, BookOpenIcon } from "@phosphor-icons/react/dist/ssr";
 import { motion, useReducedMotion } from "motion/react";
 import {
   formatBRL,
@@ -203,12 +204,22 @@ function Slide({ concurso }: { concurso: Concurso }) {
         </dl>
 
         <div className="mt-6 flex flex-wrap gap-2">
-          <a
-            href="#planos"
-            className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-[#062a1c] transition-transform hover:-translate-y-0.5 active:translate-y-0"
-          >
-            Assinar
-          </a>
+          {concurso.linkGuia ? (
+            <Link
+              href={concurso.linkGuia}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-[#062a1c] transition-transform hover:-translate-y-0.5 active:translate-y-0"
+            >
+              <BookOpenIcon size={16} weight="fill" aria-hidden />
+              Ver guia completo
+            </Link>
+          ) : (
+            <a
+              href="#planos"
+              className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-[#062a1c] transition-transform hover:-translate-y-0.5 active:translate-y-0"
+            >
+              Assinar
+            </a>
+          )}
           {linkInscricao && (
             <a
               href={linkInscricao}

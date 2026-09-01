@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import type { PrismaClient } from "@prisma/client";
+import { seedTestesSesTo } from "./seed-ses-to-testes";
 
 /**
  * Seed dos guias de concurso (dados profundos por edital). Idempotente.
@@ -16,6 +17,12 @@ function slugify(s: string): string {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .slice(0, 80);
+}
+
+/** Regra dura do projeto: nada de em-dash / en-dash em texto visível. */
+function limpar(s: string | null | undefined): string | null {
+  if (s == null) return null;
+  return s.replace(/\s*[—–]\s*/g, " - ").replace(/\s+/g, " ").trim();
 }
 
 function moeda(s: string | undefined): number | null {
@@ -140,17 +147,17 @@ async function seedSesTo(prisma: PrismaClient) {
           : itensDeLista(mod1[nivel]?.[m.nome] ?? "");
 
       for (let i = 0; i < titulos.length; i++) {
-        const titulo = titulos[i];
-        const conteudo = doStudy.find((s) => s.item === titulo);
+        const titulo = limpar(titulos[i]) ?? titulos[i];
+        const conteudo = doStudy.find((s) => (limpar(s.item) ?? s.item) === titulo);
         const slug = slugify(titulo) || `item-${i + 1}`;
         await prisma.itemEstudo.upsert({
           where: { chave: `${concurso.id}:mat:${m.slug}:${slug}` },
           update: {
             titulo,
             ordem: i + 1,
-            resumo: conteudo?.resumo ?? null,
-            pontos: conteudo?.pontos ?? [],
-            dica: conteudo?.dica ?? null,
+            resumo: limpar(conteudo?.resumo),
+            pontos: (conteudo?.pontos ?? []).map((x) => limpar(x) ?? x),
+            dica: limpar(conteudo?.dica),
           },
           create: {
             chave: `${concurso.id}:mat:${m.slug}:${slug}`,
@@ -159,9 +166,9 @@ async function seedSesTo(prisma: PrismaClient) {
             ordem: i + 1,
             slug,
             titulo,
-            resumo: conteudo?.resumo ?? null,
-            pontos: conteudo?.pontos ?? [],
-            dica: conteudo?.dica ?? null,
+            resumo: limpar(conteudo?.resumo),
+            pontos: (conteudo?.pontos ?? []).map((x) => limpar(x) ?? x),
+            dica: limpar(conteudo?.dica),
           },
         });
         itensCriados += 1;
@@ -180,8 +187,8 @@ async function seedSesTo(prisma: PrismaClient) {
         nivel,
         cargaHoraria: cg.carga_horaria ?? null,
         salario: moeda(cg.salario_basico),
-        requisito: cg.requisito_investidura ?? null,
-        conteudoItens: cg.conteudo_especifico?.itens ?? [],
+        requisito: limpar(cg.requisito_investidura),
+        conteudoItens: (cg.conteudo_especifico?.itens ?? []).map((x) => limpar(x) ?? x),
         vagasImediatas: cg.vagas.imediatas,
         vagasReserva: cg.vagas.cadastro_reserva,
         localidades: cg.localidades,
@@ -195,8 +202,8 @@ async function seedSesTo(prisma: PrismaClient) {
         nivel,
         cargaHoraria: cg.carga_horaria ?? null,
         salario: moeda(cg.salario_basico),
-        requisito: cg.requisito_investidura ?? null,
-        conteudoItens: cg.conteudo_especifico?.itens ?? [],
+        requisito: limpar(cg.requisito_investidura),
+        conteudoItens: (cg.conteudo_especifico?.itens ?? []).map((x) => limpar(x) ?? x),
         vagasImediatas: cg.vagas.imediatas,
         vagasReserva: cg.vagas.cadastro_reserva,
         localidades: cg.localidades,
@@ -207,17 +214,17 @@ async function seedSesTo(prisma: PrismaClient) {
     const doStudy = study.cargos[cg.slug] ?? [];
     const itens = cg.conteudo_especifico?.itens ?? [];
     for (let i = 0; i < itens.length; i++) {
-      const titulo = itens[i];
-      const conteudo = doStudy.find((s) => s.item === titulo);
+      const titulo = limpar(itens[i]) ?? itens[i];
+      const conteudo = doStudy.find((s) => (limpar(s.item) ?? s.item) === titulo);
       const slug = slugify(titulo) || `item-${i + 1}`;
       await prisma.itemEstudo.upsert({
         where: { chave: `${concurso.id}:cargo:${cg.slug}:${slug}` },
         update: {
-          titulo,
+          titulo: limpar(titulo) ?? titulo,
           ordem: i + 1,
-          resumo: conteudo?.resumo ?? null,
-          pontos: conteudo?.pontos ?? [],
-          dica: conteudo?.dica ?? null,
+          resumo: limpar(conteudo?.resumo),
+          pontos: (conteudo?.pontos ?? []).map((x) => limpar(x) ?? x),
+          dica: limpar(conteudo?.dica),
         },
         create: {
           chave: `${concurso.id}:cargo:${cg.slug}:${slug}`,
@@ -226,14 +233,30 @@ async function seedSesTo(prisma: PrismaClient) {
           ordem: i + 1,
           slug,
           titulo,
-          resumo: conteudo?.resumo ?? null,
-          pontos: conteudo?.pontos ?? [],
-          dica: conteudo?.dica ?? null,
+          resumo: limpar(conteudo?.resumo),
+          pontos: (conteudo?.pontos ?? []).map((x) => limpar(x) ?? x),
+          dica: limpar(conteudo?.dica),
         },
       });
       itensCriados += 1;
     }
   }
+
+  // Faixa salarial a partir dos cargos.
+  const salarios = Object.values(enr.cargos)
+    .map((c) => moeda(c.salario_basico))
+    .filter((n): n is number => n !== null);
+  if (salarios.length > 0) {
+    await prisma.concurso.update({
+      where: { id: concurso.id },
+      data: {
+        salarioDe: Math.min(...salarios),
+        salarioAte: Math.max(...salarios),
+      },
+    });
+  }
+
+  await seedTestesSesTo(prisma, concurso.id);
 
   console.log(
     `Concurso ${concurso.slug}: ${Object.keys(enr.cargos).length} cargos, ${itensCriados} itens de estudo.`,
