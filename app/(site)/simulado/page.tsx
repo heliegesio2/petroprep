@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Prisma } from "@prisma/client";
 import {
   ArrowClockwiseIcon,
+  BookOpenIcon,
   CheckCircleIcon,
   ClockIcon,
   LockSimpleIcon,
@@ -40,6 +41,27 @@ export default async function SimuladoListaPage() {
     orderBy: [{ gratuito: "desc" }, { createdAt: "asc" }],
     include: { _count: { select: { questoes: true } } },
   });
+
+  // Liga cada simulado a matéria de estudo correspondente (conteúdo do edital),
+  // para oferecer "Estudar o conteúdo" ao lado de "Começar".
+  const materiasComTeste = await prisma.materiaConcurso.findMany({
+    where: { simuladoSlug: { not: null } },
+    select: {
+      slug: true,
+      nome: true,
+      simuladoSlug: true,
+      concurso: { select: { slug: true } },
+    },
+  });
+  const estudoPorSimulado = new Map<string, { href: string; nome: string }>();
+  for (const m of materiasComTeste) {
+    if (m.simuladoSlug && !estudoPorSimulado.has(m.simuladoSlug)) {
+      estudoPorSimulado.set(m.simuladoSlug, {
+        href: `/concurso/${m.concurso.slug}/estudo/${m.slug}`,
+        nome: m.nome,
+      });
+    }
+  }
 
   // Última tentativa finalizada por simulado (conta logada + feitas deslogado).
   const donos: Prisma.TentativaWhereInput[] = [];
@@ -100,6 +122,7 @@ export default async function SimuladoListaPage() {
           const acessivel = s.gratuito || liberado;
           const qtd = s._count.questoes;
           const feito = ultimaPorSimulado.get(s.id);
+          const estudo = estudoPorSimulado.get(s.slug);
 
           return (
             <li key={s.id} className="rounded-2xl border bg-surface p-5">
@@ -137,6 +160,15 @@ export default async function SimuladoListaPage() {
                     </span>
                   )}
                 </p>
+                {estudo && (
+                  <Link
+                    href={estudo.href}
+                    className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-brand hover:underline"
+                  >
+                    <BookOpenIcon size={15} aria-hidden />
+                    Estudar o conteúdo desta prova
+                  </Link>
+                )}
               </div>
 
               {!acessivel ? (
