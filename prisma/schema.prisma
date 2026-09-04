@@ -15,20 +15,20 @@ datasource db {
 
 /// Conta de quem se cadastra no site.
 model Usuario {
-  id            String       @id @default(cuid())
-  email         String?      @unique // opcional: contas TikTok entram sem e-mail
-  senhaHash     String? // opcional: contas sociais não têm senha
-  nome          String
-  telefone      String?
-  plano         String? // "transpetro" | "completo"
-  planoStatus   String       @default("nenhum") // nenhum | pendente | ativo
-  planoAte      DateTime?
+  id             String       @id @default(cuid())
+  email          String?      @unique // opcional: contas TikTok entram sem e-mail
+  senhaHash      String? // opcional: contas sociais não têm senha
+  nome           String
+  telefone       String?
+  plano          String? // "transpetro" | "completo"
+  planoStatus    String       @default("nenhum") // nenhum | pendente | ativo
+  planoAte       DateTime?
   mpPreferenceId String?
-  mpPaymentId   String?
-  tentativas    Tentativa[]
-  contasOAuth   ContaOAuth[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  mpPaymentId    String?
+  tentativas     Tentativa[]
+  contasOAuth    ContaOAuth[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
 
 /// Vínculo de uma conta de provedor social (Google, Facebook, TikTok) a um Usuario.
@@ -64,17 +64,17 @@ model Lead {
 // ---------------------------------------------------------------------------
 
 model Questao {
-  id          String             @id @default(cuid())
-  disciplina  String
-  banca       String             @default("Cesgranrio")
-  enunciado   String
-  alternativas Json              // string[5]
-  correta     Int                // índice 0-4
-  comentario  String?
-  dificuldade Int                @default(3)
-  simulados   SimuladoQuestao[]
-  respostas   RespostaSimulado[]
-  createdAt   DateTime           @default(now())
+  id           String             @id @default(cuid())
+  disciplina   String
+  banca        String             @default("Cesgranrio")
+  enunciado    String
+  alternativas Json // string[5]
+  correta      Int // índice 0-4
+  comentario   String?
+  dificuldade  Int                @default(3)
+  simulados    SimuladoQuestao[]
+  respostas    RespostaSimulado[]
+  createdAt    DateTime           @default(now())
 }
 
 model Simulado {
@@ -166,7 +166,7 @@ model Vaga {
 }
 
 model Topico {
-  id         String   @id @default(cuid())
+  id         String  @id @default(cuid())
   disciplina String
   titulo     String
   descricao  String?
@@ -209,25 +209,29 @@ model Concurso {
 }
 
 model CargoConcurso {
-  id             String   @id @default(cuid())
-  concurso       Concurso @relation(fields: [concursoId], references: [id], onDelete: Cascade)
-  concursoId     String
-  slug           String
-  nome           String
-  area           String
-  nivel          String
-  cargaHoraria   String?
-  salario        Decimal? @db.Decimal(10, 2)
-  requisito      String?
-  finalidade     String?
-  atribuicoes    String?
-  remuneracao    String?
-  conteudoItens  String[]
-  vagasImediatas Int      @default(0)
-  vagasReserva   Int      @default(0)
-  localidades    Json     @default("[]")
-  materiasSlugs  String[]
-  criadoEm       DateTime @default(now())
+  id              String   @id @default(cuid())
+  concurso        Concurso @relation(fields: [concursoId], references: [id], onDelete: Cascade)
+  concursoId      String
+  slug            String
+  nome            String
+  area            String
+  nivel           String
+  cargaHoraria    String?
+  salario         Decimal? @db.Decimal(10, 2)
+  requisito       String?
+  finalidade      String?
+  atribuicoes     String?
+  remuneracao     String?
+  conteudoItens   String[]
+  conteudoNota    String? // ressalva do edital sobre o conteudo especifico
+  vagasModalidade Json? // { ac|pcd|pn|pi|pq|total: { imediatas, reserva } }
+  cursoTecnico    Json? // blocos "Como concluir o curso tecnico a tempo"
+  calloutCurso    String? // aviso "ainda da tempo de concluir o curso tecnico"
+  vagasImediatas  Int      @default(0)
+  vagasReserva    Int      @default(0)
+  localidades     Json     @default("[]")
+  materiasSlugs   String[]
+  criadoEm        DateTime @default(now())
 
   @@unique([concursoId, slug])
   @@index([concursoId, nivel])
@@ -247,14 +251,14 @@ model MateriaConcurso {
 }
 
 model ItemEstudo {
-  id         String           @id @default(cuid())
-  chave      String           @unique // seed: "<concursoId>:mat:<materiaSlug>:<slug>" ou ":cargo:<cargoSlug>:<slug>"
-  concurso   Concurso         @relation(fields: [concursoId], references: [id], onDelete: Cascade)
-  concursoId String
-  materia    MateriaConcurso? @relation(fields: [materiaId], references: [id], onDelete: Cascade)
-  materiaId  String?
-  cargoSlug  String? // conteúdo específico (Módulo II) de um cargo
-  ordem      Int              @default(0)
+  id           String           @id @default(cuid())
+  chave        String           @unique // seed: "<concursoId>:mat:<materiaSlug>:<slug>" ou ":cargo:<cargoSlug>:<slug>"
+  concurso     Concurso         @relation(fields: [concursoId], references: [id], onDelete: Cascade)
+  concursoId   String
+  materia      MateriaConcurso? @relation(fields: [materiaId], references: [id], onDelete: Cascade)
+  materiaId    String?
+  cargoSlug    String? // conteúdo específico (Módulo II) de um cargo
+  ordem        Int              @default(0)
   slug         String
   titulo       String
   resumo       String? // "O que e"

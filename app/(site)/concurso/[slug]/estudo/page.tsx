@@ -18,9 +18,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 }
 
 const NIVEL_LABEL: Record<string, string> = {
+  geral: "Conhecimentos gerais (todos os níveis)",
   medio: "Nível Médio / Técnico",
   superior: "Nível Superior",
 };
+
+// Ordem de exibição dos grupos de nível; níveis fora da lista vão para o fim.
+const NIVEL_ORDEM = ["superior", "medio", "geral"];
 
 export default async function EstudoIndexPage({ params }: Params) {
   const { slug } = await params;
@@ -34,6 +38,11 @@ export default async function EstudoIndexPage({ params }: Params) {
     arr.push(m);
     porNivel.set(m.nivel, arr);
   }
+  const niveis = [...porNivel.keys()].sort((a, b) => {
+    const ia = NIVEL_ORDEM.indexOf(a);
+    const ib = NIVEL_ORDEM.indexOf(b);
+    return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+  });
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
@@ -51,7 +60,7 @@ export default async function EstudoIndexPage({ params }: Params) {
         cargo (Módulo II) fica na página do cargo.
       </p>
 
-      {["superior", "medio"].map((nivel) => {
+      {niveis.map((nivel) => {
         const lista = porNivel.get(nivel);
         if (!lista || lista.length === 0) return null;
         return (

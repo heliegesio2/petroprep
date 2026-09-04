@@ -5,6 +5,8 @@ import {
   ArrowLeftIcon,
   CaretRightIcon,
   CheckCircleIcon,
+  GraduationCapIcon,
+  InfoIcon,
   MapPinIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { formatBRL } from "@/lib/concursos";
@@ -15,6 +17,25 @@ import {
 
 interface Params {
   params: Promise<{ slug: string; cargo: string }>;
+}
+
+interface VagasModalidade {
+  imediatas: number;
+  reserva: number;
+}
+const MODALIDADE_LABEL: [string, string][] = [
+  ["ac", "Ampla concorrência"],
+  ["pcd", "Pessoa com deficiência"],
+  ["pn", "Pessoa negra"],
+  ["pi", "Pessoa indígena"],
+  ["pq", "Pessoa quilombola"],
+  ["total", "Total"],
+];
+
+interface CursoTecnicoBloco {
+  tipo: "titulo" | "paragrafo" | "lista";
+  texto?: string;
+  itens?: string[];
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
@@ -40,6 +61,13 @@ export default async function CargoPage({ params }: Params) {
     cidade: string;
     vagas: number;
   }[];
+  const vagasModalidade = (c.vagasModalidade ?? null) as Record<
+    string,
+    VagasModalidade
+  > | null;
+  const cursoTecnico = (Array.isArray(c.cursoTecnico)
+    ? c.cursoTecnico
+    : null) as CursoTecnicoBloco[] | null;
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-10">
@@ -85,6 +113,48 @@ export default async function CargoPage({ params }: Params) {
         </div>
       </div>
 
+      {vagasModalidade && (
+        <section className="mt-8">
+          <h2 className="font-semibold">Vagas por modalidade de concorrência</h2>
+          <div className="mt-3 overflow-x-auto rounded-2xl border">
+            <table className="w-full text-sm">
+              <thead className="bg-surface text-left text-xs text-muted">
+                <tr>
+                  <th className="px-4 py-2 font-medium">Modalidade</th>
+                  <th className="px-4 py-2 text-right font-medium">Imediatas</th>
+                  <th className="px-4 py-2 text-right font-medium">
+                    Cadastro de reserva
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {MODALIDADE_LABEL.filter(([k]) => vagasModalidade[k]).map(
+                  ([k, label]) => (
+                    <tr
+                      key={k}
+                      className={k === "total" ? "font-semibold" : undefined}
+                    >
+                      <td className="px-4 py-2">{label}</td>
+                      <td className="px-4 py-2 text-right font-mono tabular-nums">
+                        {vagasModalidade[k].imediatas}
+                      </td>
+                      <td className="px-4 py-2 text-right font-mono tabular-nums">
+                        {vagasModalidade[k].reserva}
+                      </td>
+                    </tr>
+                  ),
+                )}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-2 text-xs leading-relaxed text-muted">
+            Reserva de vagas nos termos das Leis 12.990/2014 e 15.142/2025 e do
+            Decreto 9.508/2018. A distribuição por modalidade pode variar; o
+            edital oficial prevalece.
+          </p>
+        </section>
+      )}
+
       {c.finalidade && (
         <section className="mt-8">
           <h2 className="font-semibold">Finalidade do cargo</h2>
@@ -103,6 +173,18 @@ export default async function CargoPage({ params }: Params) {
         </section>
       )}
 
+      {c.calloutCurso && (
+        <div className="mt-6 flex gap-3 rounded-2xl border border-brand/30 bg-brand-soft/50 p-4 text-sm leading-relaxed text-foreground/90">
+          <InfoIcon
+            size={18}
+            weight="fill"
+            className="mt-0.5 flex-none text-brand"
+            aria-hidden
+          />
+          <p>{c.calloutCurso}</p>
+        </div>
+      )}
+
       {c.remuneracao && (
         <section className="mt-8">
           <h2 className="font-semibold">Remuneração</h2>
@@ -118,6 +200,37 @@ export default async function CargoPage({ params }: Params) {
           <p className="mt-2 text-sm leading-relaxed text-foreground/90">
             {c.atribuicoes}
           </p>
+        </section>
+      )}
+
+      {cursoTecnico && (
+        <section className="mt-8">
+          <h2 className="flex items-center gap-2 font-semibold">
+            <GraduationCapIcon
+              size={18}
+              weight="fill"
+              className="text-brand"
+              aria-hidden
+            />
+            Como concluir o curso técnico a tempo
+          </h2>
+          <div className="mt-3 space-y-3 text-sm leading-relaxed text-foreground/90">
+            {cursoTecnico.map((b, i) =>
+              b.tipo === "titulo" ? (
+                <h3 key={i} className="pt-1 font-semibold">
+                  {b.texto}
+                </h3>
+              ) : b.tipo === "lista" ? (
+                <ul key={i} className="list-disc space-y-1.5 pl-5">
+                  {(b.itens ?? []).map((it, j) => (
+                    <li key={j}>{it}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p key={i}>{b.texto}</p>
+              ),
+            )}
+          </div>
         </section>
       )}
 
@@ -177,6 +290,11 @@ export default async function CargoPage({ params }: Params) {
               </li>
             ))}
           </ul>
+          {c.conteudoNota && (
+            <p className="mt-3 text-xs leading-relaxed text-muted">
+              {c.conteudoNota}
+            </p>
+          )}
         </section>
       )}
 

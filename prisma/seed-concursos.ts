@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import type { PrismaClient } from "@prisma/client";
+import { Prisma, type PrismaClient } from "@prisma/client";
 import { seedTestesSesTo } from "./seed-ses-to-testes";
 
 /**
@@ -22,7 +22,23 @@ function slugify(s: string): string {
 /** Regra dura do projeto: nada de em-dash / en-dash em texto visível. */
 function limpar(s: string | null | undefined): string | null {
   if (s == null) return null;
-  return s.replace(/\s*[—–]\s*/g, " - ").replace(/\s+/g, " ").trim();
+  const t = s.replace(/\s*[—–]\s*/g, " - ").replace(/\s+/g, " ").trim();
+  return t.length ? t : null;
+}
+
+/** Aplica limpar() em cada texto dos blocos "Como concluir o curso técnico". */
+function limparCursoTecnico(
+  blocos:
+    | { tipo: string; texto?: string; itens?: string[] }[]
+    | null
+    | undefined,
+) {
+  if (!blocos?.length) return null;
+  return blocos.map((b) => ({
+    tipo: b.tipo,
+    ...(b.texto ? { texto: limpar(b.texto) } : {}),
+    ...(b.itens ? { itens: b.itens.map((x) => limpar(x) ?? x) } : {}),
+  }));
 }
 
 function moeda(s: string | undefined): number | null {
@@ -274,13 +290,29 @@ interface CargoTranspetro {
   vagas_reserva: number;
 }
 
+interface EspecItem {
+  titulo: string;
+  editalTexto: string | null;
+}
+interface CursoTecnicoBloco {
+  tipo: "titulo" | "paragrafo" | "lista";
+  texto?: string;
+  itens?: string[];
+}
 interface CargoDetalhe {
   slug: string;
   requisito: string | null;
   finalidade: string | null;
   remuneracao: string | null;
   atribuicoes: string | null;
-  conteudo_especifico: string[];
+  conteudo_especifico: EspecItem[];
+  conteudo_especifico_nota: string | null;
+  vagas_modalidade: Record<
+    string,
+    { imediatas: number; reserva: number }
+  > | null;
+  curso_tecnico: CursoTecnicoBloco[] | null;
+  callout_curso: string | null;
 }
 
 interface TopicoTranspetro {
@@ -412,9 +444,8 @@ async function seedTranspetro(prisma: PrismaClient) {
   // --- Cargos (metadados + detalhe + conteúdo específico) --------------
   for (const cg of cargos) {
     const d = detalhe.get(cg.slug);
-    const especItens = (d?.conteudo_especifico ?? []).flatMap((bloco) =>
-      itensDeLista(bloco).map((x) => limpar(x) ?? x),
-    );
+    const espec = d?.conteudo_especifico ?? [];
+    const especItens = espec.map((e) => limpar(e.titulo) ?? e.titulo);
     const dados = {
       nome: limpar(cg.nome) ?? cg.nome,
       area: limpar(cg.edital_label) ?? cg.edital_label,
@@ -427,6 +458,10 @@ async function seedTranspetro(prisma: PrismaClient) {
       atribuicoes: limpar(d?.atribuicoes),
       remuneracao: limpar(d?.remuneracao),
       conteudoItens: especItens,
+      conteudoNota: limpar(d?.conteudo_especifico_nota),
+      vagasModalidade: d?.vagas_modalidade ?? Prisma.DbNull,
+      cursoTecnico: limparCursoTecnico(d?.curso_tecnico) ?? Prisma.DbNull,
+      calloutCurso: limpar(d?.callout_curso),
       materiasSlugs: materiasNomes.map((m) => slugify(m)),
     };
     await prisma.cargoConcurso.upsert({
@@ -439,6 +474,7 @@ async function seedTranspetro(prisma: PrismaClient) {
       const titulo = especItens[i];
       const slug = slugify(titulo) || `item-${i + 1}`;
       const t = conteudoPorTitulo.get(titulo.toLowerCase());
+      const textoOficial = limpar(t?.oficial) ?? limpar(espec[i]?.editalTexto);
       await prisma.itemEstudo.upsert({
         where: { chave: `${c.id}:cargo:${cg.slug}:${slug}` },
         update: {
@@ -446,7 +482,7 @@ async function seedTranspetro(prisma: PrismaClient) {
           ordem: i + 1,
           resumo: limpar(t?.oque),
           comoFunciona: limpar(t?.como),
-          textoOficial: limpar(t?.oficial),
+          textoOficial,
           exemplos: (t?.exemplos ?? []).map((x) => limpar(x) ?? x),
         },
         create: {
@@ -458,7 +494,7 @@ async function seedTranspetro(prisma: PrismaClient) {
           titulo,
           resumo: limpar(t?.oque),
           comoFunciona: limpar(t?.como),
-          textoOficial: limpar(t?.oficial),
+          textoOficial,
           exemplos: (t?.exemplos ?? []).map((x) => limpar(x) ?? x),
         },
       });
