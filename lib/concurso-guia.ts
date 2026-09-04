@@ -21,6 +21,7 @@ export async function listarCargosDoConcurso(concursoId: string) {
       vagasReserva: true,
       localidades: true,
       materiasSlugs: true,
+      calloutCurso: true,
     },
   });
 }

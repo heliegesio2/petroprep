@@ -41,6 +41,7 @@ export default async function ConcursoGuiaPage({ params }: Params) {
       cidade: string;
       vagas: number;
     }[],
+    calloutCurso: c.calloutCurso,
   }));
 
   return (

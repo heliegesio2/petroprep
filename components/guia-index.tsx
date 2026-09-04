@@ -4,12 +4,26 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
+  AnchorIcon,
   ArrowSquareOutIcon,
+  BuildingsIcon,
   CoinsIcon,
+  GraduationCapIcon,
   HourglassIcon,
+  InfoIcon,
   MagnifyingGlassIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { formatBRL, formatData } from "@/lib/concursos";
+import {
+  ESCOLARIDADES,
+  escolaridadeLabelDe,
+  escolaridadesDoCargo,
+  exigeCursoTecnico,
+  localDoCargo,
+  requisitoMencionaPos,
+  type Escolaridade,
+  type Local,
+} from "@/lib/cargo-nivel";
 import { HeroParticles } from "@/components/hero-particles";
 
 interface Localidade {
@@ -28,6 +42,7 @@ export interface GuiaCargo {
   imediatas: number;
   reserva: number;
   localidades: Localidade[];
+  calloutCurso: string | null;
 }
 
 interface GuiaConcurso {
@@ -65,12 +80,6 @@ function paletaDe(area: string | null | undefined) {
   return (m && PALETAS[m[1].padStart(2, "0")]) || PALETA_PADRAO;
 }
 
-/** Cargo de nivel medio que exige curso tecnico ainda em andamento. */
-function exigeCursoTecnico(requisito: string | null) {
-  if (!requisito) return false;
-  return /curso t[ée]cnico/i.test(requisito) && !/n[ãa]o exige/i.test(requisito);
-}
-
 export function GuiaIndex({
   concurso,
   concursos,
@@ -84,18 +93,12 @@ export function GuiaIndex({
 }) {
   const router = useRouter();
   const [busca, setBusca] = useState("");
-  const [nivel, setNivel] = useState("");
-  const [area, setArea] = useState("");
+  const [escolaridade, setEscolaridade] = useState<Escolaridade | "">("");
+  const [local, setLocal] = useState<Local | "">("");
+  const [formacao, setFormacao] = useState("");
+  const [pos, setPos] = useState("");
   const [cidade, setCidade] = useState("");
 
-  const niveis = useMemo(
-    () => [...new Set(cargos.map((c) => c.nivel).filter(Boolean))].sort(),
-    [cargos],
-  );
-  const areas = useMemo(
-    () => [...new Set(cargos.map((c) => c.area).filter(Boolean))].sort(),
-    [cargos],
-  );
   const cidades = useMemo(
     () =>
       [
@@ -104,17 +107,77 @@ export function GuiaIndex({
     [cargos],
   );
 
+  const formacoesSuperior = useMemo(
+    () =>
+      [
+        ...new Set(
+          cargos
+            .filter((c) => escolaridadesDoCargo(c).includes("Superior"))
+            .map((c) => c.nome),
+        ),
+      ].sort(),
+    [cargos],
+  );
+
+  const posInfo = useMemo(() => {
+    const termo = pos.trim();
+    if (!termo) return null;
+    const q = semAcento(termo);
+    const relevantes = cargos.filter(
+      (c) => requisitoMencionaPos(c.requisito) && semAcento(c.requisito ?? "").includes(q),
+    );
+    return { termo, relevantes };
+  }, [pos, cargos]);
+
   const filtrados = useMemo(() => {
     const q = semAcento(busca.trim());
+    const posSlugs = posInfo && posInfo.relevantes.length > 0
+      ? new Set(posInfo.relevantes.map((c) => c.slug))
+      : null;
     return cargos.filter((c) => {
-      if (nivel && c.nivel !== nivel) return false;
-      if (area && c.area !== area) return false;
+      if (escolaridade && !escolaridadesDoCargo(c).includes(escolaridade))
+        return false;
+      if (local && localDoCargo(c) !== local) return false;
+      if (escolaridade === "Superior" && formacao && c.nome !== formacao)
+        return false;
       if (cidade && !c.localidades.some((l) => l.cidade === cidade)) return false;
       if (q && !semAcento(`${c.nome} ${c.area} ${c.nivel}`).includes(q))
         return false;
+      if (posSlugs && !posSlugs.has(c.slug)) return false;
       return true;
     });
-  }, [cargos, busca, nivel, area, cidade]);
+  }, [cargos, busca, escolaridade, local, formacao, cidade, posInfo]);
+
+  const statsFiltro = useMemo(() => {
+    const salarios = filtrados
+      .map((c) => c.salario)
+      .filter((s): s is number => s != null);
+    return {
+      cargos: filtrados.length,
+      imediatas: filtrados.reduce((s, c) => s + c.imediatas, 0),
+      reserva: filtrados.reduce((s, c) => s + c.reserva, 0),
+      min: salarios.length ? Math.min(...salarios) : null,
+      max: salarios.length ? Math.max(...salarios) : null,
+    };
+  }, [filtrados]);
+
+  const comparativoTecnico = useMemo(() => {
+    const medioTerra = cargos.filter(
+      (c) =>
+        localDoCargo(c) === "terra" &&
+        escolaridadesDoCargo(c).includes("Médio") &&
+        !escolaridadesDoCargo(c).includes("Médio Técnico"),
+    );
+    const tecnicoTerra = cargos.filter(
+      (c) => localDoCargo(c) === "terra" && escolaridadesDoCargo(c).includes("Médio Técnico"),
+    );
+    return {
+      medioCargos: medioTerra.length,
+      medioVagas: medioTerra.reduce((s, c) => s + c.imediatas, 0),
+      tecnicoCargos: tecnicoTerra.length,
+      tecnicoVagas: tecnicoTerra.reduce((s, c) => s + c.imediatas, 0),
+    };
+  }, [cargos]);
 
   const totalImediatas = cargos.reduce((s, c) => s + c.imediatas, 0);
   const totalReserva = cargos.reduce((s, c) => s + c.reserva, 0);
@@ -123,6 +186,12 @@ export function GuiaIndex({
     "w-full rounded-lg border bg-surface px-3 py-2.5 text-sm focus:border-brand focus:outline-none focus:ring-2 focus:ring-brand/25";
   const rotulo =
     "mb-1.5 block text-xs font-bold uppercase tracking-wide text-muted";
+  const pill = (ativo: boolean) =>
+    `rounded-full border px-3.5 py-1.5 text-sm font-semibold transition ${
+      ativo
+        ? "border-brand bg-brand text-white"
+        : "border bg-surface text-foreground/80 hover:border-brand/50"
+    }`;
 
   return (
     <div>
@@ -270,9 +339,9 @@ export function GuiaIndex({
                 Encontre seu cargo
               </p>
               <p className="mt-0.5 text-xs text-muted">
-                Filtre por nível, área
-                {cidades.length > 0 ? ", cidade de lotação" : ""} ou busque pelo
-                nome do cargo.
+                Escolha seu nível de escolaridade, se atua embarcado ou em
+                terra{cidades.length > 0 ? ", a cidade de lotação" : ""} ou
+                busque pelo nome do cargo.
               </p>
             </div>
 
@@ -303,36 +372,72 @@ export function GuiaIndex({
           </div>
 
           <div className="mt-4 rounded-2xl border bg-surface p-4 shadow-sm">
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              <label>
-                <span className={rotulo}>Nível</span>
+            <span className={rotulo}>Nível de escolaridade</span>
+            <div className="flex flex-wrap gap-2">
+              {ESCOLARIDADES.map((n) => (
+                <button
+                  key={n}
+                  type="button"
+                  aria-pressed={escolaridade === n}
+                  onClick={() =>
+                    setEscolaridade((cur) => (cur === n ? "" : n))
+                  }
+                  className={pill(escolaridade === n)}
+                >
+                  {n}
+                </button>
+              ))}
+            </div>
+
+            <span className={`${rotulo} mt-4`}>Onde atua</span>
+            <div className="flex flex-wrap gap-2">
+              {(
+                [
+                  ["embarcado", "Embarcado", AnchorIcon],
+                  ["terra", "Em terra", BuildingsIcon],
+                ] as [Local, string, typeof AnchorIcon][]
+              ).map(([v, label, Icon]) => (
+                <button
+                  key={v}
+                  type="button"
+                  aria-pressed={local === v}
+                  onClick={() => setLocal((cur) => (cur === v ? "" : v))}
+                  className={`inline-flex items-center gap-1.5 ${pill(local === v)}`}
+                >
+                  <Icon size={14} aria-hidden />
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {escolaridade === "Superior" && formacoesSuperior.length > 0 && (
+              <label className="mt-4 block max-w-sm">
+                <span className={rotulo}>Sua formação</span>
                 <select
-                  value={nivel}
-                  onChange={(e) => setNivel(e.target.value)}
+                  value={formacao}
+                  onChange={(e) => setFormacao(e.target.value)}
                   className={campo}
                 >
-                  <option value="">Todos os níveis</option>
-                  {niveis.map((n) => (
-                    <option key={n} value={n}>
-                      {n}
+                  <option value="">Todas as formações</option>
+                  {formacoesSuperior.map((f) => (
+                    <option key={f} value={f}>
+                      {f}
                     </option>
                   ))}
                 </select>
               </label>
+            )}
+
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <label>
-                <span className={rotulo}>Área</span>
-                <select
-                  value={area}
-                  onChange={(e) => setArea(e.target.value)}
+                <span className={rotulo}>Tem pós-graduação?</span>
+                <input
+                  type="text"
+                  value={pos}
+                  onChange={(e) => setPos(e.target.value)}
+                  placeholder="Ex.: MBA em Gestão de Projetos"
                   className={campo}
-                >
-                  <option value="">Todas as áreas</option>
-                  {areas.map((a) => (
-                    <option key={a} value={a}>
-                      {a}
-                    </option>
-                  ))}
-                </select>
+                />
               </label>
               {cidades.length > 0 && (
                 <label>
@@ -362,6 +467,84 @@ export function GuiaIndex({
                 />
               </label>
             </div>
+
+            {pos.trim() !== "" && (
+              <p className="mt-3 flex items-start gap-2 rounded-lg bg-background px-3 py-2.5 text-xs leading-relaxed text-muted">
+                <InfoIcon size={14} className="mt-0.5 flex-none" aria-hidden />
+                {posInfo && posInfo.relevantes.length > 0 ? (
+                  <span>
+                    Sua pós-graduação em <b>{posInfo.termo}</b> pode fazer
+                    diferença em {posInfo.relevantes.length}{" "}
+                    {posInfo.relevantes.length === 1 ? "cargo" : "cargos"} -
+                    aplicamos como filtro abaixo.
+                  </span>
+                ) : (
+                  <span>
+                    Pós-graduação não é exigida nem é diferencial em nenhum
+                    cargo da Transpetro no momento, conforme o edital. Sua
+                    pós-graduação não muda nenhum requisito aqui - deixamos
+                    os outros filtros como estão.
+                  </span>
+                )}
+              </p>
+            )}
+
+            {(escolaridade || local || cidade || busca.trim()) && (
+              <div className="mt-4 grid grid-cols-2 gap-3 border-t pt-4 sm:grid-cols-4">
+                {[
+                  { n: String(statsFiltro.cargos), l: "cargos" },
+                  { n: String(statsFiltro.imediatas), l: "vagas imediatas" },
+                  { n: String(statsFiltro.reserva), l: "cadastro de reserva" },
+                  {
+                    n:
+                      statsFiltro.min != null && statsFiltro.max != null
+                        ? statsFiltro.min === statsFiltro.max
+                          ? formatBRL(statsFiltro.min, false)
+                          : `${formatBRL(statsFiltro.min, false)} a ${formatBRL(statsFiltro.max, false)}`
+                        : "conforme edital",
+                    l: "salário básico",
+                  },
+                ].map((x) => (
+                  <div key={x.l}>
+                    <div className="font-mono text-lg font-bold tabular-nums">
+                      {x.n}
+                    </div>
+                    <div className="text-xs text-muted">{x.l}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {escolaridade === "Médio" && comparativoTecnico.tecnicoCargos > 0 && (
+              <div className="mt-4 flex gap-3 rounded-2xl border border-amber-300/60 bg-amber-50 p-4 text-sm leading-relaxed text-amber-950">
+                <HourglassIcon
+                  size={18}
+                  weight="fill"
+                  className="mt-0.5 flex-none text-amber-600"
+                  aria-hidden
+                />
+                <div>
+                  <p>
+                    Para nível médio (sem técnico) são só{" "}
+                    <b>{comparativoTecnico.medioVagas} vagas imediatas</b> em{" "}
+                    {comparativoTecnico.medioCargos}{" "}
+                    {comparativoTecnico.medioCargos === 1 ? "cargo" : "cargos"}.
+                    Já para nível médio técnico há{" "}
+                    <b>{comparativoTecnico.tecnicoVagas} vagas imediatas</b> em{" "}
+                    {comparativoTecnico.tecnicoCargos} cargos - e pelo edital o
+                    diploma só precisa ser apresentado na convocação, então
+                    ainda dá tempo de concluir o curso técnico.
+                  </p>
+                  <Link
+                    href={`/concurso/${atual}/tecnico`}
+                    className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-amber-800 hover:underline"
+                  >
+                    <GraduationCapIcon size={15} weight="fill" aria-hidden />
+                    Ver cargos de nível médio técnico que ainda dá tempo
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -397,14 +580,23 @@ export function GuiaIndex({
                       >
                         {c.area}
                       </span>
-                      {c.nivel && (
-                        <span
-                          className="rounded-full px-2.5 py-1 text-[0.72rem] font-semibold"
-                          style={{ background: p.light, color: p.dark }}
-                        >
-                          {c.nivel}
-                        </span>
-                      )}
+                      <span
+                        className="rounded-full px-2.5 py-1 text-[0.72rem] font-semibold"
+                        style={{ background: p.light, color: p.dark }}
+                      >
+                        {escolaridadeLabelDe(c)}
+                      </span>
+                      <span
+                        className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[0.72rem] font-semibold"
+                        style={{ background: p.light, color: p.dark }}
+                      >
+                        {localDoCargo(c) === "embarcado" ? (
+                          <AnchorIcon size={11} aria-hidden />
+                        ) : (
+                          <BuildingsIcon size={11} aria-hidden />
+                        )}
+                        {localDoCargo(c) === "embarcado" ? "Embarcado" : "Terra"}
+                      </span>
                     </div>
 
                     <h3 className="mt-2.5 min-h-[2.6em] text-[1.04rem] font-semibold leading-snug">

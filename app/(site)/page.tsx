@@ -48,6 +48,7 @@ export default async function Home({ searchParams }: Props) {
       cidade: string;
       vagas: number;
     }[],
+    calloutCurso: cg.calloutCurso,
   }));
 
   return (
