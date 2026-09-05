@@ -31,6 +31,11 @@ interface Localidade {
   vagas: number;
 }
 
+interface VagasModalidade {
+  imediatas: number;
+  reserva: number;
+}
+
 export interface GuiaCargo {
   slug: string;
   nome: string;
@@ -43,6 +48,22 @@ export interface GuiaCargo {
   reserva: number;
   localidades: Localidade[];
   calloutCurso: string | null;
+  vagasModalidade: Record<string, VagasModalidade> | null;
+}
+
+/** Modalidades de concorrência por cota (chave bate com CargoConcurso.vagasModalidade). */
+const MODALIDADES: [string, string][] = [
+  ["pcd", "Pessoa com deficiência"],
+  ["pn", "Pessoa negra"],
+  ["pi", "Pessoa indígena"],
+  ["pq", "Pessoa quilombola"],
+  ["lgbtqia", "Pessoa LGBTQIA+"],
+];
+
+/** Cargo tem vaga (imediata ou reserva) alocada pra essa modalidade de cota. */
+function temVagaNaModalidade(c: GuiaCargo, chave: string) {
+  const m = c.vagasModalidade?.[chave];
+  return !!m && m.imediatas + m.reserva > 0;
 }
 
 interface GuiaConcurso {
@@ -54,6 +75,16 @@ interface GuiaConcurso {
   dataProva: string | null;
   vagasOficial: number | null;
   fonteOficial: string | null;
+}
+
+/**
+ * "Comunicação Social - Jornalismo" -> "Jornalismo (Comunicação Social)":
+ * o nome oficial do cargo vira o valor do filtro (precisa bater com o edital),
+ * mas exibimos a especialidade primeiro pra achar por ela (ex.: "Jornalismo").
+ */
+function formacaoLabel(nome: string) {
+  const m = /^(.+?) - (.+)$/.exec(nome);
+  return m ? `${m[2]} (${m[1]})` : nome;
 }
 
 function semAcento(s: string) {
@@ -96,7 +127,8 @@ export function GuiaIndex({
   const [escolaridade, setEscolaridade] = useState<Escolaridade | "">("");
   const [local, setLocal] = useState<Local | "">("");
   const [formacao, setFormacao] = useState("");
-  const [pos, setPos] = useState("");
+  const [pos, setPos] = useState(false);
+  const [modalidade, setModalidade] = useState("");
   const [cidade, setCidade] = useState("");
 
   const cidades = useMemo(
@@ -115,25 +147,23 @@ export function GuiaIndex({
             .filter((c) => escolaridadesDoCargo(c).includes("Superior"))
             .map((c) => c.nome),
         ),
-      ].sort(),
+      ].sort((a, b) => formacaoLabel(a).localeCompare(formacaoLabel(b), "pt-BR")),
     [cargos],
   );
 
-  const posInfo = useMemo(() => {
-    const termo = pos.trim();
-    if (!termo) return null;
-    const q = semAcento(termo);
-    const relevantes = cargos.filter(
-      (c) => requisitoMencionaPos(c.requisito) && semAcento(c.requisito ?? "").includes(q),
-    );
-    return { termo, relevantes };
-  }, [pos, cargos]);
+  const cargosComPos = useMemo(
+    () => cargos.filter((c) => requisitoMencionaPos(c.requisito)),
+    [cargos],
+  );
+
+  const modalidadesComVaga = useMemo(
+    () => new Set(MODALIDADES.filter(([k]) => cargos.some((c) => temVagaNaModalidade(c, k))).map(([k]) => k)),
+    [cargos],
+  );
 
   const filtrados = useMemo(() => {
     const q = semAcento(busca.trim());
-    const posSlugs = posInfo && posInfo.relevantes.length > 0
-      ? new Set(posInfo.relevantes.map((c) => c.slug))
-      : null;
+    const posSlugs = pos ? new Set(cargosComPos.map((c) => c.slug)) : null;
     return cargos.filter((c) => {
       if (escolaridade && !escolaridadesDoCargo(c).includes(escolaridade))
         return false;
@@ -144,9 +174,10 @@ export function GuiaIndex({
       if (q && !semAcento(`${c.nome} ${c.area} ${c.nivel}`).includes(q))
         return false;
       if (posSlugs && !posSlugs.has(c.slug)) return false;
+      if (modalidade && !temVagaNaModalidade(c, modalidade)) return false;
       return true;
     });
-  }, [cargos, busca, escolaridade, local, formacao, cidade, posInfo]);
+  }, [cargos, busca, escolaridade, local, formacao, cidade, pos, cargosComPos, modalidade]);
 
   const statsFiltro = useMemo(() => {
     const salarios = filtrados
@@ -410,6 +441,57 @@ export function GuiaIndex({
               ))}
             </div>
 
+            <span className={`${rotulo} mt-4`}>
+              Concorre por alguma cota? (Leis 12.990/2014, 15.142/2025 e
+              Decreto 9.508/2018)
+            </span>
+            <div className="flex flex-wrap gap-x-5 gap-y-2">
+              {MODALIDADES.map(([k, label]) => {
+                const disponivel = modalidadesComVaga.has(k);
+                return (
+                  <label
+                    key={k}
+                    className={`flex items-center gap-1.5 text-sm ${
+                      disponivel ? "" : "opacity-50"
+                    }`}
+                    title={
+                      disponivel
+                        ? undefined
+                        : "Nenhum cargo deste concurso reserva vaga para este perfil"
+                    }
+                  >
+                    <input
+                      type="checkbox"
+                      checked={modalidade === k}
+                      disabled={!disponivel}
+                      onChange={() =>
+                        setModalidade((cur) => (cur === k ? "" : k))
+                      }
+                      className="h-4 w-4 rounded border-2 accent-brand disabled:cursor-not-allowed"
+                    />
+                    {label}
+                  </label>
+                );
+              })}
+            </div>
+            <p className="mt-1.5 flex items-start gap-2 pl-6 text-xs leading-relaxed text-muted">
+              <InfoIcon size={13} className="mt-0.5 flex-none" aria-hidden />
+              {modalidadesComVaga.has("lgbtqia") ? (
+                <span>
+                  Marque sua cota pra ver só os cargos com vaga reservada
+                  (imediata ou cadastro de reserva) pra esse perfil.
+                </span>
+              ) : (
+                <span>
+                  Não há reserva de vagas para <b>pessoas LGBTQIA+</b>: não
+                  existe lei federal exigindo essa cota em concursos
+                  públicos, e {concurso.orgao} não a instituiu neste edital.
+                  Marque uma das outras cotas pra ver só os cargos com vaga
+                  reservada pra esse perfil.
+                </span>
+              )}
+            </p>
+
             {escolaridade === "Superior" && formacoesSuperior.length > 0 && (
               <label className="mt-4 block max-w-sm">
                 <span className={rotulo}>Sua formação</span>
@@ -421,24 +503,54 @@ export function GuiaIndex({
                   <option value="">Todas as formações</option>
                   {formacoesSuperior.map((f) => (
                     <option key={f} value={f}>
-                      {f}
+                      {formacaoLabel(f)}
                     </option>
                   ))}
                 </select>
               </label>
             )}
 
+            <label
+              className={`mt-4 flex items-start gap-2 text-sm ${
+                cargosComPos.length === 0 ? "opacity-50" : ""
+              }`}
+              title={
+                cargosComPos.length === 0
+                  ? "Nenhum cargo deste concurso exige ou valoriza pós-graduação"
+                  : undefined
+              }
+            >
+              <input
+                type="checkbox"
+                checked={pos}
+                disabled={cargosComPos.length === 0}
+                onChange={(e) => setPos(e.target.checked)}
+                className="mt-0.5 h-4 w-4 rounded border-2 accent-brand disabled:cursor-not-allowed"
+              />
+              <span>
+                Tenho pós-graduação e quero ver só os cargos onde isso faz
+                diferença
+              </span>
+            </label>
+            <p className="mt-1.5 flex items-start gap-2 pl-6 text-xs leading-relaxed text-muted">
+              <InfoIcon size={13} className="mt-0.5 flex-none" aria-hidden />
+              {cargosComPos.length === 0 ? (
+                <span>
+                  Pós-graduação não é exigida nem é diferencial em nenhum
+                  cargo deste concurso no momento, conforme o edital.
+                </span>
+              ) : (
+                <span>
+                  {cargosComPos.length}{" "}
+                  {cargosComPos.length === 1
+                    ? "cargo pede ou valoriza"
+                    : "cargos pedem ou valorizam"}{" "}
+                  pós-graduação neste concurso.
+                </span>
+              )}
+            </p>
+
             <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              <label>
-                <span className={rotulo}>Tem pós-graduação?</span>
-                <input
-                  type="text"
-                  value={pos}
-                  onChange={(e) => setPos(e.target.value)}
-                  placeholder="Ex.: MBA em Gestão de Projetos"
-                  className={campo}
-                />
-              </label>
               {cidades.length > 0 && (
                 <label>
                   <span className={rotulo}>Cidade de lotação</span>
@@ -468,28 +580,7 @@ export function GuiaIndex({
               </label>
             </div>
 
-            {pos.trim() !== "" && (
-              <p className="mt-3 flex items-start gap-2 rounded-lg bg-background px-3 py-2.5 text-xs leading-relaxed text-muted">
-                <InfoIcon size={14} className="mt-0.5 flex-none" aria-hidden />
-                {posInfo && posInfo.relevantes.length > 0 ? (
-                  <span>
-                    Sua pós-graduação em <b>{posInfo.termo}</b> pode fazer
-                    diferença em {posInfo.relevantes.length}{" "}
-                    {posInfo.relevantes.length === 1 ? "cargo" : "cargos"} -
-                    aplicamos como filtro abaixo.
-                  </span>
-                ) : (
-                  <span>
-                    Pós-graduação não é exigida nem é diferencial em nenhum
-                    cargo da Transpetro no momento, conforme o edital. Sua
-                    pós-graduação não muda nenhum requisito aqui - deixamos
-                    os outros filtros como estão.
-                  </span>
-                )}
-              </p>
-            )}
-
-            {(escolaridade || local || cidade || busca.trim()) && (
+            {(escolaridade || local || cidade || busca.trim() || pos || modalidade) && (
               <div className="mt-4 grid grid-cols-2 gap-3 border-t pt-4 sm:grid-cols-4">
                 {[
                   { n: String(statsFiltro.cargos), l: "cargos" },

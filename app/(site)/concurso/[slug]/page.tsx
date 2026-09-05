@@ -42,6 +42,10 @@ export default async function ConcursoGuiaPage({ params }: Params) {
       vagas: number;
     }[],
     calloutCurso: c.calloutCurso,
+    vagasModalidade: (c.vagasModalidade ?? null) as Record<
+      string,
+      { imediatas: number; reserva: number }
+    > | null,
   }));
 
   return (

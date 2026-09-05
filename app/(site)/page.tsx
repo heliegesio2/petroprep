@@ -49,6 +49,10 @@ export default async function Home({ searchParams }: Props) {
       vagas: number;
     }[],
     calloutCurso: cg.calloutCurso,
+    vagasModalidade: (cg.vagasModalidade ?? null) as Record<
+      string,
+      { imediatas: number; reserva: number }
+    > | null,
   }));
 
   return (

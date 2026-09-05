@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -130,18 +131,28 @@ export default async function CargoPage({ params }: Params) {
               <tbody className="divide-y">
                 {MODALIDADE_LABEL.filter(([k]) => vagasModalidade[k]).map(
                   ([k, label]) => (
-                    <tr
-                      key={k}
-                      className={k === "total" ? "font-semibold" : undefined}
-                    >
-                      <td className="px-4 py-2">{label}</td>
-                      <td className="px-4 py-2 text-right font-mono tabular-nums">
-                        {vagasModalidade[k].imediatas}
-                      </td>
-                      <td className="px-4 py-2 text-right font-mono tabular-nums">
-                        {vagasModalidade[k].reserva}
-                      </td>
-                    </tr>
+                    <Fragment key={k}>
+                      {k === "total" && (
+                        <tr className="text-muted">
+                          <td className="px-4 py-2">Pessoa LGBTQIA+*</td>
+                          <td className="px-4 py-2 text-right font-mono tabular-nums">
+                            0
+                          </td>
+                          <td className="px-4 py-2 text-right font-mono tabular-nums">
+                            0
+                          </td>
+                        </tr>
+                      )}
+                      <tr className={k === "total" ? "font-semibold" : undefined}>
+                        <td className="px-4 py-2">{label}</td>
+                        <td className="px-4 py-2 text-right font-mono tabular-nums">
+                          {vagasModalidade[k].imediatas}
+                        </td>
+                        <td className="px-4 py-2 text-right font-mono tabular-nums">
+                          {vagasModalidade[k].reserva}
+                        </td>
+                      </tr>
+                    </Fragment>
                   ),
                 )}
               </tbody>
@@ -151,6 +162,12 @@ export default async function CargoPage({ params }: Params) {
             Reserva de vagas nos termos das Leis 12.990/2014 e 15.142/2025 e do
             Decreto 9.508/2018. A distribuição por modalidade pode variar; o
             edital oficial prevalece.
+          </p>
+          <p className="mt-2 text-xs leading-relaxed text-muted">
+            * Este edital não prevê reserva de vagas para pessoas LGBTQIA+: não
+            há lei federal exigindo essa cota em concursos públicos, e a
+            Transpetro não a instituiu neste edital. Concorra pela ampla
+            concorrência ou pelas modalidades acima, conforme seu enquadramento.
           </p>
         </section>
       )}
